@@ -18,6 +18,7 @@ public class LOGINFORM extends javax.swing.JFrame {
     public LOGINFORM() {
         initComponents();
         JOptionPane.showMessageDialog(this, "CON LAU MS XONG ?!");
+        System.out.println("Da Sua Xong ? ");
     }
 
     /**
