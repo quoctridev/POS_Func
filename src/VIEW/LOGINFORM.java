@@ -4,6 +4,8 @@
  */
 package VIEW;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Admin
@@ -15,6 +17,7 @@ public class LOGINFORM extends javax.swing.JFrame {
      */
     public LOGINFORM() {
         initComponents();
+        JOptionPane.showMessageDialog(this, "CON LAU MS XONG ?!");
     }
 
     /**
