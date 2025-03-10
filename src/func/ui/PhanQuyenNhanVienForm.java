@@ -55,10 +55,10 @@ public class PhanQuyenNhanVienForm extends javax.swing.JFrame {
         jCheckBox16 = new javax.swing.JCheckBox();
         jCheckBox17 = new javax.swing.JCheckBox();
         jCheckBox18 = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnCapQuyen = new javax.swing.JButton();
+        btnThuHoiQuyen = new javax.swing.JButton();
+        btnXemDanhSachNV = new javax.swing.JButton();
+        btnLuuThayDoi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -231,13 +231,13 @@ public class PhanQuyenNhanVienForm extends javax.swing.JFrame {
                 .addContainerGap(91, Short.MAX_VALUE))
         );
 
-        jButton1.setText("Cấp Quyền");
+        btnCapQuyen.setText("Cấp Quyền");
 
-        jButton2.setText("Thu Hồi Quyền");
+        btnThuHoiQuyen.setText("Thu Hồi Quyền");
 
-        jButton3.setText("Xem Danh Sách NV");
+        btnXemDanhSachNV.setText("Xem Danh Sách NV");
 
-        jButton4.setText("Lưu Thay Đổi");
+        btnLuuThayDoi.setText("Lưu Thay Đổi");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -250,10 +250,10 @@ public class PhanQuyenNhanVienForm extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3)
-                            .addComponent(jButton1)
-                            .addComponent(jButton4)))
+                            .addComponent(btnThuHoiQuyen)
+                            .addComponent(btnXemDanhSachNV)
+                            .addComponent(btnCapQuyen)
+                            .addComponent(btnLuuThayDoi)))
                     .addComponent(jLabel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -268,13 +268,13 @@ public class PhanQuyenNhanVienForm extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(61, 61, 61)
-                        .addComponent(jButton1)
+                        .addComponent(btnCapQuyen)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(btnThuHoiQuyen)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
+                        .addComponent(btnXemDanhSachNV)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4)))
+                        .addComponent(btnLuuThayDoi)))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
@@ -341,10 +341,10 @@ public class PhanQuyenNhanVienForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnCapQuyen;
+    private javax.swing.JButton btnLuuThayDoi;
+    private javax.swing.JButton btnThuHoiQuyen;
+    private javax.swing.JButton btnXemDanhSachNV;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox10;
     private javax.swing.JCheckBox jCheckBox11;

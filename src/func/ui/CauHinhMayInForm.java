@@ -42,7 +42,7 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
         jCheckBox6 = new javax.swing.JCheckBox();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnThemMayIn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -102,10 +102,10 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
 
         jLabel10.setText("Kết Nối Thành Công");
 
-        jButton1.setText("Thêm Máy In ");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnThemMayIn.setText("Thêm Máy In ");
+        btnThemMayIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnThemMayInActionPerformed(evt);
             }
         });
 
@@ -144,7 +144,7 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addGap(214, 214, 214)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jButton1)
+                                .addComponent(btnThemMayIn)
                                 .addComponent(jLabel5))
                             .addGap(124, 124, 124)
                             .addComponent(jLabel6)
@@ -191,7 +191,7 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
                     .addComponent(jCheckBox6)
                     .addComponent(jLabel10))
                 .addGap(53, 53, 53)
-                .addComponent(jButton1)
+                .addComponent(btnThemMayIn)
                 .addContainerGap(135, Short.MAX_VALUE))
         );
 
@@ -222,9 +222,9 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox6ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnThemMayInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemMayInActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnThemMayInActionPerformed
 
     /**
      * @param args the command line arguments
@@ -263,7 +263,7 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnThemMayIn;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
