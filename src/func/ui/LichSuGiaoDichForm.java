@@ -29,18 +29,18 @@ public class LichSuGiaoDichForm extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        tblChuaThanhToan = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblDaThanhToan = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        panel = new javax.swing.JScrollPane();
+        tblTongDonHang = new javax.swing.JTable();
         btnXuatFile = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        tblChuaThanhToan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -51,7 +51,7 @@ public class LichSuGiaoDichForm extends javax.swing.JFrame {
                 "Mã Hoá Đơn ", "Thời Gian ", "Khách Hàng", "Hình Thức Thanh Toán", "Tổng Tiền Hàng ", "Giảm Giá", "Khách Đã Trả"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(tblChuaThanhToan);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -72,7 +72,7 @@ public class LichSuGiaoDichForm extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Chưa Thanh Toán", jPanel1);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblDaThanhToan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -83,7 +83,7 @@ public class LichSuGiaoDichForm extends javax.swing.JFrame {
                 "Mã Hoá Đơn ", "Thời Gian ", "Khách Hàng", "Hình Thức Thanh Toán", "Tổng Tiền Hàng ", "Giảm Giá", "Khách Đã Trả"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblDaThanhToan);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -104,7 +104,7 @@ public class LichSuGiaoDichForm extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Đã Thanh Toán", jPanel2);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblTongDonHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -115,7 +115,7 @@ public class LichSuGiaoDichForm extends javax.swing.JFrame {
                 "Mã Hoá Đơn ", "Thời Gian ", "Khách Hàng", "Hình Thức Thanh Toán", "Tổng Tiền Hàng ", "Giảm Giá", "Khách Đã Trả"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        panel.setViewportView(tblTongDonHang);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -123,14 +123,14 @@ public class LichSuGiaoDichForm extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(17, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 709, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, 709, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(105, 105, 105))
         );
 
@@ -202,12 +202,12 @@ public class LichSuGiaoDichForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
+    private javax.swing.JScrollPane panel;
+    private javax.swing.JTable tblChuaThanhToan;
+    private javax.swing.JTable tblDaThanhToan;
+    private javax.swing.JTable tblTongDonHang;
     // End of variables declaration//GEN-END:variables
 }

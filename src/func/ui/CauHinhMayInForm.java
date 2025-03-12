@@ -33,15 +33,15 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        labelTrangThaiMayIn1 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
         jCheckBox3 = new javax.swing.JCheckBox();
         jCheckBox4 = new javax.swing.JCheckBox();
         jCheckBox5 = new javax.swing.JCheckBox();
         jCheckBox6 = new javax.swing.JCheckBox();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        labelTrangThaiMayIn2 = new javax.swing.JLabel();
+        labelTrangThaiMayIn3 = new javax.swing.JLabel();
         btnThemMayIn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -60,7 +60,7 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
 
         jLabel7.setText("Trạng Thái Máy In ");
 
-        jLabel8.setText("Kết Nối Thành Công");
+        labelTrangThaiMayIn1.setText("Kết Nối Thành Công");
 
         jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -98,9 +98,9 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setText("Kết Nối Thành Công");
+        labelTrangThaiMayIn2.setText("Kết Nối Thành Công");
 
-        jLabel10.setText("Kết Nối Thành Công");
+        labelTrangThaiMayIn3.setText("Kết Nối Thành Công");
 
         btnThemMayIn.setText("Thêm Máy In ");
         btnThemMayIn.addActionListener(new java.awt.event.ActionListener() {
@@ -138,9 +138,9 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
                                 .addComponent(jCheckBox6))
                             .addGap(110, 110, 110)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel10)
-                                .addComponent(jLabel9)
-                                .addComponent(jLabel8)))
+                                .addComponent(labelTrangThaiMayIn3)
+                                .addComponent(labelTrangThaiMayIn2)
+                                .addComponent(labelTrangThaiMayIn1)))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addGap(214, 214, 214)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -170,17 +170,18 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
                                 .addGap(19, 19, 19)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel8)
-                                            .addComponent(jCheckBox1))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jCheckBox1)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jLabel2)
+                                                .addComponent(labelTrangThaiMayIn1)))
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGap(41, 41, 41)
                                                 .addComponent(jLabel4))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGap(38, 38, 38)
-                                                .addComponent(jLabel9))))
+                                                .addComponent(labelTrangThaiMayIn2))))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jCheckBox4)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -189,7 +190,7 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
                         .addGap(41, 41, 41)
                         .addComponent(jLabel3))
                     .addComponent(jCheckBox6)
-                    .addComponent(jLabel10))
+                    .addComponent(labelTrangThaiMayIn3))
                 .addGap(53, 53, 53)
                 .addComponent(btnThemMayIn)
                 .addContainerGap(135, Short.MAX_VALUE))
@@ -271,14 +272,14 @@ public class CauHinhMayInForm extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JCheckBox jCheckBox6;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel labelTrangThaiMayIn1;
+    private javax.swing.JLabel labelTrangThaiMayIn2;
+    private javax.swing.JLabel labelTrangThaiMayIn3;
     // End of variables declaration//GEN-END:variables
 }

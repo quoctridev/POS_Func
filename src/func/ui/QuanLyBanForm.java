@@ -27,7 +27,7 @@ public class QuanLyBanForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        panelTaiQuan = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -37,7 +37,7 @@ public class QuanLyBanForm extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        panelMangDi = new javax.swing.JPanel();
         jButton10 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
         jButton12 = new javax.swing.JButton();
@@ -50,7 +50,7 @@ public class QuanLyBanForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0)));
+        panelTaiQuan.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0)));
 
         jButton1.setText("jButton1");
 
@@ -70,47 +70,47 @@ public class QuanLyBanForm extends javax.swing.JFrame {
 
         jButton9.setText("jButton1");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelTaiQuanLayout = new javax.swing.GroupLayout(panelTaiQuan);
+        panelTaiQuan.setLayout(panelTaiQuanLayout);
+        panelTaiQuanLayout.setHorizontalGroup(
+            panelTaiQuanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTaiQuanLayout.createSequentialGroup()
                 .addGap(41, 41, 41)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(panelTaiQuanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTaiQuanLayout.createSequentialGroup()
+                        .addGroup(panelTaiQuanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton4)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(panelTaiQuanLayout.createSequentialGroup()
                                 .addComponent(jButton2)
                                 .addGap(72, 72, 72)
                                 .addComponent(jButton1)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                         .addComponent(jButton3)
                         .addGap(88, 88, 88))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTaiQuanLayout.createSequentialGroup()
+                        .addGroup(panelTaiQuanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton8)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(panelTaiQuanLayout.createSequentialGroup()
                                 .addComponent(jButton5)
                                 .addGap(225, 225, 225)
                                 .addComponent(jButton9)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(panelTaiQuanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton6)
                     .addComponent(jButton7))
                 .addGap(41, 41, 41))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        panelTaiQuanLayout.setVerticalGroup(
+            panelTaiQuanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTaiQuanLayout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelTaiQuanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2)
                     .addComponent(jButton3)
                     .addComponent(jButton6))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelTaiQuanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4)
                     .addComponent(jButton5)
                     .addComponent(jButton9)
@@ -120,9 +120,9 @@ public class QuanLyBanForm extends javax.swing.JFrame {
                 .addContainerGap(169, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Tại Quán", jPanel1);
+        jTabbedPane1.addTab("Tại Quán", panelTaiQuan);
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0)));
+        panelMangDi.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0)));
 
         jButton10.setText("jButton1");
 
@@ -142,47 +142,47 @@ public class QuanLyBanForm extends javax.swing.JFrame {
 
         jButton18.setText("jButton1");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelMangDiLayout = new javax.swing.GroupLayout(panelMangDi);
+        panelMangDi.setLayout(panelMangDiLayout);
+        panelMangDiLayout.setHorizontalGroup(
+            panelMangDiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelMangDiLayout.createSequentialGroup()
                 .addGap(41, 41, 41)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(panelMangDiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelMangDiLayout.createSequentialGroup()
+                        .addGroup(panelMangDiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton13)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGroup(panelMangDiLayout.createSequentialGroup()
                                 .addComponent(jButton11)
                                 .addGap(72, 72, 72)
                                 .addComponent(jButton10)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                         .addComponent(jButton12)
                         .addGap(88, 88, 88))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelMangDiLayout.createSequentialGroup()
+                        .addGroup(panelMangDiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton17)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGroup(panelMangDiLayout.createSequentialGroup()
                                 .addComponent(jButton14)
                                 .addGap(225, 225, 225)
                                 .addComponent(jButton18)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(panelMangDiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton15)
                     .addComponent(jButton16))
                 .addGap(41, 41, 41))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        panelMangDiLayout.setVerticalGroup(
+            panelMangDiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelMangDiLayout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelMangDiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton10)
                     .addComponent(jButton11)
                     .addComponent(jButton12)
                     .addComponent(jButton15))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelMangDiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton13)
                     .addComponent(jButton14)
                     .addComponent(jButton18)
@@ -192,7 +192,7 @@ public class QuanLyBanForm extends javax.swing.JFrame {
                 .addContainerGap(169, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Mang Đi", jPanel3);
+        jTabbedPane1.addTab("Mang Đi", panelMangDi);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -268,8 +268,8 @@ public class QuanLyBanForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPanel panelMangDi;
+    private javax.swing.JPanel panelTaiQuan;
     // End of variables declaration//GEN-END:variables
 }
