@@ -1,26 +1,22 @@
-package func.entity;
+package func.dto;
 
-import java.util.Date;
-
-public class TableEntity {
+public class TableDTO {
 
     int tableId;
     int tableNumber;
     String status;
     int capacity;
     int zone;
-    Date createdAt;
 
-    public TableEntity() {
+    public TableDTO() {
     }
 
-    public TableEntity(int tableId, int tableNumber, String status, int capacity, int zone, Date createdAt) {
+    public TableDTO(int tableId, int tableNumber, String status, int capacity, int zone) {
         this.tableId = tableId;
         this.tableNumber = tableNumber;
         this.status = status;
         this.capacity = capacity;
         this.zone = zone;
-        this.createdAt = createdAt;
     }
 
     public int getTableId() {
@@ -61,14 +57,6 @@ public class TableEntity {
 
     public void setZone(int zone) {
         this.zone = zone;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
 }

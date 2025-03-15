@@ -1,31 +1,28 @@
-package func.entity;
+package func.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-public class OrderDetailEntity {
+public class OrderDetailExpandedDTO {
 
     int orderDetailId;
     int orderId;
-    int productId;
+    String productName;
     int quantity;
     BigDecimal price;
     String note;
     String status;
-    Date createdAt;
 
-    public OrderDetailEntity() {
+    public OrderDetailExpandedDTO() {
     }
 
-    public OrderDetailEntity(int orderDetailId, int orderId, int productId, int quantity, BigDecimal price, String note, String status, Date createdAt) {
+    public OrderDetailExpandedDTO(int orderDetailId, int orderId, String productName, int quantity, BigDecimal price, String note, String status) {
         this.orderDetailId = orderDetailId;
         this.orderId = orderId;
-        this.productId = productId;
+        this.productName = productName;
         this.quantity = quantity;
         this.price = price;
         this.note = note;
         this.status = status;
-        this.createdAt = createdAt;
     }
 
     public int getOrderDetailId() {
@@ -44,12 +41,12 @@ public class OrderDetailEntity {
         this.orderId = orderId;
     }
 
-    public int getProductId() {
-        return productId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public int getQuantity() {
@@ -82,14 +79,6 @@ public class OrderDetailEntity {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
 }
