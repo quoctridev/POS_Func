@@ -1,9 +1,9 @@
-package func.entity;
+package func.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class OrderEntity {
+public class OrderDTO {
 
     int orderId;
     int discountId;
@@ -14,12 +14,11 @@ public class OrderEntity {
     BigDecimal totalPrice;
     String status;
     boolean isPaid;
-    int orderTableId;
 
-    public OrderEntity() {
+    public OrderDTO() {
     }
 
-    public OrderEntity(int orderId, int discountId, int cashierId, String customerPhone, Date orderDate, String customerName, BigDecimal totalPrice, String status, boolean isPaid, int orderTableId) {
+    public OrderDTO(int orderId, int discountId, int cashierId, String customerPhone, Date orderDate, String customerName, BigDecimal totalPrice, String status, boolean isPaid) {
         this.orderId = orderId;
         this.discountId = discountId;
         this.cashierId = cashierId;
@@ -29,7 +28,6 @@ public class OrderEntity {
         this.totalPrice = totalPrice;
         this.status = status;
         this.isPaid = isPaid;
-        this.orderTableId = orderTableId;
     }
 
     public int getOrderId() {
@@ -102,14 +100,6 @@ public class OrderEntity {
 
     public void setIsPaid(boolean isPaid) {
         this.isPaid = isPaid;
-    }
-
-    public int getOrderTableId() {
-        return orderTableId;
-    }
-
-    public void setOrderTableId(int orderTableId) {
-        this.orderTableId = orderTableId;
     }
 
 }

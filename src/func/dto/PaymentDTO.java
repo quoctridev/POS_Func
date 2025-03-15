@@ -1,9 +1,9 @@
-package func.entity;
+package func.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class PaymentEntity {
+public class PaymentDTO {
 
     int paymentId;
     Date paymentTime;
@@ -12,10 +12,10 @@ public class PaymentEntity {
     String status;
     BigDecimal totalAmount;
 
-    public PaymentEntity() {
+    public PaymentDTO() {
     }
 
-    public PaymentEntity(int paymentId, Date paymentTime, int orderId, String paymentMethod, String status, BigDecimal totalAmount) {
+    public PaymentDTO(int paymentId, Date paymentTime, int orderId, String paymentMethod, String status, BigDecimal totalAmount) {
         this.paymentId = paymentId;
         this.paymentTime = paymentTime;
         this.orderId = orderId;

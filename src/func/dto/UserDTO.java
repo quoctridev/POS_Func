@@ -1,28 +1,22 @@
-package func.entity;
+package func.dto;
 
-import java.util.Date;
-
-public class UserEntity {
+public class UserDTO {
 
     int userId;
     String username;
-    String password;
     String fullName;
     String phone;
     String role;
-    Date createdAt;
 
-    public UserEntity() {
+    public UserDTO() {
     }
 
-    public UserEntity(int userId, String username, String password, String fullName, String phone, String role, Date createdAt) {
+    public UserDTO(int userId, String username, String fullName, String phone, String role) {
         this.userId = userId;
         this.username = username;
-        this.password = password;
         this.fullName = fullName;
         this.phone = phone;
         this.role = role;
-        this.createdAt = createdAt;
     }
 
     public int getUserId() {
@@ -39,14 +33,6 @@ public class UserEntity {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFullName() {
@@ -71,14 +57,6 @@ public class UserEntity {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
 }
