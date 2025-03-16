@@ -1,47 +1,35 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package func.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- *
- * @author quoctris.dev
- */
 public class OrderEntity {
 
-    private int orderId;
-    private int cashierId;
-    private int chefId;
-    private int customerId;
-    private String customerName;
-    private String status;
-    private BigDecimal totalPrice;
-    private int discountId;
-    private int tableId;
-    private String note;
-    private Date createdAt;
-    private Date completedAt;
+    int orderId;
+    int discountId;
+    int cashierId;
+    String customerPhone;
+    Date orderDate;
+    String customerName;
+    BigDecimal totalPrice;
+    String status;
+    boolean isPaid;
+    int orderTableId;
 
     public OrderEntity() {
     }
 
-    public OrderEntity(int orderId, int cashierId, int chefId, int customerId, String customerName, String status, BigDecimal totalPrice, int discountId, int tableId, String note, Date createdAt, Date completedAt) {
+    public OrderEntity(int orderId, int discountId, int cashierId, String customerPhone, Date orderDate, String customerName, BigDecimal totalPrice, String status, boolean isPaid, int orderTableId) {
         this.orderId = orderId;
-        this.cashierId = cashierId;
-        this.chefId = chefId;
-        this.customerId = customerId;
-        this.customerName = customerName;
-        this.status = status;
-        this.totalPrice = totalPrice;
         this.discountId = discountId;
-        this.tableId = tableId;
-        this.note = note;
-        this.createdAt = createdAt;
-        this.completedAt = completedAt;
+        this.cashierId = cashierId;
+        this.customerPhone = customerPhone;
+        this.orderDate = orderDate;
+        this.customerName = customerName;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.isPaid = isPaid;
+        this.orderTableId = orderTableId;
     }
 
     public int getOrderId() {
@@ -52,6 +40,14 @@ public class OrderEntity {
         this.orderId = orderId;
     }
 
+    public int getDiscountId() {
+        return discountId;
+    }
+
+    public void setDiscountId(int discountId) {
+        this.discountId = discountId;
+    }
+
     public int getCashierId() {
         return cashierId;
     }
@@ -60,20 +56,20 @@ public class OrderEntity {
         this.cashierId = cashierId;
     }
 
-    public int getChefId() {
-        return chefId;
+    public String getCustomerPhone() {
+        return customerPhone;
     }
 
-    public void setChefId(int chefId) {
-        this.chefId = chefId;
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
     }
 
-    public int getCustomerId() {
-        return customerId;
+    public Date getOrderDate() {
+        return orderDate;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 
     public String getCustomerName() {
@@ -84,14 +80,6 @@ public class OrderEntity {
         this.customerName = customerName;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
@@ -100,44 +88,28 @@ public class OrderEntity {
         this.totalPrice = totalPrice;
     }
 
-    public int getDiscountId() {
-        return discountId;
+    public String getStatus() {
+        return status;
     }
 
-    public void setDiscountId(int discountId) {
-        this.discountId = discountId;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public int getTableId() {
-        return tableId;
+    public boolean isIsPaid() {
+        return isPaid;
     }
 
-    public void setTableId(int tableId) {
-        this.tableId = tableId;
+    public void setIsPaid(boolean isPaid) {
+        this.isPaid = isPaid;
     }
 
-    public String getNote() {
-        return note;
+    public int getOrderTableId() {
+        return orderTableId;
     }
 
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getCompletedAt() {
-        return completedAt;
-    }
-
-    public void setCompletedAt(Date completedAt) {
-        this.completedAt = completedAt;
+    public void setOrderTableId(int orderTableId) {
+        this.orderTableId = orderTableId;
     }
 
 }

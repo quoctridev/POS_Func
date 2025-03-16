@@ -1,9 +1,8 @@
-package func.entity;
+package func.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-public class OrderDetailEntity {
+public class OrderDetailsDTO {
 
     int orderDetailId;
     int orderId;
@@ -12,12 +11,11 @@ public class OrderDetailEntity {
     BigDecimal price;
     String note;
     String status;
-    Date createdAt;
 
-    public OrderDetailEntity() {
+    public OrderDetailsDTO() {
     }
 
-    public OrderDetailEntity(int orderDetailId, int orderId, int productId, int quantity, BigDecimal price, String note, String status, Date createdAt) {
+    public OrderDetailsDTO(int orderDetailId, int orderId, int productId, int quantity, BigDecimal price, String note, String status) {
         this.orderDetailId = orderDetailId;
         this.orderId = orderId;
         this.productId = productId;
@@ -25,7 +23,6 @@ public class OrderDetailEntity {
         this.price = price;
         this.note = note;
         this.status = status;
-        this.createdAt = createdAt;
     }
 
     public int getOrderDetailId() {
@@ -82,14 +79,6 @@ public class OrderDetailEntity {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
 }

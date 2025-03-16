@@ -1,37 +1,33 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package func.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- *
- * @author quoctris.dev
- */
 public class ProductEntity {
 
-    private int productId;
-    private String name;
-    private BigDecimal price;
-    private String image;
-    private int stockQuantity;
-    private int categoryId;
-    private Date createdAt;
+    int productId;
+    String productName;
+    BigDecimal price;
+    int stock;
+    String image;
+    int categoryId;
+    boolean isAvailable;
+    Date createdAt;
+    Date updatedAt;
 
     public ProductEntity() {
     }
 
-    public ProductEntity(int productId, String name, BigDecimal price, String image, int stockQuantity, int categoryId, Date createdAt) {
+    public ProductEntity(int productId, String productName, BigDecimal price, int stock, String image, int categoryId, boolean isAvailable, Date createdAt, Date updatedAt) {
         this.productId = productId;
-        this.name = name;
+        this.productName = productName;
         this.price = price;
+        this.stock = stock;
         this.image = image;
-        this.stockQuantity = stockQuantity;
         this.categoryId = categoryId;
+        this.isAvailable = isAvailable;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public int getProductId() {
@@ -42,12 +38,12 @@ public class ProductEntity {
         this.productId = productId;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public BigDecimal getPrice() {
@@ -58,20 +54,20 @@ public class ProductEntity {
         this.price = price;
     }
 
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
     public String getImage() {
         return image;
     }
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public int getStockQuantity() {
-        return stockQuantity;
-    }
-
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
     }
 
     public int getCategoryId() {
@@ -82,12 +78,28 @@ public class ProductEntity {
         this.categoryId = categoryId;
     }
 
+    public boolean isIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }

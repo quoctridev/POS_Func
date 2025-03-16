@@ -1,29 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package func.entity;
 
 import java.util.Date;
 
-/**
- *
- * @author quoctris.dev
- */
 public class TableEntity {
 
-    private int tableId;
-    private String tableNumber;
-    private String status;
-    private Date createdAt;
+    int tableId;
+    int tableNumber;
+    String status;
+    int capacity;
+    int zone;
+    Date createdAt;
 
     public TableEntity() {
     }
 
-    public TableEntity(int tableId, String tableNumber, String status, Date createdAt) {
+    public TableEntity(int tableId, int tableNumber, String status, int capacity, int zone, Date createdAt) {
         this.tableId = tableId;
         this.tableNumber = tableNumber;
         this.status = status;
+        this.capacity = capacity;
+        this.zone = zone;
         this.createdAt = createdAt;
     }
 
@@ -35,11 +31,11 @@ public class TableEntity {
         this.tableId = tableId;
     }
 
-    public String getTableNumber() {
+    public int getTableNumber() {
         return tableNumber;
     }
 
-    public void setTableNumber(String tableNumber) {
+    public void setTableNumber(int tableNumber) {
         this.tableNumber = tableNumber;
     }
 
@@ -49,6 +45,22 @@ public class TableEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getZone() {
+        return zone;
+    }
+
+    public void setZone(int zone) {
+        this.zone = zone;
     }
 
     public Date getCreatedAt() {

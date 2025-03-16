@@ -1,35 +1,27 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package func.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- *
- * @author quoctris.dev
- */
 public class PaymentEntity {
 
-    private int paymentId;
-    private int orderId;
-    private String paymentMethod;
-    private BigDecimal amount;
-    private String status;
-    private Date paymentTime;
+    int paymentId;
+    Date paymentTime;
+    int orderId;
+    String paymentMethod;
+    String status;
+    BigDecimal totalAmount;
 
     public PaymentEntity() {
     }
 
-    public PaymentEntity(int paymentId, int orderId, String paymentMethod, BigDecimal amount, String status, Date paymentTime) {
+    public PaymentEntity(int paymentId, Date paymentTime, int orderId, String paymentMethod, String status, BigDecimal totalAmount) {
         this.paymentId = paymentId;
+        this.paymentTime = paymentTime;
         this.orderId = orderId;
         this.paymentMethod = paymentMethod;
-        this.amount = amount;
         this.status = status;
-        this.paymentTime = paymentTime;
+        this.totalAmount = totalAmount;
     }
 
     public int getPaymentId() {
@@ -38,6 +30,14 @@ public class PaymentEntity {
 
     public void setPaymentId(int paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public Date getPaymentTime() {
+        return paymentTime;
+    }
+
+    public void setPaymentTime(Date paymentTime) {
+        this.paymentTime = paymentTime;
     }
 
     public int getOrderId() {
@@ -56,14 +56,6 @@ public class PaymentEntity {
         this.paymentMethod = paymentMethod;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -72,12 +64,12 @@ public class PaymentEntity {
         this.status = status;
     }
 
-    public Date getPaymentTime() {
-        return paymentTime;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setPaymentTime(Date paymentTime) {
-        this.paymentTime = paymentTime;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
 }

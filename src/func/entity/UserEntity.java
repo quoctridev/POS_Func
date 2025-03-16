@@ -1,29 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package func.entity;
 
 import java.util.Date;
 
-/**
- *
- * @author quoctris.dev
- */
 public class UserEntity {
-    private int userId;
-    private String username;
-    private String password;
-    private String role;
-    private Date createdAt;
+
+    int userId;
+    String username;
+    String password;
+    String fullName;
+    String phone;
+    String role;
+    Date createdAt;
 
     public UserEntity() {
     }
 
-    public UserEntity(int userId, String username, String password, String role, Date createdAt) {
+    public UserEntity(int userId, String username, String password, String fullName, String phone, String role, Date createdAt) {
         this.userId = userId;
         this.username = username;
         this.password = password;
+        this.fullName = fullName;
+        this.phone = phone;
         this.role = role;
         this.createdAt = createdAt;
     }
@@ -52,6 +49,22 @@ public class UserEntity {
         this.password = password;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getRole() {
         return role;
     }
@@ -67,5 +80,5 @@ public class UserEntity {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-    
+
 }
