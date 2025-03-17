@@ -15,7 +15,7 @@ import java.sql.SQLException;
  *
  */
 public class UserDAO extends FuncDAO<UserEntity, String> {
-
+//note
     public UserEntity selectById(String username) {
         String sql = "SELECT TOP 1 * FROM Users WHERE = ?";
         List<UserEntity> list = this.selectBySql(sql, username);

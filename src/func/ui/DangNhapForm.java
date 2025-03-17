@@ -57,7 +57,7 @@ public class DangNhapForm extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(286, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(256, 256, 256))
         );
@@ -157,9 +157,9 @@ public class DangNhapForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(212, 212, 212)
                 .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(157, 157, 157)
+                .addGap(140, 140, 140)
                 .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(181, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,6 +263,7 @@ public class DangNhapForm extends javax.swing.JFrame {
     private void login() {
         String username = txtTenTaiKhoan.getText();
         String password = String.valueOf(pwfMatKhau.getPassword());
+        //validate
         if (username.equals("")) {
             lbNhapSai.setText("Không được bỏ trống tên tài khoản ");
         }
@@ -270,6 +271,7 @@ public class DangNhapForm extends javax.swing.JFrame {
             lbNhapSai.setText("Không được bỏ trống mật khẩu ");
         }
         UserEntity user = new UserDAO().selectById(username);
+        //hashpass
         BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
         if (result.verified) {
             JOptionPane.showMessageDialog(rootPane, "Dang nhap thanh cong ");
