@@ -7,6 +7,7 @@ public class OrderTableEntity {
     int orderTableId;
     int customerId;
     int tableId;
+    String phone;
     String note;
     String status;
     Date createdAt;
@@ -14,14 +15,16 @@ public class OrderTableEntity {
     public OrderTableEntity() {
     }
 
-    public OrderTableEntity(int orderTableId, int customerId, int tableId, String note, String status, Date createdAt) {
+    public OrderTableEntity(int orderTableId, int customerId, int tableId, String phone, String note, String status, Date createdAt) {
         this.orderTableId = orderTableId;
         this.customerId = customerId;
         this.tableId = tableId;
+        this.phone = phone;
         this.note = note;
         this.status = status;
         this.createdAt = createdAt;
     }
+
 
     public int getOrderTableId() {
         return orderTableId;
@@ -46,6 +49,15 @@ public class OrderTableEntity {
     public void setTableId(int tableId) {
         this.tableId = tableId;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    
 
     public String getNote() {
         return note;
