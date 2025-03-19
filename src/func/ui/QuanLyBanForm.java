@@ -95,6 +95,7 @@ public class QuanLyBanForm extends javax.swing.JFrame {
             }
         });
 
+
         btnSua.setText("Sửa");
         btnSua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
