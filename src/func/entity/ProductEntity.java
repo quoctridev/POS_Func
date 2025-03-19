@@ -8,26 +8,22 @@ public class ProductEntity {
     int productId;
     String productName;
     BigDecimal price;
-    int stock;
-    String image;
-    int categoryId;
-    boolean isAvailable;
-    Date createdAt;
-    Date updatedAt;
+    int stock;//hàng tồn kho
+    String image;//ảnh
+    int categoryId;//mã danh mục
+    Date createdAt;//ngày tạo
 
     public ProductEntity() {
     }
 
-    public ProductEntity(int productId, String productName, BigDecimal price, int stock, String image, int categoryId, boolean isAvailable, Date createdAt, Date updatedAt) {
+    public ProductEntity(int productId, String productName, BigDecimal price, int stock, String image, int categoryId, Date createdAt) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
         this.stock = stock;
         this.image = image;
         this.categoryId = categoryId;
-        this.isAvailable = isAvailable;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public int getProductId() {
@@ -78,28 +74,12 @@ public class ProductEntity {
         this.categoryId = categoryId;
     }
 
-    public boolean isIsAvailable() {
-        return isAvailable;
-    }
-
-    public void setIsAvailable(boolean isAvailable) {
-        this.isAvailable = isAvailable;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
 }

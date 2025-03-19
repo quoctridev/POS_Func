@@ -25,7 +25,7 @@ public class Database {
     }
 
     public static PreparedStatement getStmt(String sql, Object... args) throws SQLException {
-        Connection connection = DriverManager.getConnection(dburl, username, password);
+        Connection connection = DriverManager.getConnection("jdbc:sqlserver://103.118.28.181:1433;databaseName=POS_FUNC;user=sa;password=FuncDev@;encrypt=true;trustServerCertificate=true");
         PreparedStatement pstmt = null;
         if (sql.trim().startsWith("{")) {
             pstmt = connection.prepareCall(sql);
