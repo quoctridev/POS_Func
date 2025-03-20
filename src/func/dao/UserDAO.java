@@ -56,10 +56,10 @@ public class UserDAO extends FuncDAO<UserEntity, String>{
                     UserEntity user = new UserEntity();
                     user.setUserId(rs.getInt("user_id"));
                     user.setUsername(rs.getString("username"));
-                    user.setPassword(rs.getString("[password]"));
+                    user.setPassword(rs.getString("password"));
                     user.setFullName(rs.getString("full_name"));
                     user.setPhone(rs.getString("phone"));
-                    user.setRole(rs.getString("[role]"));
+                    user.setRole(rs.getString("role"));
                     user.setCreatedAt(rs.getDate("created_at"));
                     list.add(user);                    
                 }
