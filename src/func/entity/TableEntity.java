@@ -5,16 +5,16 @@ import java.util.Date;
 public class TableEntity {
 
     int tableId;
-    int tableNumber;
+    String tableNumber;
     String status;
     int capacity;
-    int zone;
+    String zone;
     Date createdAt;
 
     public TableEntity() {
     }
 
-    public TableEntity(int tableId, int tableNumber, String status, int capacity, int zone, Date createdAt) {
+    public TableEntity(int tableId, String tableNumber, String status, int capacity, String zone, Date createdAt) {
         this.tableId = tableId;
         this.tableNumber = tableNumber;
         this.status = status;
@@ -31,11 +31,11 @@ public class TableEntity {
         this.tableId = tableId;
     }
 
-    public int getTableNumber() {
+    public String getTableNumber() {
         return tableNumber;
     }
 
-    public void setTableNumber(int tableNumber) {
+    public void setTableNumber(String tableNumber) {
         this.tableNumber = tableNumber;
     }
 
@@ -55,11 +55,11 @@ public class TableEntity {
         this.capacity = capacity;
     }
 
-    public int getZone() {
+    public String getZone() {
         return zone;
     }
 
-    public void setZone(int zone) {
+    public void setZone(String zone) {
         this.zone = zone;
     }
 

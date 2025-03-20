@@ -13,18 +13,20 @@ int discountId;
     BigDecimal maxValue;
     Date startDate;
     Date endDate;
+    boolean isActive;
     Date createdAt;
 
     public DiscountEntity() {
     }
 
-    public DiscountEntity(int discountId, String code, BigDecimal discountValue, BigDecimal maxValue, Date startDate, Date endDate, Date createdAt) {
+    public DiscountEntity(int discountId, String code, BigDecimal discountValue, BigDecimal maxValue, Date startDate, Date endDate, boolean isActive, Date createdAt) {
         this.discountId = discountId;
         this.code = code;
         this.discountValue = discountValue;
         this.maxValue = maxValue;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.isActive = isActive;
         this.createdAt = createdAt;
     }
 
@@ -74,6 +76,14 @@ int discountId;
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public Date getCreatedAt() {

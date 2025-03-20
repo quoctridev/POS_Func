@@ -1,3 +1,4 @@
+
 package func.dao;
 
 import func.entity.UserEntity;
@@ -32,7 +33,7 @@ public class UserDAO extends FuncDAO<UserEntity, String>{
 
     @Override
     public UserEntity selectById(String id) {
-        String sql = "SELECT TOP 1 FROM Users WHERE user_id = ?";
+        String sql = "SELECT TOP 1 FROM Users WHERE username = ?";
         List<UserEntity> list = selectBySql(sql, id);
         return list.size() > 0 ? list.get(0) : null;
     }
