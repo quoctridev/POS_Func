@@ -7,6 +7,8 @@ package func.application;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import func.ui.PanelDoanhThu;
+import func.ui.PanelQuanLyDanhMuc;
+import func.ui.QuanLyNhanVienForm;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
@@ -18,7 +20,7 @@ import javax.swing.JPanel;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    String role = "cashier";
+    String role = "admin";
     private static MainForm app;
 
     /**
@@ -34,8 +36,9 @@ public class MainForm extends javax.swing.JFrame {
         switch (role) {
             case "admin":
                 jLabel5.setText("Quản lý nhân viên");
-                clickPanel(jLabel2, jPanel1);
+                clickPanel(jLabel5, new QuanLyNhanVienForm());
                 jLabel6.setText("Quản lý danh mục");
+                clickPanel(jLabel6, new PanelQuanLyDanhMuc());
                 jLabel7.setText("Quản lý sản phẩm");
                 jLabel9.setText("Quản lý giảm giá");
                 jLabel10.setText("Thống kê");
