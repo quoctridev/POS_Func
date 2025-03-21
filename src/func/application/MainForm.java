@@ -7,6 +7,7 @@ package func.application;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import func.ui.PanelDoanhThu;
+import func.ui.PanelTaoDon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
@@ -17,7 +18,7 @@ import javax.swing.JPanel;
  * @author quoca
  */
 public class MainForm extends javax.swing.JFrame {
-
+private PanelTaoDon panelTaoDon = new PanelTaoDon();
     String role = "cashier";
     private static MainForm app;
 
@@ -44,10 +45,12 @@ public class MainForm extends javax.swing.JFrame {
                 jLabel5.setText("Quản lý hóa đơn");
                 jLabel6.setText("Quản lý bàn");
                 jLabel7.setText("Quản lý đơn hàng");
+                clickPanel(jLabel7, panelTaoDon);
                 jLabel9.setText("Thanh Toán");
                 break;
             case "chef":
                 jLabel5.setText("Quản lí đơn hàng");
+                clickPanel(jLabel7, panelTaoDon);
                 break;
         }
     }

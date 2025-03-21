@@ -219,8 +219,9 @@ public class JDialogDangNhap extends javax.swing.JDialog {
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
     private void lbQuenMatKhauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbQuenMatKhauMouseClicked
-        JDialogQuenMatKhau dialog = new JDialogQuenMatKhau();
-        dialog.setLocationRelativeTo(null); // Để hiển thị ở giữa màn hình
+        JDialogQuenMatKhau dialog = new JDialogQuenMatKhau((java.awt.Frame) this.getParent(), true);
+        dialog.setLocationRelativeTo(null);
+        this.dispose(); // Đóng JDialog hiện tại (JDialogDangNhap)
         dialog.setVisible(true);
     }//GEN-LAST:event_lbQuenMatKhauMouseClicked
 

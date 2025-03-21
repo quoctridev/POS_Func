@@ -20,6 +20,8 @@ public class JDialogQuenMatKhau extends javax.swing.JDialog {
      */
     public JDialogQuenMatKhau() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
     }
 
     /**
@@ -40,7 +42,7 @@ public class JDialogQuenMatKhau extends javax.swing.JDialog {
         btnQuenMatKhau = new javax.swing.JButton();
         lbDangNhap = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 255));
 
