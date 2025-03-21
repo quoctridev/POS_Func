@@ -11,7 +11,8 @@ public class PaymentDAO extends FuncDAO<PaymentEntity, String> {
 
     @Override
     public void insert(PaymentEntity entity) {
-        String sql = "INSERT INTO Payments(order_id, payment_method, status, total_amount)";
+        String sql = "INSERT INTO Payments(order_id, payment_method, status, total_amount) "
+                + "VALUES (?,?,?,?)";
         Database.update(sql, entity.getOrderId(), entity.getPaymentMethod(), entity.getStatus(), entity.getTotalAmount());
     }
 
