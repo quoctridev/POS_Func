@@ -8,6 +8,9 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import func.ui.PanelDoanhThu;
 import func.ui.PanelTaoDon;
+import func.ui.PanelQuanLyDanhMuc;
+import func.ui.PanelThongKe;
+import func.ui.QuanLyNhanVienForm;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
@@ -18,8 +21,7 @@ import javax.swing.JPanel;
  * @author quoca
  */
 public class MainForm extends javax.swing.JFrame {
-    private PanelTaoDon panelTaoDon = new PanelTaoDon();
-    String role = "cashier";
+    String role = "admin";
     private static MainForm app;
 
     /**
@@ -35,17 +37,19 @@ public class MainForm extends javax.swing.JFrame {
         switch (role) {
             case "admin":
                 jLabel5.setText("Quản lý nhân viên");
-                clickPanel(jLabel2, jPanel1);
+                clickPanel(jLabel5, new QuanLyNhanVienForm());
                 jLabel6.setText("Quản lý danh mục");
+                clickPanel(jLabel6, new PanelQuanLyDanhMuc());
                 jLabel7.setText("Quản lý sản phẩm");
                 jLabel9.setText("Quản lý giảm giá");
                 jLabel10.setText("Thống kê");
+                clickPanel(jLabel10, new PanelThongKe());
                 break;
             case "cashier":
                 jLabel5.setText("Quản lý hóa đơn");
                 jLabel6.setText("Quản lý bàn");
                 jLabel7.setText("Quản lý đơn hàng");
-                clickPanel(jLabel7, panelTaoDon);
+                clickPanel(jLabel7, new PanelTaoDon());
                 jLabel9.setText("Thanh Toán");
                 break;
             case "chef":
@@ -115,7 +119,6 @@ public class MainForm extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -123,6 +126,7 @@ public class MainForm extends javax.swing.JFrame {
             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -137,10 +141,10 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 

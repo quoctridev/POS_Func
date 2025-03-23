@@ -7,9 +7,21 @@ package func.ui;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import func.dao.DiscountDAO;
+import func.dao.OrderDetailsDAO;
+import func.dao.PaymentDAO;
+import func.dto.OrderDetailsDTO;
+import func.entity.DiscountEntity;
+import func.entity.PaymentEntity;
+import func.utils.Currency;
+import func.utils.Message;
 import java.awt.Color;
 import java.awt.Dialog;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 import javax.swing.JLabel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,7 +29,9 @@ import javax.swing.JLabel;
  */
 public class JDialogThanhToan extends javax.swing.JDialog {
 
+    DefaultTableModel model;
     private JLabel selectedPayment = null; // Lưu lựa chọn hiện tại
+    String orderId = null;
 
     /**
      * Creates new form JDialogThanhToan
@@ -26,6 +40,10 @@ public class JDialogThanhToan extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         init();
+    }
+
+    public String getOrderId() {
+        return orderId;
     }
 
     /**
@@ -57,6 +75,8 @@ public class JDialogThanhToan extends javax.swing.JDialog {
         pnDonHang = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         pnMonDaChon = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblThanhToan = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -128,6 +148,11 @@ public class JDialogThanhToan extends javax.swing.JDialog {
         });
 
         btnApDung.setText("Áp dụng mã");
+        btnApDung.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnApDungActionPerformed(evt);
+            }
+        });
 
         btnThanhToan.setText("Thanh toán");
         btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
@@ -136,10 +161,13 @@ public class JDialogThanhToan extends javax.swing.JDialog {
             }
         });
 
+        txtTienHang.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         txtTienHang.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
+        txtGiamGia.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         txtGiamGia.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
+        txtTongTien.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         txtTongTien.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -156,10 +184,10 @@ public class JDialogThanhToan extends javax.swing.JDialog {
                 .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(lbTongTien, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbTienHang, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
                     .addComponent(lbMaGiamGia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbTienHang, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(lbTongTien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtTienHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtGiamGia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -212,15 +240,45 @@ public class JDialogThanhToan extends javax.swing.JDialog {
 
         jLabel8.setText("Đơn hàng");
 
+        tblThanhToan.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "STT", "Tên món", "Số lượng", "Giá"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblThanhToan.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblThanhToan);
+        if (tblThanhToan.getColumnModel().getColumnCount() > 0) {
+            tblThanhToan.getColumnModel().getColumn(0).setResizable(false);
+            tblThanhToan.getColumnModel().getColumn(0).setPreferredWidth(2);
+            tblThanhToan.getColumnModel().getColumn(1).setMinWidth(30);
+        }
+
         javax.swing.GroupLayout pnMonDaChonLayout = new javax.swing.GroupLayout(pnMonDaChon);
         pnMonDaChon.setLayout(pnMonDaChonLayout);
         pnMonDaChonLayout.setHorizontalGroup(
             pnMonDaChonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(pnMonDaChonLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnMonDaChonLayout.setVerticalGroup(
             pnMonDaChonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(pnMonDaChonLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout pnDonHangLayout = new javax.swing.GroupLayout(pnDonHang);
@@ -231,7 +289,7 @@ public class JDialogThanhToan extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(pnDonHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnMonDaChon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE))
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnDonHangLayout.setVerticalGroup(
@@ -320,11 +378,47 @@ public class JDialogThanhToan extends javax.swing.JDialog {
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
         if (getSelectedPayment() == 2) {
-            JDialogQRThanhToan qr = new JDialogQRThanhToan((Dialog) this, false, "2000");
+            PaymentEntity pm = new PaymentEntity();
+            pm.setOrderId(Integer.parseInt(orderId));
+            pm.setPaymentMethod(getSelectedPayment() == 1 ? "cash" : "qr-code");
+            pm.setStatus("completed");
+            pm.setTotalAmount(totalAmount);
+            JDialogQRThanhToan qr = new JDialogQRThanhToan((Dialog) this, false, finalAmount.toString());
+            qr.setPm(pm);
             qr.setVisible(true);
-
+        } else {
+            PaymentEntity pm = new PaymentEntity();
+            pm.setOrderId(Integer.parseInt(orderId));
+            pm.setPaymentMethod(getSelectedPayment() == 1 ? "cash" : "qr-code");
+            pm.setStatus("completed");
+            pm.setTotalAmount(totalAmount);
+            new PaymentDAO().insert(pm);
         }
     }//GEN-LAST:event_btnThanhToanActionPerformed
+
+    private void btnApDungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApDungActionPerformed
+        // TODO add your handling code here:
+        DiscountEntity dc = new DiscountEntity();
+        if (txtMaGiamGia.getText().trim().isEmpty()) {
+            JDialogMaGiamGia dialog = new JDialogMaGiamGia((Dialog) this, true);
+            dialog.setVisible(true);
+            dc = dialog.getSelectedDiscount();
+        } else {
+            dc = new DiscountDAO().selectById(txtMaGiamGia.getText());
+            if (dc == null) {
+                Message.warning(this, "Không có mã giảm giá phù hợp");
+                return;
+            } else if (!JDialogMaGiamGia.isCurrentDateInRange(dc)) {
+                Message.warning(this, "Mã giảm giá đã hết hạn!");
+                return;
+            } else {
+                Message.info(this, "Bạn đã áp dụng mã giảm giá thành công");
+                return;
+            }
+        }
+        checkDiscount(dc);
+    }//GEN-LAST:event_btnApDungActionPerformed
+
     private void selectPayment(JLabel selected) {
         if (selectedPayment != null) {
             selectedPayment.setBackground(new Color(221, 221, 221)); // Reset màu của cái trước
@@ -376,10 +470,47 @@ public class JDialogThanhToan extends javax.swing.JDialog {
             }
         });
     }
+    BigDecimal totalAmount = BigDecimal.ZERO;
+    BigDecimal discount = BigDecimal.ZERO;
+    BigDecimal finalAmount = BigDecimal.ZERO;
 
     void init() {
+        setLocationRelativeTo(null);
         selectPayment(lbTienMat);
+        int i = 1;
+        model = (DefaultTableModel) tblThanhToan.getModel();
+        List<OrderDetailsDTO> ls = new OrderDetailsDAO().selectById(orderId);
+        for (OrderDetailsDTO od : ls) {
+            BigDecimal totalPrice = od.getPrice().multiply(BigDecimal.valueOf(od.getQuantity())); // quantity * price
+            totalAmount = totalAmount.add(totalPrice);
+            model.addRow(new Object[]{
+                i, od.getProductName(), od.getQuantity(), Currency.formatVND(od.getPrice())
+            });
+            i++;
+        }
+        txtGiamGia.setText(Currency.formatVND(0));
+        String discountText = txtGiamGia.getText().trim();
+        discountText = discountText.replaceAll("[^0-9]", "");
+        discount = new BigDecimal(discountText);
+        txtTienHang.setText(String.valueOf(Currency.formatVND(totalAmount)));
+        finalAmount = totalAmount.subtract(discount);
+
+        txtTongTien.setText(Currency.formatVND(finalAmount));
     }
+
+    void checkDiscount(DiscountEntity dc) {
+        BigDecimal tienGiam = dc.getDiscountValue();
+        String tienHangText = txtTienHang.getText().replaceAll("[^0-9]", "").trim();
+        totalAmount = new BigDecimal(tienHangText);
+        discount = totalAmount.multiply(tienGiam).divide(new BigDecimal(100), 0, RoundingMode.HALF_UP);
+        if (discount.compareTo(dc.getMaxValue()) > 0) {
+            discount = dc.getMaxValue();
+        }
+        finalAmount = totalAmount.subtract(discount);
+        txtGiamGia.setText(Currency.formatVND(discount));
+        txtTongTien.setText(Currency.formatVND(finalAmount));
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApDung;
     private javax.swing.JButton btnQuayLai;
@@ -390,6 +521,7 @@ public class JDialogThanhToan extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbChuyenKhoan;
     private javax.swing.JLabel lbMaGiamGia;
     private javax.swing.JLabel lbTienHang;
@@ -397,6 +529,7 @@ public class JDialogThanhToan extends javax.swing.JDialog {
     private javax.swing.JLabel lbTongTien;
     private javax.swing.JPanel pnDonHang;
     private javax.swing.JPanel pnMonDaChon;
+    private javax.swing.JTable tblThanhToan;
     private javax.swing.JLabel txtGiamGia;
     private javax.swing.JTextField txtMaGiamGia;
     private javax.swing.JLabel txtTienHang;
