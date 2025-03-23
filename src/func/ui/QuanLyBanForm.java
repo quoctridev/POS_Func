@@ -57,14 +57,6 @@ public class QuanLyBanForm extends javax.swing.JFrame {
         btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        txtSoBan = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txtGhe1Ban = new javax.swing.JTextField();
-        txtKhuVuc = new javax.swing.JTextField();
-        cboTrangThai = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -95,7 +87,6 @@ public class QuanLyBanForm extends javax.swing.JFrame {
             }
         });
 
-
         btnSua.setText("Sửa");
         btnSua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -107,39 +98,6 @@ public class QuanLyBanForm extends javax.swing.JFrame {
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXoaActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("Số bàn");
-
-        txtSoBan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSoBanActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setText("Số ghế/bàn");
-
-        jLabel3.setText("Trạng thái");
-
-        jLabel4.setText("Khu vực");
-
-        txtGhe1Ban.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtGhe1BanActionPerformed(evt);
-            }
-        });
-
-        txtKhuVuc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtKhuVucActionPerformed(evt);
-            }
-        });
-
-        cboTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Progress", "Maintenance" }));
-        cboTrangThai.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboTrangThaiActionPerformed(evt);
             }
         });
 
@@ -157,26 +115,7 @@ public class QuanLyBanForm extends javax.swing.JFrame {
                         .addComponent(btnSua)
                         .addGap(82, 82, 82)
                         .addComponent(btnXoa)
-                        .addGap(43, 43, 43))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSoBan)
-                            .addComponent(cboTrangThai, 0, 137, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtGhe1Ban, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(43, 43, 43)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -184,19 +123,7 @@ public class QuanLyBanForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSoBan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtGhe1Ban, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cboTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtKhuVuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnXoa)
                     .addComponent(btnSua)
@@ -226,43 +153,23 @@ public class QuanLyBanForm extends javax.swing.JFrame {
         showTable();
     }//GEN-LAST:event_btnXoaActionPerformed
 
-    private void txtSoBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoBanActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSoBanActionPerformed
-
-    private void txtGhe1BanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGhe1BanActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtGhe1BanActionPerformed
-
-    private void txtKhuVucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKhuVucActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtKhuVucActionPerformed
-
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-        TableEntity tb = new TableEntity();
-        tb.setTableNumber(txtSoBan.getText());
-        tb.setCapacity(Integer.parseInt(txtGhe1Ban.getText()));
-        tb.setStatus(String.valueOf(cboTrangThai.getSelectedItem()));
-        tb.setZone(txtKhuVuc.getText());
-        new TableDAO().insert(tb);
+        DialogThemBan manHinh = new DialogThemBan(this, false);
+        manHinh.setVisible(true);
         showTable();
 
     }//GEN-LAST:event_btnThemActionPerformed
 
-    private void cboTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTrangThaiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cboTrangThaiActionPerformed
-
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
         TableEntity tb = new TableEntity();
-        tb.setTableNumber(txtSoBan.getText());
-        tb.setCapacity(Integer.parseInt(txtGhe1Ban.getText()));
-        tb.setStatus(String.valueOf(cboTrangThai.getSelectedItem()));
-        tb.setZone(txtKhuVuc.getText());
-        tb.setTableId(Integer.parseInt(id));
-        new TableDAO().update(tb);
+//        tb.setTableNumber(txtSoBan.getText());
+//        tb.setCapacity(Integer.parseInt(txtGhe1Ban.getText()));
+//        tb.setStatus(String.valueOf(cboTrangThai.getSelectedItem()));
+//        tb.setZone(txtKhuVuc.getText());
+//        tb.setTableId(Integer.parseInt(id));
+//        new TableDAO().update(tb);
         showTable();
     }//GEN-LAST:event_btnSuaActionPerformed
 
@@ -270,10 +177,10 @@ public class QuanLyBanForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         int dongHienTai = tblDanhSachBan.getSelectedRow();
         id = String.valueOf(tblDanhSachBan.getValueAt(dongHienTai, 0));
-        txtSoBan.setText(String.valueOf(tblDanhSachBan.getValueAt(dongHienTai, 1)));
-        cboTrangThai.setSelectedItem(String.valueOf(tblDanhSachBan.getValueAt(dongHienTai, 2)));
-        txtGhe1Ban.setText(String.valueOf(tblDanhSachBan.getValueAt(dongHienTai, 3)));
-        txtKhuVuc.setText(String.valueOf(tblDanhSachBan.getValueAt(dongHienTai, 4)));
+//        txtSoBan.setText(String.valueOf(tblDanhSachBan.getValueAt(dongHienTai, 1)));
+//        cboTrangThai.setSelectedItem(String.valueOf(tblDanhSachBan.getValueAt(dongHienTai, 2)));
+//        txtGhe1Ban.setText(String.valueOf(tblDanhSachBan.getValueAt(dongHienTai, 3)));
+//        txtKhuVuc.setText(String.valueOf(tblDanhSachBan.getValueAt(dongHienTai, 4)));
     }//GEN-LAST:event_tblDanhSachBanMouseClicked
 
     /**
@@ -315,17 +222,9 @@ public class QuanLyBanForm extends javax.swing.JFrame {
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
-    private javax.swing.JComboBox<String> cboTrangThai;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JTable tblDanhSachBan;
-    private javax.swing.JTextField txtGhe1Ban;
-    private javax.swing.JTextField txtKhuVuc;
-    private javax.swing.JTextField txtSoBan;
     // End of variables declaration//GEN-END:variables
 }
