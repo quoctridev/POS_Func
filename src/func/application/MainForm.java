@@ -7,6 +7,7 @@ package func.application;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import func.ui.PanelDoanhThu;
+import func.ui.PanelTaoDon;
 import func.ui.PanelQuanLyDanhMuc;
 import func.ui.PanelThongKe;
 import func.ui.QuanLyNhanVienForm;
@@ -20,7 +21,6 @@ import javax.swing.JPanel;
  * @author quoca
  */
 public class MainForm extends javax.swing.JFrame {
-
     String role = "admin";
     private static MainForm app;
 
@@ -49,10 +49,12 @@ public class MainForm extends javax.swing.JFrame {
                 jLabel5.setText("Quản lý hóa đơn");
                 jLabel6.setText("Quản lý bàn");
                 jLabel7.setText("Quản lý đơn hàng");
+                clickPanel(jLabel7, new PanelTaoDon());
                 jLabel9.setText("Thanh Toán");
                 break;
             case "chef":
                 jLabel5.setText("Quản lí đơn hàng");
+                clickPanel(jLabel7, panelTaoDon);
                 break;
         }
     }
