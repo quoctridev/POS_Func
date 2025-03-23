@@ -22,21 +22,21 @@ public class ThongKeDAO {
         String sql = "";
 
         switch (type) {
-            case "day":  // Theo ngày (yyyy-MM-dd)
+            case "day":
                 sql = "SELECT payment_method, SUM(total_amount) AS revenue "
                         + "FROM Payments "
                         + "WHERE FORMAT(payment_time, 'yyyy-MM-dd') = ? "
                         + "AND [status] = 'completed' "
                         + "GROUP BY payment_method";
                 break;
-            case "month":  // Theo tháng (yyyy-MM)
+            case "month":
                 sql = "SELECT payment_method, SUM(total_amount) AS revenue "
                         + "FROM Payments "
                         + "WHERE FORMAT(payment_time, 'yyyy-MM') = ? "
                         + "AND [status] = 'completed' "
                         + "GROUP BY payment_method";
                 break;
-            case "year":  // Theo năm (yyyy)
+            case "year":
                 sql = "SELECT payment_method, SUM(total_amount) AS revenue "
                         + "FROM Payments "
                         + "WHERE FORMAT(payment_time, 'yyyy') = ? "
@@ -46,8 +46,8 @@ public class ThongKeDAO {
             case "week":
                 sql = "SELECT payment_method, SUM(total_amount) AS revenue "
                         + "FROM Payments "
-                        + "WHERE DATEPART(YEAR, payment_time) = DATEPART(YEAR, CAST(? AS DATE)) "
-                        + "AND DATEPART(WEEK, payment_time) = DATEPART(WEEK, CAST(? AS DATE)) "
+                        + "WHERE DATEPART(YEAR, payment_time) = ? "
+                        + "AND DATEPART(WEEK, payment_time) = ? "
                         + "AND [status] = 'completed' "
                         + "GROUP BY payment_method";
                 break;
@@ -59,7 +59,9 @@ public class ThongKeDAO {
             ResultSet rs;
             System.out.println(date);
             if (type.equals("week")) {
-                rs = Database.query(sql, date, date);
+                String[] parts = date.split("-W");
+
+                rs = Database.query(sql, parts[0], parts[1]);
             } else {
                 rs = Database.query(sql, date);
             }
@@ -135,7 +137,14 @@ public class ThongKeDAO {
         }
         try (ResultSet rs = Database.query(query)) {
             while (rs.next()) {
-                String date = rs.getString("period");
+                String date;
+                if (type.equals("week")) {
+                    int year = rs.getInt("year");
+                    int week = rs.getInt("period");
+                    date = year + "-W" + String.format("%02d", week); // Format thành YYYY-WW
+                } else {
+                    date = rs.getString("period");
+                }
                 double revenue = rs.getDouble("revenue");
                 dataset.addValue(revenue, "Doanh thu", date);
             }
