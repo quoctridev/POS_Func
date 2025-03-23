@@ -6,13 +6,11 @@ package func.application;
 
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import func.ui.PanelDoanhThu;
 import func.ui.PanelQuanLyDanhMuc;
 import func.ui.PanelThongKe;
 import func.ui.QuanLyNhanVienForm;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**

@@ -56,6 +56,9 @@ public class PanelThongKe extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         pnDoanhThu = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
 
         cboThongKe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ngày", "Tuần", "Tháng", "Năm" }));
         cboThongKe.addActionListener(new java.awt.event.ActionListener() {
@@ -69,7 +72,7 @@ public class PanelThongKe extends javax.swing.JPanel {
         jLabel1.setText("THỐNG KÊ DOANH THU");
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        jLabel2.setText("Kiểu thống kê:");
+        jLabel2.setText("Thống kế theo:");
 
         javax.swing.GroupLayout pnDoanhThuLayout = new javax.swing.GroupLayout(pnDoanhThu);
         pnDoanhThu.setLayout(pnDoanhThuLayout);
@@ -79,7 +82,7 @@ public class PanelThongKe extends javax.swing.JPanel {
         );
         pnDoanhThuLayout.setVerticalGroup(
             pnDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 617, Short.MAX_VALUE)
+            .addGap(0, 653, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -103,7 +106,7 @@ public class PanelThongKe extends javax.swing.JPanel {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cboThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -115,15 +118,56 @@ public class PanelThongKe extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("Thống kê doanh thu", jPanel1);
 
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 668, Short.MAX_VALUE)
+        );
+
+        jLabel3.setFont(new java.awt.Font("Helvetica Neue", 3, 48)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("THỐNG KÊ MÓN ĂN");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 975, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 999, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 721, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Thống kê món ăn", jPanel2);
@@ -140,7 +184,7 @@ public class PanelThongKe extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 803, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -178,7 +222,14 @@ public class PanelThongKe extends javax.swing.JPanel {
 
         // Tuỳ chỉnh thanh Bar
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
-        renderer.setSeriesPaint(0, new Color(52, 152, 219));
+        for (int i = 0; i < dataset.getRowCount(); i++) {
+            String rowKey = (String) dataset.getRowKey(i);
+            if (rowKey.equals("Đơn hoàn thành")) {
+                renderer.setSeriesPaint(i, new Color(52, 152, 219)); // Xanh - Hoàn thành
+            } else if (rowKey.equals("Đơn bị huỷ")) {
+                renderer.setSeriesPaint(i, new Color(231, 76, 60));  // Đỏ - Bị huỷ
+            }
+        }
         renderer.setBarPainter(new StandardBarPainter());
 
         // Tạo ChartPanel
@@ -246,18 +297,33 @@ public class PanelThongKe extends javax.swing.JPanel {
     private void hienThiPieChart(String selectedDate, String type) {
         DefaultPieDataset dataset = ThongKeDAO.getRevenueByPaymentMethod(selectedDate, type);
 
+        if (dataset.getItemCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Không có dữ liệu để hiển thị biểu đồ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         JFreeChart pieChart = ChartFactory.createPieChart(
                 "Phương thức thanh toán - " + selectedDate,
                 dataset, true, true, false);
+
         PiePlot plot = (PiePlot) pieChart.getPlot();
-        plot.setSectionPaint("Tiền mặt", new Color(46, 204, 113));  // Xanh lá
-        plot.setSectionPaint("QR-Code", new Color(231, 76, 60));  // Đỏ
         plot.setBackgroundPaint(Color.WHITE);
         plot.setOutlineVisible(false);
-        if (dataset.getItemCount() == 0) {
-            JOptionPane.showMessageDialog(null, "Không có dữ liệu để hiển thị biểu đồ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            return; // Thoát nếu không có dữ liệu
+
+        // Gán màu cho từng phần tử dựa trên loại thanh toán
+        for (Object obj : dataset.getKeys()) {
+            Comparable<?> key = (Comparable<?>) obj;
+            String label = key.toString();  // Lấy nhãn
+
+            if (label.startsWith("Tiền mặt")) {
+                plot.setSectionPaint(label, new Color(46, 204, 113));  // Xanh lá
+            } else if (label.startsWith("QR-Code")) {
+                plot.setSectionPaint(label, new Color(231, 76, 60));  // Đỏ
+            } else {
+                plot.setSectionPaint(label, new Color(52, 152, 219));  // Màu xanh dương mặc định
+            }
         }
+
         ChartPanel pieChartPanel = new ChartPanel(pieChart);
         pieChartPanel.setPreferredSize(new Dimension(500, 400));
 
@@ -274,17 +340,28 @@ public class PanelThongKe extends javax.swing.JPanel {
 
         JFreeChart chart = ChartFactory.createBarChart(
                 "Thống kê doanh thu theo ca làm (" + date + ")",
-                "Ca làm", "Doanh thu (VNĐ)", dataset
+                "Ca làm", "Giá trị", dataset
         );
-// Tuỳ chỉnh biểu đồ
+
+        // Tuỳ chỉnh biểu đồ
         CategoryPlot plot = chart.getCategoryPlot();
         plot.setBackgroundPaint(Color.WHITE);
         plot.setRangeGridlinePaint(Color.GRAY);
         plot.setOutlineVisible(false);
+
         // Tuỳ chỉnh thanh Bar
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
-        renderer.setSeriesPaint(0, new Color(52, 152, 219));
+        for (int i = 0; i < dataset.getRowCount(); i++) {
+            String rowKey = dataset.getRowKey(i).toString().trim(); // Đảm bảo không có khoảng trắng thừa
+
+            if (rowKey.equalsIgnoreCase("Doanh thu")) {
+                renderer.setSeriesPaint(i, new Color(52, 152, 219)); // Xanh - Doanh thu
+            } else if (rowKey.equalsIgnoreCase("Đơn bị huỷ")) {
+                renderer.setSeriesPaint(i, new Color(231, 76, 60));  // Đỏ - Đơn bị hủy
+            }
+        }
         renderer.setBarPainter(new StandardBarPainter());
+
         // Hiển thị biểu đồ trong popup
         JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Chi tiết doanh thu theo ca", true);
         dialog.setSize(600, 400);
@@ -297,8 +374,11 @@ public class PanelThongKe extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cboThongKe;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel pnDoanhThu;
     // End of variables declaration//GEN-END:variables
