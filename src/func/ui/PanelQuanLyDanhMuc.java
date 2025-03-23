@@ -7,7 +7,12 @@ package func.ui;
 import func.cell.ChinhSuaBang;
 import func.cell.KetHopBang;
 import func.cell.SuKienHanhDong;
+import func.dao.CategoryDAO;
+import func.entity.CategoriesEntity;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
+// Tạo TableCellRenderer để thay đổi màu sắc
+//import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -18,29 +23,90 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
     /**
      * Creates new form PanelQuanLyDanhMuc
      */
+    DefaultTableModel model;
+    CategoriesEntity category = null;
+    List<CategoriesEntity> list = new CategoryDAO().selectAll();
+    int categoryId;
+    
     public PanelQuanLyDanhMuc() {
         initComponents();
+        showTable();
+        
         SuKienHanhDong event = new SuKienHanhDong() {
-            @Override 
+            @Override
             public void Edit(int row) {
                 System.out.println("Edit row : " + row);
+                String tenDanhMuc = String.valueOf(tblDanhSach.getValueAt(row, 1));
+                txtTenDanhMuc.setText(tenDanhMuc);
+                String trangThai = String.valueOf(tblDanhSach.getValueAt(row, 2));
+                if (trangThai.equals("Hoạt động")) {
+                    cboTrangThai.setSelectedItem("Đang hoạt động");
+                } else {
+                    cboTrangThai.setSelectedItem("Không hoạt động");
+                }
+                categoryId = list.get(row).getCategoryId();
+                btnThem.setText("Lưu danh mục");
             }
-
+            
             @Override
             public void Delete(int row) {
-                if (tblDanhSach.isEditing()) {
-                    tblDanhSach.getCellEditor().stopCellEditing();
-                }
-                DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
-                model.removeRow(row);
+//                if (tblDanhSach.isEditing()) {
+//                    tblDanhSach.getCellEditor().stopCellEditing();
+//                }
+//                DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
+//                model.removeRow(row);
+                categoryId = list.get(row).getCategoryId();
+                new CategoryDAO().delete(String.valueOf(categoryId));
+                showTable();
             }
-
+            
         };
-                
+        
         tblDanhSach.getColumnModel().getColumn(3).setCellRenderer(new KetHopBang());
         tblDanhSach.getColumnModel().getColumn(3).setCellEditor(new ChinhSuaBang(event));
     }
+    
+    void clearText() {
+        txtTenDanhMuc.setText("");
+        cboTrangThai.setSelectedIndex(0);
+    }
+    
+    public void showTable() {
+        List<CategoriesEntity> list = new CategoryDAO().selectAll(); // Cập nhật lại danh sách 
+        model = (DefaultTableModel) this.tblDanhSach.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
 
+        int number = 1;
+        
+        for (CategoriesEntity category : list) {
+            String name = category.getCategoryName();
+            String trangThai = category.isIsActive() ? "Hoạt động" : "Không hoạt động";
+
+            // Thêm số thứ tự tự động vào bảng
+            model.addRow(new Object[]{
+                number++, name, trangThai
+            });
+        }
+
+//        tblDanhSach.getColumnModel().getColumn(2).setCellRenderer(new StatusCellRenderer());
+    }
+
+//    // Tạo một lớp TableCellRenderer để thay đổi màu sắc cột trạng thái
+//    public class StatusCellRenderer extends JLabel implements TableCellRenderer {
+//
+//        @Override
+//        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+//            setText(value.toString()); // Đặt giá trị cho ô
+//
+//            // Kiểm tra trạng thái và thay đổi màu sắc cho phù hợp
+//            if ("Hoạt động".equals(value)) {
+//                setForeground(Color.GREEN); // Màu xanh lá cây
+//            } else if ("Không hoạt động".equals(value)) {
+//                setForeground(Color.RED); // Màu đỏ
+//            }
+//            return this;
+//        }
+//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -162,6 +228,11 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
             }
         });
         tblDanhSach.setRowHeight(40);
+        tblDanhSach.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDanhSachMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblDanhSach);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -211,7 +282,30 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
+        if (btnThem.getText().equals("Thêm danh mục")) {
+            CategoriesEntity category = new CategoriesEntity();
+            category.setCategoryName(txtTenDanhMuc.getText());
+            category.setIsActive(String.valueOf(cboTrangThai.getSelectedItem()).equals("Đang hoạt động"));
+            new CategoryDAO().insert(category);
+            clearText();
+            showTable();
+        } else if (btnThem.getText().equals("Lưu danh mục")) {
+            CategoriesEntity category = new CategoriesEntity();
+            category.setCategoryName(txtTenDanhMuc.getText());
+            category.setIsActive(String.valueOf(cboTrangThai.getSelectedItem()).equals("Đang hoạt động"));
+            category.setCategoryId(categoryId);
+            new CategoryDAO().update(category);
+            clearText();
+            showTable();
+            categoryId = -1;
+            btnThem.setText("Thêm danh mục");
+        }
+
     }//GEN-LAST:event_btnThemActionPerformed
+
+    private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked
+
+    }//GEN-LAST:event_tblDanhSachMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

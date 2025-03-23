@@ -4,14 +4,11 @@
  */
 package func.ui;
 
-import func.application.MainForm;
 import func.dao.UserDAO;
 import func.entity.UserEntity;
 import java.awt.Frame;
-import java.awt.Window;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -32,8 +29,9 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
     }
 
     public void showTable() {
+        List<UserEntity> list = new UserDAO().selectAll(); // Cập nhật lại danh sách 
         model = (DefaultTableModel) this.tblDanhSach.getModel();
-        model.setRowCount(0);
+        model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
         for (UserEntity user : list) {
             String id = String.valueOf(user.getUserId());
             String name = user.getUsername();
@@ -187,11 +185,10 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
         if (user != null) {
-            JDialogSuaNhanVien sua = 
-            new JDialogSuaNhanVien((Frame) SwingUtilities.getWindowAncestor(this), true, user);
+            JDialogSuaNhanVien sua = new JDialogSuaNhanVien((Frame) SwingUtilities.getWindowAncestor(this), true, user);
             sua.setVisible(true);
-            sua.dispose();
-            showTable();
+            sua.dispose(); // Đóng dialog sau khi sửa xong
+            showTable();  // Cập nhật lại bảng sau khi sửa
         } else {
             JOptionPane.showMessageDialog(this, "Chọn nhân viên muốn sửa thông tin");
         }
@@ -200,8 +197,12 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
-        String id = null;
-        new UserDAO().delete(String.valueOf(user.getUserId()));
+        if (user != null) {
+            new UserDAO().delete(String.valueOf(user.getUserId()));
+            showTable();
+        } else {
+            JOptionPane.showMessageDialog(this, "Chọn nhân viên muốn xóa");
+        }
         showTable();
     }//GEN-LAST:event_btnXoaActionPerformed
 
@@ -209,7 +210,6 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
         // TODO add your handling code here:
         new JDialogThemNhanVien((Frame) SwingUtilities.getWindowAncestor(this), true).setVisible(true);
         showTable();
-
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnXoaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnXoaMouseClicked
@@ -219,7 +219,6 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
     private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked
         // TODO add your handling code here:
         int dongDangChon = tblDanhSach.getSelectedRow();
-        //   dongDangChon = tblDanhSach.getSelectedRow();
         this.user = list.get(dongDangChon);
     }//GEN-LAST:event_tblDanhSachMouseClicked
 
