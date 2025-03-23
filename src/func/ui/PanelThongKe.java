@@ -20,6 +20,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.CategoryItemEntity;
 import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.CategoryDataset;
@@ -223,7 +224,7 @@ public class PanelThongKe extends javax.swing.JPanel {
                             hienThiBieuDoTheoCa(selectedDate);
                         }
                     } else {
-                        // Với Tuần/Tháng/Năm: Hiển thị PieChart trực tiếp
+                        System.out.println(selectedDate);
                         hienThiPieChart(selectedDate, type);
                     }
                 }
@@ -243,20 +244,16 @@ public class PanelThongKe extends javax.swing.JPanel {
     }
 
     private void hienThiPieChart(String selectedDate, String type) {
-        DefaultPieDataset dataset = switch (type) {
-            case "day" ->
-                ThongKeDAO.getRevenueByPaymentMethod(selectedDate, "day");
-            case "week" ->
-                ThongKeDAO.getRevenueByPaymentMethod(selectedDate, "week");
-            case "month" ->
-                ThongKeDAO.getRevenueByPaymentMethod(selectedDate, "month");
-            default ->
-                ThongKeDAO.getRevenueByPaymentMethod(selectedDate, "year");
-        };
+        DefaultPieDataset dataset = ThongKeDAO.getRevenueByPaymentMethod(selectedDate, type);
 
         JFreeChart pieChart = ChartFactory.createPieChart(
                 "Phương thức thanh toán - " + selectedDate,
                 dataset, true, true, false);
+        PiePlot plot = (PiePlot) pieChart.getPlot();
+        plot.setSectionPaint("Tiền mặt", new Color(46, 204, 113));  // Xanh lá
+        plot.setSectionPaint("QR-Code", new Color(231, 76, 60));  // Đỏ
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setOutlineVisible(false);
         if (dataset.getItemCount() == 0) {
             JOptionPane.showMessageDialog(null, "Không có dữ liệu để hiển thị biểu đồ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return; // Thoát nếu không có dữ liệu
@@ -284,7 +281,6 @@ public class PanelThongKe extends javax.swing.JPanel {
         plot.setBackgroundPaint(Color.WHITE);
         plot.setRangeGridlinePaint(Color.GRAY);
         plot.setOutlineVisible(false);
-
         // Tuỳ chỉnh thanh Bar
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setSeriesPaint(0, new Color(52, 152, 219));
