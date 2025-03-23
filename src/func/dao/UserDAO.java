@@ -15,7 +15,7 @@ public class UserDAO extends FuncDAO<UserEntity, String>{
 
     @Override
     public void insert(UserEntity entity) {
-        String sql  = "INSERT INTO Users (username, [password], full_name, phone, [role] VALUES (?, ?, ?, ?, ?))";
+        String sql  = "INSERT INTO Users (username, [password], full_name, phone, [role]) VALUES (?, ?, ?, ?, ?)";
         Database.update(sql, entity.getUsername(), entity.getPassword(), entity.getFullName(), entity.getPhone(), entity.getRole());
     }
 
