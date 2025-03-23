@@ -5,11 +5,27 @@
 package func.ui;
 
 import func.dao.CategoryDAO;
-import func.dao.ProductCategoryDAO;
-import java.util.LinkedHashMap;
-import javax.swing.*;
+import func.dao.ProductDAO;
+import func.entity.CategoriesEntity;
+import func.entity.ProductEntity;
+import func.utils.Currency;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
+import javax.swing.AbstractCellEditor;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -17,19 +33,17 @@ import java.util.Map;
  */
 public class PanelTaoDon extends javax.swing.JPanel {
 
-    private DefaultListModel<String> listModel;
-    private JList<String> listCate;
-    private CategoryDAO categoryDAO;
+    private List<CategoriesEntity> categoryList;
+    private List<ProductEntity> menu;
+    private DefaultTableModel model;
 
     public PanelTaoDon() {
         initComponents();
-        categoryDAO = new CategoryDAO();
-        listModel = new DefaultListModel<>();
-        ListCate.setModel(listModel);
+        selectCategory();
+        model = (DefaultTableModel) tblDanhSach.getModel();
+        model.setRowCount(0);
 
-        loadCategories();
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,8 +60,8 @@ public class PanelTaoDon extends javax.swing.JPanel {
         jMenu3 = new javax.swing.JMenu();
         jLabel3 = new javax.swing.JLabel();
         pnDanhMuc = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        ListCate = new javax.swing.JList<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        pnCategory = new javax.swing.JPanel();
         pnDanhSachMon = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -55,33 +69,14 @@ public class PanelTaoDon extends javax.swing.JPanel {
         tblDanhSach = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lbTongTien = new javax.swing.JLabel();
         btnLuu = new javax.swing.JButton();
         btnThanhTien = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         pnMonAn = new javax.swing.JPanel();
-        jButton14 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
-        jButton17 = new javax.swing.JButton();
-        jButton18 = new javax.swing.JButton();
-        jButton19 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton20 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
-        jButton21 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
 
         jMenu1.setText("jMenu1");
 
@@ -93,32 +88,22 @@ public class PanelTaoDon extends javax.swing.JPanel {
 
         jLabel3.setText("jLabel3");
 
-        ListCate.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        ListCate.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ListCateMouseClicked(evt);
-            }
-        });
-        jScrollPane2.setViewportView(ListCate);
+        pnCategory.setBorder(javax.swing.BorderFactory.createTitledBorder("Category"));
+        pnCategory.setLayout(new java.awt.GridLayout(16, 0));
+        jScrollPane3.setViewportView(pnCategory);
 
         javax.swing.GroupLayout pnDanhMucLayout = new javax.swing.GroupLayout(pnDanhMuc);
         pnDanhMuc.setLayout(pnDanhMucLayout);
         pnDanhMucLayout.setHorizontalGroup(
             pnDanhMucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnDanhMucLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         pnDanhMucLayout.setVerticalGroup(
             pnDanhMucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnDanhMucLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane3)
                 .addContainerGap())
         );
 
@@ -134,7 +119,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(99, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(97, 97, 97))
         );
@@ -157,17 +142,18 @@ public class PanelTaoDon extends javax.swing.JPanel {
                 "Món", "SL", "Giá", "T.Tiền"
             }
         ));
+        tblDanhSach.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblDanhSach);
 
         jPanel6.setBackground(new java.awt.Color(204, 204, 255));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("THÀNH TIỀN:");
+        jLabel4.setText("TỔNG TIỀN:");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("jLabel5");
+        lbTongTien.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbTongTien.setForeground(new java.awt.Color(0, 0, 0));
+        lbTongTien.setText("jLabel5");
 
         btnLuu.setBackground(new java.awt.Color(102, 0, 204));
         btnLuu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -199,9 +185,9 @@ public class PanelTaoDon extends javax.swing.JPanel {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lbTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                        .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnThanhTien, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -214,7 +200,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5))
+                    .addComponent(lbTongTien))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
@@ -231,17 +217,18 @@ public class PanelTaoDon extends javax.swing.JPanel {
             pnDanhSachMonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnDanhSachMonLayout.createSequentialGroup()
-                .addGroup(pnDanhSachMonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnDanhSachMonLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnDanhSachMonLayout.setVerticalGroup(
             pnDanhSachMonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnDanhSachMonLayout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -259,7 +246,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(251, 251, 251)
                 .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(186, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -269,67 +256,11 @@ public class PanelTaoDon extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        pnMonAn.setLayout(new java.awt.GridLayout(0, 4));
+        pnMonAn.setBorder(javax.swing.BorderFactory.createTitledBorder("Menu"));
+        pnMonAn.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jButton14.setText("jButton14");
-        pnMonAn.add(jButton14);
-
-        jButton15.setText("jButton15");
-        pnMonAn.add(jButton15);
-
-        jButton1.setText("jButton1");
-        pnMonAn.add(jButton1);
-
-        jButton16.setText("jButton16");
-        pnMonAn.add(jButton16);
-
-        jButton17.setText("jButton17");
-        pnMonAn.add(jButton17);
-
-        jButton18.setText("jButton18");
-        pnMonAn.add(jButton18);
-
-        jButton19.setText("jButton19");
-        pnMonAn.add(jButton19);
-
-        jButton9.setText("jButton9");
-        pnMonAn.add(jButton9);
-
-        jButton3.setText("jButton3");
-        pnMonAn.add(jButton3);
-
-        jButton20.setText("jButton20");
-        pnMonAn.add(jButton20);
-
-        jButton2.setText("jButton2");
-        pnMonAn.add(jButton2);
-
-        jButton6.setText("jButton6");
-        pnMonAn.add(jButton6);
-
-        jButton8.setText("jButton8");
-        pnMonAn.add(jButton8);
-
-        jButton4.setText("jButton4");
-        pnMonAn.add(jButton4);
-
-        jButton5.setText("jButton5");
-        pnMonAn.add(jButton5);
-
-        jButton10.setText("jButton10");
-        pnMonAn.add(jButton10);
-
-        jButton7.setText("jButton7");
-        pnMonAn.add(jButton7);
-
-        jButton11.setText("jButton11");
-        pnMonAn.add(jButton11);
-
-        jButton12.setText("jButton12");
-        pnMonAn.add(jButton12);
-
-        jButton21.setText("jButton21");
-        pnMonAn.add(jButton21);
+        jLabel5.setText("Bạn chưa chọn danh mục sản phẩm");
+        pnMonAn.add(jLabel5);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -338,10 +269,10 @@ public class PanelTaoDon extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnDanhMuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnMonAn, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnMonAn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(pnDanhSachMon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -351,84 +282,166 @@ public class PanelTaoDon extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addComponent(pnMonAn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton13ActionPerformed
-    private int lastSelectedCategoryId = -1;
-    private void ListCateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ListCateMouseClicked
-        ListCate.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) { // Chỉ kích hoạt khi đã chọn xong
-                int categoryId = getSelectedCategoryId();
 
-                // Chỉ in nếu ID thay đổi
-                if (categoryId != -1 && categoryId != lastSelectedCategoryId) {
-                    System.out.println("Selected Category ID: " + categoryId);
-                    lastSelectedCategoryId = categoryId; // Cập nhật ID đã chọn
-                    ProductCategoryDAO procate = new ProductCategoryDAO();
-                    procate.getProductsByCategoryId(categoryId);
+    public void selectCategory() {
+        categoryList = new CategoryDAO().selectAll();
+        pnCategory.removeAll();
+        pnCategory.updateUI();
+        int i = 0;
+        for (CategoriesEntity c : categoryList) {
+            JButton jButtonCategory = new JButton();
+            jButtonCategory.setText(String.valueOf(c.getCategoryName()));
+            jButtonCategory.setPreferredSize(new java.awt.Dimension(100, 44));
+            jButtonCategory.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Ví dụ: Hiển thị danh sách món theo danh mục
+                    selectProductById(c.getCategoryId());
                 }
+            });
+            jButtonCategory.setMargin(new java.awt.Insets(2, 2, 2, 2));
+            jButtonCategory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jButtonCategory.setFont(new java.awt.Font("Segoe UI", 0, 10));
+            if (!c.isIsActive()) {
+                continue;
             }
-        });
-    }//GEN-LAST:event_ListCateMouseClicked
-
-    private Map<Integer, String> categoryMap = new LinkedHashMap<>();
-
-    private void loadCategories() {
-        listModel.clear(); // Xóa dữ liệu cũ
-        categoryMap = categoryDAO.getAllCategoriesWithID(); // Lấy danh mục
-
-        for (String categoryName : categoryMap.values()) {
-            listModel.addElement(categoryName); // Hiển thị tên danh mục
+            i++;
+            pnCategory.add(jButtonCategory);
         }
+
+        pnCategory.setLayout(new java.awt.GridLayout(i, 0));
     }
 
-    private int getSelectedCategoryId() {
-        int selectedIndex = ListCate.getSelectedIndex(); // Lấy index của item chọn
-        if (selectedIndex == -1) {
-            return -1; // Không chọn gì
-        }
+    public void selectProductById(int id) {
 
-        // Lấy category_id từ tên danh mục
-        String selectedCategoryName = listModel.getElementAt(selectedIndex);
-        for (Map.Entry<Integer, String> entry : categoryMap.entrySet()) {
-            if (entry.getValue().equals(selectedCategoryName)) {
-                return entry.getKey(); // Trả về category_id
-            }
+        menu = new ProductDAO().selectByCategory(id);
+        pnMonAn.removeAll();
+        pnMonAn.updateUI();
+        JPanel panelRecipe = new JPanel(new java.awt.GridLayout(0, 4, 10, 5));
+        JScrollPane mainScrollPane = new JScrollPane();
+        tblDanhSach.getColumnModel().getColumn(0).setPreferredWidth(150); // Cột Tên món
+        tblDanhSach.getColumnModel().getColumn(1).setPreferredWidth(70);  // Cột Số lượng
+        tblDanhSach.getColumnModel().getColumn(2).setPreferredWidth(100); // Cột Đơn giá
+        tblDanhSach.getColumnModel().getColumn(3).setPreferredWidth(120); // Cột Thành tiền
+        TableColumn quantityColumn = tblDanhSach.getColumnModel().getColumn(1);
+        quantityColumn.setCellEditor(new SpinnerEditor());
+
+        for (ProductEntity pro : menu) {
+            JButton jButtonRecipe = new JButton();
+            jButtonRecipe.setText(String.valueOf(pro.getProductName()));
+            jButtonRecipe.setPreferredSize(new java.awt.Dimension(110, 110));
+            jButtonRecipe.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    boolean found = false;
+                    for (int i = 0; i < model.getRowCount(); i++) {
+                        if (model.getValueAt(i, 0).equals(pro.getProductName())) {
+                            int currentQuantity = (int) model.getValueAt(i, 1);
+                            int newQuantity = currentQuantity + 1;
+                            model.setValueAt(newQuantity, i, 1);
+
+                            // Cập nhật thành tiền
+                            BigDecimal price = (BigDecimal) model.getValueAt(i, 2);
+                            BigDecimal total = price.multiply(BigDecimal.valueOf(newQuantity));
+                            model.setValueAt(total, i, 3);
+
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        model.addRow(new Object[]{
+                            pro.getProductName(),
+                            1,
+                            pro.getPrice(),
+                            pro.getPrice() // Thành tiền = số lượng * đơn giá (1 * giá)
+                        });
+                    }
+                    lbTongTien.setText(Currency.formatVND(tinhTongTien()));
+                }
+            });
+//            if (displayPicture(menu) == null) {
+//            } else {
+//                jButtonRecipe.setIcon(displayPicture(menu));
+//            }
+//            jButtonRecipe.setBackground(new Color(192,192,192));
+            jButtonRecipe.setName(String.valueOf(pro.getCategoryId()));
+            jButtonRecipe.setText("<html><body style =\"text-indent: -2em;padding:0;margin:0;\"><p style=\"font-size: 13; color:black;\">" + pro.getProductName() + "</p><p  style=\"font-weight: 50%; color:blue;\">" + Currency.formatVND(pro.getPrice()) + "</p></body></html>");
+            jButtonRecipe.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+            jButtonRecipe.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+            jButtonRecipe.setMargin(new java.awt.Insets(2, 2, 2, 2));
+            jButtonRecipe.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            panelRecipe.add(jButtonRecipe);
+
+            mainScrollPane.setViewportView(panelRecipe);
+
+            pnMonAn.add(mainScrollPane, java.awt.BorderLayout.CENTER);
+            pnMonAn.validate();
+            pnMonAn.validate();
         }
-        return -1; // Không tìm thấy
+//        disableSideButton();
     }
 
+    private BigDecimal tinhTongTien() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            BigDecimal amount = (BigDecimal) model.getValueAt(i, 3); // Cột Thành tiền (Index 3)
+            total = total.add(amount);
+        }
+        return total;
+    }
 
+    class SpinnerEditor extends AbstractCellEditor implements TableCellEditor {
+
+        private final JSpinner spinner;
+        private int row;
+        private JTable table;
+
+        public SpinnerEditor() {
+            spinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1)); // Min = 1, Max = 100, Step = 1
+            spinner.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    if (table != null) {
+                        int quantity = (int) spinner.getValue();
+                        Object priceObj = table.getModel().getValueAt(row, 2);
+
+                        if (priceObj instanceof BigDecimal) {
+                            BigDecimal price = (BigDecimal) priceObj;
+                            BigDecimal total = price.multiply(BigDecimal.valueOf(quantity)); // Thành tiền = Đơn giá * Số lượng
+
+                            table.getModel().setValueAt(total, row, 3);
+                            lbTongTien.setText(Currency.formatVND(tinhTongTien()));
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            this.row = row;
+            this.table = table;
+            spinner.setValue(value);
+            return spinner;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return spinner.getValue();
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList<String> ListCate;
     private javax.swing.JButton btnLuu;
     private javax.swing.JButton btnThanhTien;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton20;
-    private javax.swing.JButton jButton21;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -442,7 +455,9 @@ public class PanelTaoDon extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lbTongTien;
+    private javax.swing.JPanel pnCategory;
     private javax.swing.JPanel pnDanhMuc;
     private javax.swing.JPanel pnDanhSachMon;
     private javax.swing.JPanel pnMonAn;

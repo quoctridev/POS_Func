@@ -18,7 +18,7 @@ import javax.swing.JPanel;
  * @author quoca
  */
 public class MainForm extends javax.swing.JFrame {
-private PanelTaoDon panelTaoDon = new PanelTaoDon();
+    private PanelTaoDon panelTaoDon = new PanelTaoDon();
     String role = "cashier";
     private static MainForm app;
 
