@@ -8,10 +8,10 @@ public class ProductEntity {
     int productId;
     String productName;
     BigDecimal price;
-    int stock;//hàng tồn kho
-    String image;//ảnh
-    int categoryId;//mã danh mục
-    Date createdAt;//ngày tạo
+    int stock;
+    String image;
+    int categoryId;
+    Date createdAt;
 
     public ProductEntity() {
     }

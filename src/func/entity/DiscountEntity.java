@@ -1,19 +1,16 @@
-
-
 package func.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-
 public class DiscountEntity {
-int discountId;
+
+    int discountId;
     String code;
     BigDecimal discountValue;
     BigDecimal maxValue;
     Date startDate;
     Date endDate;
-    boolean isActive;
     Date createdAt;
 
     public DiscountEntity() {
@@ -26,7 +23,6 @@ int discountId;
         this.maxValue = maxValue;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.isActive = isActive;
         this.createdAt = createdAt;
     }
 
@@ -78,14 +74,6 @@ int discountId;
         this.endDate = endDate;
     }
 
-    public boolean isIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -93,6 +81,5 @@ int discountId;
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-    
-    
+
 }
