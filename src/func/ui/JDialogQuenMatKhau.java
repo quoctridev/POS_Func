@@ -173,18 +173,18 @@ public class JDialogQuenMatKhau extends javax.swing.JDialog {
         String tenTaiKhoan = txtUser.getText();
 
         if (tenTaiKhoan.isEmpty()) {
-            Message.message(this, "Không được để trống Tên Tài Khoản", "Thong bao!");
+            Message.warning(this, "Không được để trống Tên Tài Khoản");
 
         } else {
             UserDAO userDAO = new UserDAO();
             UserEntity user = userDAO.selectById(tenTaiKhoan);
 
             if (user != null) {
-                Message.message(this, "Đã gửi thông báo cho admin", "Thong bao!");
+                Message.warning(this, "Đã gửi thông báo cho admin");
 
                 guiThongBaoChoAdmin(user);
             } else {
-                Message.message(this, "Sai Tên Tài Khoản", "Thong bao!");
+                Message.warning(this, "Sai Tên Tài Khoản");
 
             }
         }
