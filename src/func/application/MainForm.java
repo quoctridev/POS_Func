@@ -7,12 +7,13 @@ package func.application;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import func.ui.PanelDoanhThu;
+import func.ui.PanelTaoDon;
 import func.ui.PanelQuanLyDanhMuc;
 import func.ui.PanelThongKe;
+import func.ui.PanelQuanLyHoaDon;
 import func.ui.QuanLyNhanVienForm;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -21,7 +22,8 @@ import javax.swing.JPanel;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    String role = "admin";
+
+    String role = "cashier";
     private static MainForm app;
 
     /**
@@ -47,12 +49,15 @@ public class MainForm extends javax.swing.JFrame {
                 break;
             case "cashier":
                 jLabel5.setText("Quản lý hóa đơn");
+                clickPanel(jLabel5, new PanelQuanLyHoaDon());
                 jLabel6.setText("Quản lý bàn");
                 jLabel7.setText("Quản lý đơn hàng");
+                clickPanel(jLabel7, new PanelTaoDon());
                 jLabel9.setText("Thanh Toán");
                 break;
             case "chef":
                 jLabel5.setText("Quản lí đơn hàng");
+//                clickPanel(jLabel7, panelTaoDon);
                 break;
         }
     }

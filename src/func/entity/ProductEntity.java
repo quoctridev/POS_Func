@@ -8,26 +8,22 @@ public class ProductEntity {
     int productId;
     String productName;
     BigDecimal price;
-    int stock;
+    boolean isActive;
     String image;
     int categoryId;
-    boolean isAvailable;
     Date createdAt;
-    Date updatedAt;
 
     public ProductEntity() {
     }
 
-    public ProductEntity(int productId, String productName, BigDecimal price, int stock, String image, int categoryId, boolean isAvailable, Date createdAt, Date updatedAt) {
+    public ProductEntity(int productId, String productName, BigDecimal price, boolean isActive, String image, int categoryId, Date createdAt) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
-        this.stock = stock;
+        this.isActive = isActive;
         this.image = image;
         this.categoryId = categoryId;
-        this.isAvailable = isAvailable;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public int getProductId() {
@@ -54,12 +50,12 @@ public class ProductEntity {
         this.price = price;
     }
 
-    public int getStock() {
-        return stock;
+    public boolean isIsActive() {
+        return isActive;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public String getImage() {
@@ -78,28 +74,12 @@ public class ProductEntity {
         this.categoryId = categoryId;
     }
 
-    public boolean isIsAvailable() {
-        return isAvailable;
-    }
-
-    public void setIsAvailable(boolean isAvailable) {
-        this.isAvailable = isAvailable;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
 }
