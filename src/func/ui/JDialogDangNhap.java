@@ -221,7 +221,7 @@ public class JDialogDangNhap extends javax.swing.JDialog {
     private void lbQuenMatKhauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbQuenMatKhauMouseClicked
         JDialogQuenMatKhau dialog = new JDialogQuenMatKhau();
         dialog.setLocationRelativeTo(null);
-        this.dispose(); // Đóng JDialog hiện tại (JDialogDangNhap)
+        this.dispose(); 
         dialog.setVisible(true);
     }//GEN-LAST:event_lbQuenMatKhauMouseClicked
 
