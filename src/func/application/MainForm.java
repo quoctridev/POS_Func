@@ -19,7 +19,7 @@ import javax.swing.JPanel;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    String role = "cashier";
+    String role = "admin";
     private static MainForm app;
 
     /**

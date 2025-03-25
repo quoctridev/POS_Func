@@ -4,17 +4,111 @@
  */
 package func.ui;
 
+import func.entity.OrderTableEntity;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.*;
+
+
 /**
  *
  * @author HOANG NHI
  */
 public class GopBanFrom extends javax.swing.JFrame {
+ private ArrayList<JButton> tableButtons = new ArrayList<>();
+    private ArrayList<Integer> selectedTables = new ArrayList<>();
 
-    /**
-     * Creates new form GopBanFrom
-     */
     public GopBanFrom() {
         initComponents();
+        initCustomUI();
+    }
+
+    private void initCustomUI() {
+        createTablesForPanel(jPanel1, 1, 5); // Tầng 1: Bàn 1-5
+        createTablesForPanel(jPanel2, 6, 10); // Tầng 2: Bàn 6-10
+        createTablesForPanel(jPanel3, 11, 15); // Ngoài trời: Bàn 11-15
+        createTablesForPanel(jPanel4, 16, 20); // VIP: Bàn 16-20
+
+        // Làm đẹp nút gộp bàn
+        btnGopBan.setPreferredSize(new Dimension(180, 50));
+        btnGopBan.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        btnGopBan.setBackground(new Color(46, 204, 113));
+        btnGopBan.setForeground(Color.WHITE);
+
+        // Làm đẹp nút đặt bàn
+        btnDatBan.setPreferredSize(new Dimension(180, 50));
+        btnDatBan.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        btnDatBan.setBackground(new Color(52, 152, 219));
+        btnDatBan.setForeground(Color.WHITE);
+    }
+
+    private void createTablesForPanel(JPanel panel, int startId, int endId) {
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        for (int i = startId; i <= endId; i++) {
+            JButton btn = new JButton("Bàn " + i);
+            btn.setPreferredSize(new Dimension(100, 80));
+            btn.setBackground(Color.LIGHT_GRAY);
+            btn.setFont(new Font("Segoe UI", Font.BOLD, 16));
+            int tableId = i;
+            btn.addActionListener(e -> handleSelectTable(btn, tableId));
+            panel.add(btn);
+            tableButtons.add(btn);
+        }
+    }
+
+    private void handleSelectTable(JButton button, int tableId) {
+        if (selectedTables.contains(tableId)) {
+            selectedTables.remove((Integer) tableId);
+            button.setBackground(Color.LIGHT_GRAY);
+        } else {
+            selectedTables.add(tableId);
+            button.setBackground(Color.YELLOW);
+        }
+    }
+
+    private void handleXacNhan() {
+        if (selectedTables.size() < 2) {
+            JOptionPane.showMessageDialog(this, "Chọn ít nhất 2 bàn để gộp.");
+            return;
+        }
+        int orderID = (int) (Math.random() * 10000);
+        System.out.println("Tạo orderMerge và Order ID: " + orderID);
+        System.out.println("Các bàn đã gộp: " + selectedTables);
+        JOptionPane.showMessageDialog(this, "Chuyển sang trang chọn món cho Order: " + orderID);
+    }
+      private void handleDatBan() {
+        if (selectedTables.size() != 1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn đúng 1 bàn để đặt.");
+            return;
+        }
+
+        int tableId = selectedTables.get(0);
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Bạn có chắc chắn muốn đặt bàn số " + tableId + "?",
+                "Xác nhận đặt bàn",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            OrderTableEntity order = new OrderTableEntity();
+            order.setTableId(tableId);
+            order.setCustomerId(0); // tạm thời đặt mặc định
+            order.setPhone("");
+            order.setNote("Đặt bàn nhanh");
+            order.setStatus("Đã đặt");
+            order.setCreatedAt(new Date());
+
+            JOptionPane.showMessageDialog(this, "Đặt bàn thành công cho bàn số " + tableId + "!");
+
+            for (JButton btn : tableButtons) {
+                if (btn.getText().contains("Bàn " + tableId)) {
+                    btn.setBackground(new Color(52, 152, 219));
+                    break;
+                }
+            }
+
+            selectedTables.clear();
+        }
     }
 
     /**
@@ -28,63 +122,27 @@ public class GopBanFrom extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnGopBan = new javax.swing.JButton();
+        btnDatBan = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jButton1.setText("1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("3");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(275, Short.MAX_VALUE))
+            .addGap(0, 732, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(522, Short.MAX_VALUE))
+            .addGap(0, 703, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Tầng 1", jPanel1);
@@ -128,25 +186,31 @@ public class GopBanFrom extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("VIP", jPanel4);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Trống");
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Có người");
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Dọn dẹp");
 
-        jButton4.setText("Gộp bàn");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnGopBan.setText("Gộp bàn");
+        btnGopBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnGopBanActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Đặt bàn");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnDatBan.setText("Đặt bàn");
+        btnDatBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnDatBanActionPerformed(evt);
             }
         });
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setText("Đã đặt trước");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,9 +224,10 @@ public class GopBanFrom extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnGopBan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDatBan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(120, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -178,35 +243,30 @@ public class GopBanFrom extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
                 .addGap(35, 35, 35)
-                .addComponent(jButton4)
+                .addComponent(btnGopBan)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5)
+                .addComponent(btnDatBan)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnGopBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGopBanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn gộp các bàn đã chọn không?", "Xác nhận gộp bàn", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            handleXacNhan();
+        }
+    }//GEN-LAST:event_btnGopBanActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnDatBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDatBanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+        handleDatBan();
+    }//GEN-LAST:event_btnDatBanActionPerformed
 
     /**
      * @param args the command line arguments
@@ -244,14 +304,12 @@ public class GopBanFrom extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btnDatBan;
+    private javax.swing.JButton btnGopBan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
