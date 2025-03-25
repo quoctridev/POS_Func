@@ -8,6 +8,8 @@ import func.dao.NotificationDAO;
 import func.dao.UserDAO;
 import func.entity.UserEntity;
 import func.utils.Message;
+import java.awt.Frame;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -21,7 +23,16 @@ public class JDialogQuenMatKhau extends javax.swing.JDialog {
     public JDialogQuenMatKhau() {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                boolean confirm = Message.confirm(JDialogQuenMatKhau.this, "Bạn có chắc muốn đóng chương trình");
+                if (confirm) {
+                    System.exit(0); // Tắt toàn bộ chương trình khi ấn "X"
+                }
 
+            }
+        });
     }
 
     /**
@@ -191,10 +202,11 @@ public class JDialogQuenMatKhau extends javax.swing.JDialog {
     }//GEN-LAST:event_btnQuenMatKhauActionPerformed
 
     private void lbDangNhapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbDangNhapMouseClicked
-        JDialogDangNhap dialog = new JDialogDangNhap(this, true);
+        this.dispose();
+        JDialogDangNhap dialog = new JDialogDangNhap((Frame) SwingUtilities.getWindowAncestor(this), true);
         dialog.setLocationRelativeTo(null); // Để hiển thị ở giữa màn hình
         dialog.setVisible(true);
-        this.dispose();
+
     }//GEN-LAST:event_lbDangNhapMouseClicked
 
     /**

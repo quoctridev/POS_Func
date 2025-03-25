@@ -24,11 +24,17 @@ public class JDialogDangNhap extends javax.swing.JDialog {
     public JDialogDangNhap(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-    }
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                boolean confirm = Message.confirm(JDialogDangNhap.this, "Bạn có chắc muốn đóng chương trình");
+                if (confirm) {
+                    System.exit(0); // Tắt toàn bộ chương trình khi ấn "X"
+                }
 
-    public JDialogDangNhap(Dialog parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
+            }
+        });
     }
 
     /**
@@ -221,7 +227,7 @@ public class JDialogDangNhap extends javax.swing.JDialog {
     private void lbQuenMatKhauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbQuenMatKhauMouseClicked
         JDialogQuenMatKhau dialog = new JDialogQuenMatKhau();
         dialog.setLocationRelativeTo(null);
-        this.dispose(); 
+        this.dispose();
         dialog.setVisible(true);
     }//GEN-LAST:event_lbQuenMatKhauMouseClicked
 
@@ -268,6 +274,7 @@ public class JDialogDangNhap extends javax.swing.JDialog {
     }
 
     private void login() {
+
         String username = txtTenTaiKhoan.getText();
         String password = String.valueOf(pwfMatKhau.getPassword());
         //validate
@@ -281,7 +288,8 @@ public class JDialogDangNhap extends javax.swing.JDialog {
         }
         UserEntity user = new UserDAO().selectById(username);
         if (user == null) {
-            Message.warning(this, "Sai Ten Tai Khoan");
+            Message.warning(this, "Tài khoản mật khẩu không đúng");
+            return;
         }
         //hashpass
         BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
@@ -290,8 +298,8 @@ public class JDialogDangNhap extends javax.swing.JDialog {
             Auth.user = user;
             this.dispose();
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Fail");
-            this.dispose();
+            Message.warning(this, "Tài khoản mật khẩu không đúng");
+            return;
         }
     }
 
