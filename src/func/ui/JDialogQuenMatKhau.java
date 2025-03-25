@@ -194,6 +194,7 @@ public class JDialogQuenMatKhau extends javax.swing.JDialog {
         JDialogDangNhap dialog = new JDialogDangNhap(this, true);
         dialog.setLocationRelativeTo(null); // Để hiển thị ở giữa màn hình
         dialog.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_lbDangNhapMouseClicked
 
     /**
