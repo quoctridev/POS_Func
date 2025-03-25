@@ -194,6 +194,7 @@ public class JDialogQuenMatKhau extends javax.swing.JDialog {
         JDialogDangNhap dialog = new JDialogDangNhap(this, true);
         dialog.setLocationRelativeTo(null); // Để hiển thị ở giữa màn hình
         dialog.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_lbDangNhapMouseClicked
 
     /**
@@ -234,7 +235,7 @@ public class JDialogQuenMatKhau extends javax.swing.JDialog {
     public void guiThongBaoChoAdmin(UserEntity user) {
         System.out.println("Admin đã được thông báo về tài khoản: " + user.getUsername());
         NotificationDAO.ThongBaoQuenMatKhau(user.getUsername());
-
+//DONE
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
