@@ -39,19 +39,19 @@ public class OrderDAO extends FuncDAO<OrderEntity, String> {
             if (od.getOrderTableId() == 0) {
                 // Nếu không có order_table_id, bỏ cột này khỏi INSERT
                 sql = "DECLARE @InsertedTable TABLE (order_id INT); "
-                        + "INSERT INTO Orders (cashier_id, status) "
+                        + "INSERT INTO Orders (cashier_id, status, customer_phone, customer_name) "
                         + "OUTPUT INSERTED.order_id INTO @InsertedTable "
-                        + "VALUES (?, ?); "
+                        + "VALUES (?, ?,?,?); "
                         + "SELECT order_id FROM @InsertedTable;";
-                rs = Database.query(sql, od.getCashierId(), od.getStatus());
+                rs = Database.query(sql, od.getCashierId(), od.getStatus(), od.getCustomerPhone(), od.getCustomerName());
             } else {
                 // Nếu có order_table_id, insert đầy đủ
                 sql = "DECLARE @InsertedTable TABLE (order_id INT); "
-                        + "INSERT INTO Orders (cashier_id, status, order_table_id) "
+                        + "INSERT INTO Orders (cashier_id, status, order_table_id,customer_phone, customer_name) "
                         + "OUTPUT INSERTED.order_id INTO @InsertedTable "
-                        + "VALUES (?, ?, ?); "
+                        + "VALUES (?, ?, ?,?,?); "
                         + "SELECT order_id FROM @InsertedTable;";
-                rs = Database.query(sql, od.getCashierId(), od.getStatus(), od.getOrderTableId());
+                rs = Database.query(sql, od.getCashierId(), od.getStatus(), od.getOrderTableId(), od.getCustomerPhone(), od.getCustomerName());
             }
 
             if (rs.next()) {
@@ -95,12 +95,10 @@ public class OrderDAO extends FuncDAO<OrderEntity, String> {
 //    }
     @Override
     public void update(OrderEntity entity) {
-        String sql = "UPDATE Orders SET discount_id = ?, cashier_id = ?,"
-                + "customer_phone = ?, customer_name = ?,"
-                + "total_price = ?, [status] = ?, is_paid =?, order_table_id = ? WHERE order_id = ?";
-        Database.update(sql, entity.getDiscountId(), entity.getCashierId(),
-                entity.getCustomerPhone(), entity.getCustomerName(), entity.getTotalPrice(),
-                entity.getStatus(), entity.isIsPaid(), entity.getOrderTableId());
+        String sql = "UPDATE Orders SET discount_id = ?,payment_method = ?, "
+                + "total_price = ?, [status] = ?, is_paid = ? WHERE order_id = ?";
+        Database.update(sql, entity.getDiscountId() == 0 ? null : entity.getDiscountId(), entity.getPaymentMethod(), entity.getTotalPrice(),
+                entity.getStatus(), entity.isIsPaid(), entity.getOrderId());
     }
 
     @Override
