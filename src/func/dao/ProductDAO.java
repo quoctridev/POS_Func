@@ -19,14 +19,14 @@ public class ProductDAO extends FuncDAO<ProductEntity, String> {
 
     @Override
     public void insert(ProductEntity entity) {
-        String sql = "INSERT INTO Products (product_name, price, stock, image, category_id, created_at) VALUES (?, ?, ?, ?, ?, ?)";
-        Database.update(sql, entity.getProductName(), entity.getPrice(), entity.getStock(), entity.getImage(), entity.getCategoryId(), entity.getCreatedAt());
+        String sql = "INSERT INTO Products (product_name, price, is_active, image, category_id, created_at) VALUES (?, ?, ?, ?, ?, ?)";
+        Database.update(sql, entity.getProductName(), entity.getPrice(), entity.isIsActive(), entity.getImage(), entity.getCategoryId(), entity.getCreatedAt());
     }
 
     @Override
     public void update(ProductEntity entity) {
-        String sql = "UPDATE Products SET product_name=?, price=?, stock=?, image=?, category_id=?, created_at=? WHERE product_id = ?";
-        Database.update(sql, entity.getProductName(), entity.getPrice(), entity.getStock(), entity.getImage(), entity.getCategoryId(), entity.getCreatedAt(), entity.getProductId());
+        String sql = "UPDATE Products SET product_name=?, price=?, is_active=?, image=?, category_id=?, created_at=? WHERE product_id = ?";
+        Database.update(sql, entity.getProductName(), entity.getPrice(), entity.isIsActive(), entity.getImage(), entity.getCategoryId(), entity.getCreatedAt(), entity.getProductId());
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ProductDAO extends FuncDAO<ProductEntity, String> {
                     product.setProductId(rs.getInt("product_id"));
                     product.setProductName(rs.getString("product_name"));
                     product.setPrice(rs.getBigDecimal("price"));
-                    product.setStock(rs.getInt("stock"));
+                    product.setIsActive(rs.getBoolean("is_active"));
                     product.setImage(rs.getString("image"));
                     product.setCategoryId(rs.getInt("category_id"));
                     product.setCreatedAt(rs.getDate("created_at"));

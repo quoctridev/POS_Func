@@ -7,14 +7,24 @@ public class OrderDetailsDTO {
     int quantity;
     String productName;
     BigDecimal price;
+    int productId;
 
     public OrderDetailsDTO() {
     }
 
-    public OrderDetailsDTO(int quantity, String productName, BigDecimal price) {
+    public OrderDetailsDTO(int quantity, String productName, BigDecimal price, int productId) {
         this.quantity = quantity;
         this.productName = productName;
         this.price = price;
+        this.productId = productId;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public int getQuantity() {

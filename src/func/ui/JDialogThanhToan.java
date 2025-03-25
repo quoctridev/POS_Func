@@ -39,11 +39,16 @@ public class JDialogThanhToan extends javax.swing.JDialog {
     public JDialogThanhToan(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        init();
+
     }
 
     public String getOrderId() {
         return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+        init();
     }
 
     /**
@@ -346,6 +351,10 @@ public class JDialogThanhToan extends javax.swing.JDialog {
 
     private void btnQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuayLaiActionPerformed
         // TODO add your handling code here:
+        boolean confirm = Message.confirm(this, "Bạn có chắc quay lại không");
+        if (confirm) {
+            dispose();
+        }
     }//GEN-LAST:event_btnQuayLaiActionPerformed
 
     private void lbTienMatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbTienMatMouseEntered

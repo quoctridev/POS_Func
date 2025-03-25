@@ -4,14 +4,19 @@
  */
 package func.ui;
 
+import func.application.MainForm;
 import func.dao.CategoryDAO;
 import func.dao.OrderDetailsDAO;
 import func.dao.ProductDAO;
+import func.dto.OrderDetailsDTO;
 import func.entity.CategoriesEntity;
 import func.entity.OrderDetailEntity;
+import func.entity.OrderEntity;
 import func.entity.ProductEntity;
+import func.entity.TableEntity;
 import func.utils.Currency;
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -23,6 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -38,15 +44,46 @@ public class PanelTaoDon extends javax.swing.JPanel {
     private List<CategoriesEntity> categoryList;
     private List<ProductEntity> menu;
     private DefaultTableModel model;
+    private String table;
+    private String order;
 
     public PanelTaoDon() {
         initComponents();
+
+    }
+
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
         selectCategory();
         model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
         tblDanhSach.getColumnModel().getColumn(4).setMinWidth(0);
         tblDanhSach.getColumnModel().getColumn(4).setMaxWidth(0);
         tblDanhSach.getColumnModel().getColumn(4).setWidth(0);
+        lbSoBan.setText("Bàn " + table);
+        List<OrderDetailsDTO> od = new OrderDetailsDAO().selectById(order);
+        for (OrderDetailsDTO or : od) {
+            model.addRow(new Object[]{
+                or.getProductName(),
+                or.getQuantity(),
+                or.getPrice(),
+                or.getPrice().multiply(new BigDecimal(or.getQuantity())
+                ), or.getProductId()
+            });
+        }
+        lbTongTien.setText(Currency.formatVND(tinhTongTien()));
     }
 
     /**
@@ -66,6 +103,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
         pnDanhMuc = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         pnCategory = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         pnDanhSachMon = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -75,7 +113,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         lbTongTien = new javax.swing.JLabel();
         btnLuu = new javax.swing.JButton();
-        btnThanhTien = new javax.swing.JButton();
+        btnThanhToan = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         lbSoBan = new javax.swing.JLabel();
         pnMonAn = new javax.swing.JPanel();
@@ -96,18 +134,29 @@ public class PanelTaoDon extends javax.swing.JPanel {
         pnCategory.setLayout(new java.awt.GridLayout(16, 0));
         jScrollPane3.setViewportView(pnCategory);
 
+        jButton1.setText("Quay lại");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnDanhMucLayout = new javax.swing.GroupLayout(pnDanhMuc);
         pnDanhMuc.setLayout(pnDanhMucLayout);
         pnDanhMucLayout.setHorizontalGroup(
             pnDanhMucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnDanhMucLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(pnDanhMucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         pnDanhMucLayout.setVerticalGroup(
             pnDanhMucLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnDanhMucLayout.createSequentialGroup()
-                .addComponent(jScrollPane3)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnDanhMucLayout.createSequentialGroup()
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 731, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -167,13 +216,13 @@ public class PanelTaoDon extends javax.swing.JPanel {
             }
         });
 
-        btnThanhTien.setBackground(new java.awt.Color(204, 153, 255));
-        btnThanhTien.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnThanhTien.setForeground(new java.awt.Color(0, 0, 0));
-        btnThanhTien.setText("THANH TOÁN");
-        btnThanhTien.addActionListener(new java.awt.event.ActionListener() {
+        btnThanhToan.setBackground(new java.awt.Color(204, 153, 255));
+        btnThanhToan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnThanhToan.setForeground(new java.awt.Color(0, 0, 0));
+        btnThanhToan.setText("THANH TOÁN");
+        btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnThanhTienActionPerformed(evt);
+                btnThanhToanActionPerformed(evt);
             }
         });
 
@@ -189,7 +238,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lbTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(btnThanhTien, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -204,7 +253,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnThanhTien, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -225,7 +274,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
             .addGroup(pnDanhSachMonLayout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -262,7 +311,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
                 .addComponent(pnDanhMuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnMonAn, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                    .addComponent(pnMonAn, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtTimKiem))
                 .addGap(9, 9, 9)
@@ -275,28 +324,40 @@ public class PanelTaoDon extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtTimKiem)
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnThanhTienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhTienActionPerformed
+    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
-        System.out.println(tblDanhSach.getRowCount());
-    }//GEN-LAST:event_btnThanhTienActionPerformed
+        JDialogThanhToan thanhToan = new JDialogThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
+        thanhToan.setOrderId(order);
+        thanhToan.setVisible(true);
+    }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
         // TODO add your handling code here:
+        luuThanhToan();
+    }//GEN-LAST:event_btnLuuActionPerformed
+    void luuThanhToan() {
         for (int i = 0; i < tblDanhSach.getRowCount(); i++) {
             OrderDetailEntity od = new OrderDetailEntity();
             od.setProductId(Integer.parseInt(String.valueOf(tblDanhSach.getValueAt(i, 4))));
             od.setPrice(new BigDecimal(String.valueOf(tblDanhSach.getValueAt(i, 2))));
             od.setQuantity(Integer.parseInt(String.valueOf(tblDanhSach.getValueAt(i, 1))));
-            od.setOrderId(3);
+            od.setOrderId(Integer.parseInt(order));
             new OrderDetailsDAO().createOrderDetails(od);
         }
-    }//GEN-LAST:event_btnLuuActionPerformed
+    }
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        luuThanhToan();
+        MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
+        PanelChonBan chonBan = new PanelChonBan();
+        mainForm.showPanel(chonBan);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public void selectCategory() {
         categoryList = new CategoryDAO().selectAll();
@@ -378,6 +439,9 @@ public class PanelTaoDon extends javax.swing.JPanel {
                     lbTongTien.setText(Currency.formatVND(tinhTongTien()));
                 }
             });
+            if (!pro.isIsActive()) {
+                continue;
+            }
 //            if (displayPicture(menu) == null) {
 //            } else {
 //                jButtonRecipe.setIcon(displayPicture(menu));
@@ -451,7 +515,8 @@ public class PanelTaoDon extends javax.swing.JPanel {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLuu;
-    private javax.swing.JButton btnThanhTien;
+    private javax.swing.JButton btnThanhToan;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

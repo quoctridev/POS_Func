@@ -10,6 +10,19 @@ import java.sql.ResultSet;
 
 public class OrderDetailsDAO {
 
+    public List<OrderDetailsDTO> selectById(String id) {
+        String sql = "SELECT \n"
+                + "    p.product_name, \n"
+                + "    SUM(od.quantity) AS quantity, \n"
+                + "    od.price, od.product_id\n"
+                + "FROM OrderDetails od\n"
+                + "JOIN Products p ON od.product_id = p.product_id\n"
+                + "JOIN Orders o ON od.order_id = o.order_id\n"
+                + "WHERE od.order_id = ?\n"
+                + "GROUP BY p.product_name, od.price,od.product_id;";
+        return selectBySql(sql, id);
+    }
+
     public void createOrderDetails(OrderDetailEntity od) {
         // Lấy tổng số lượng sản phẩm đã có trong OrderDetails
         String checkOrderSql = "SELECT COALESCE(SUM(quantity), 0) FROM OrderDetails WHERE order_id = ? AND product_id = ?";
@@ -38,6 +51,7 @@ public class OrderDetailsDAO {
                     od.setProductName(rs.getNString("product_name"));
                     od.setPrice(rs.getBigDecimal("price"));
                     od.setQuantity(rs.getInt("quantity"));
+                    od.setProductId(rs.getInt("product_id"));
                     list.add(od);
                 }
             } finally {
