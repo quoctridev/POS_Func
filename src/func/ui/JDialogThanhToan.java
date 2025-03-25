@@ -8,19 +8,26 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import func.dao.DiscountDAO;
+import func.dao.OrderDAO;
 import func.dao.OrderDetailsDAO;
 import func.dao.PaymentDAO;
+import func.dao.TableDAO;
 import func.dto.OrderDetailsDTO;
 import func.entity.DiscountEntity;
+import func.entity.OrderEntity;
 import func.entity.PaymentEntity;
+import func.entity.TableEntity;
+import func.utils.Auth;
 import func.utils.Currency;
 import func.utils.Message;
 import java.awt.Color;
 import java.awt.Dialog;
+import java.awt.Frame;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -32,6 +39,8 @@ public class JDialogThanhToan extends javax.swing.JDialog {
     DefaultTableModel model;
     private JLabel selectedPayment = null; // Lưu lựa chọn hiện tại
     String orderId = null;
+    DiscountEntity dc = new DiscountEntity();
+    String tableId = null;
 
     /**
      * Creates new form JDialogThanhToan
@@ -40,6 +49,14 @@ public class JDialogThanhToan extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
+    }
+
+    public String getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
     }
 
     public String getOrderId() {
@@ -387,27 +404,36 @@ public class JDialogThanhToan extends javax.swing.JDialog {
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
         if (getSelectedPayment() == 2) {
-            PaymentEntity pm = new PaymentEntity();
-            pm.setOrderId(Integer.parseInt(orderId));
-            pm.setPaymentMethod(getSelectedPayment() == 1 ? "cash" : "qr-code");
-            pm.setStatus("completed");
-            pm.setTotalAmount(totalAmount);
-            JDialogQRThanhToan qr = new JDialogQRThanhToan((Dialog) this, false, finalAmount.toString());
-            qr.setPm(pm);
+            OrderEntity od = new OrderEntity();
+            od.setOrderId(Integer.parseInt(orderId));
+            od.setPaymentMethod(getSelectedPayment() == 1 ? "cash" : "qr-code");
+            od.setStatus("completed");
+            od.setTotalPrice(totalAmount);
+            od.setIsPaid(true);
+            od.setDiscountId(dc.getDiscountId());
+            JDialogQRThanhToan qr = new JDialogQRThanhToan((Frame) SwingUtilities.getWindowAncestor(this), false);
+            qr.setOd(od);
             qr.setVisible(true);
+            dispose();
         } else {
-            PaymentEntity pm = new PaymentEntity();
-            pm.setOrderId(Integer.parseInt(orderId));
-            pm.setPaymentMethod(getSelectedPayment() == 1 ? "cash" : "qr-code");
-            pm.setStatus("completed");
-            pm.setTotalAmount(totalAmount);
-            new PaymentDAO().insert(pm);
+            OrderEntity od = new OrderEntity();
+            od.setOrderId(Integer.parseInt(orderId));
+            od.setPaymentMethod(getSelectedPayment() == 1 ? "cash" : "qr-code");
+            od.setStatus("completed");
+            od.setIsPaid(true);
+            od.setTotalPrice(totalAmount);
+            od.setDiscountId(dc.getDiscountId());
+            new OrderDAO().update(od);
+            TableEntity tb = new TableEntity();
+            tb.setStatus("available");
+            tb.setTableId(Integer.parseInt(tableId));
+            new TableDAO().updateTableStatus(tb);
+            dispose();
         }
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void btnApDungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApDungActionPerformed
         // TODO add your handling code here:
-        DiscountEntity dc = new DiscountEntity();
         if (txtMaGiamGia.getText().trim().isEmpty()) {
             JDialogMaGiamGia dialog = new JDialogMaGiamGia((Dialog) this, true);
             dialog.setVisible(true);

@@ -13,6 +13,7 @@ import func.entity.OrderEntity;
 import func.entity.TableEntity;
 import func.utils.Auth;
 import func.utils.Message;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -132,7 +133,7 @@ public class PanelChonBan extends javax.swing.JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Ví dụ: Hiển thị danh sách món theo danh mục
-                    selectProductById(zone);
+                    selectTableById(zone);
                 }
             });
             jButtonCategory.setMargin(new java.awt.Insets(2, 2, 2, 2));
@@ -145,7 +146,7 @@ public class PanelChonBan extends javax.swing.JPanel {
         pnKhuVuc.setLayout(new java.awt.GridLayout(i, 0));
     }
 
-    public void selectProductById(String id) {
+    public void selectTableById(String id) {
 
         table = new TableDAO().selectByZone(id);
         pnBan.removeAll();
@@ -219,16 +220,43 @@ public class PanelChonBan extends javax.swing.JPanel {
     }
 
     private void handleTableClick(TableEntity table) {
+        int existingOrderId = new MergeTableDAO().getActiveOrderIdByTable(table.getTableId());
+        if (existingOrderId > 0) {
+            MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
+            PanelTaoDon orderPanel = new PanelTaoDon();
+            orderPanel.setTable(table.getTableNumber());
+            orderPanel.setTable(String.valueOf(table.getTableId()));
+            orderPanel.setOrder(String.valueOf(existingOrderId));
+            mainForm.showPanel(orderPanel);
+            return;
+        } else {
+            boolean saveCustomerInfo = Message.confirm(this, "Khách hàng muốn lưu thông tin không?");
+            String customerName = "", phoneNumber = "";
+
+            if (saveCustomerInfo) {
+                JDialogThongTinKhachHang customerInfoDialog = new JDialogThongTinKhachHang(
+                        (Frame) SwingUtilities.getWindowAncestor(this), true);
+                customerInfoDialog.setVisible(true);
+                customerName = customerInfoDialog.getTenKhach();
+                phoneNumber = customerInfoDialog.getSoDienThoai();
+            }
+
+            createOrderForTable(table, customerName, phoneNumber);
+        }
+    }
+
+    private void createOrderForTable(TableEntity table, String customerName, String phoneNumber) {
         MergeTableDAO mergeTableDAO = new MergeTableDAO();
         int existingOrderId = mergeTableDAO.getActiveOrderIdByTable(table.getTableId());
 
         MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
-        PanelTaoDon taodon = new PanelTaoDon();
-        taodon.setTable(table.getTableNumber());
+        PanelTaoDon orderPanel = new PanelTaoDon();
+        orderPanel.setTable(table.getTableNumber());
+        orderPanel.setTable(String.valueOf(table.getTableId()));
 
         if (existingOrderId > 0) {
-            taodon.setOrder(String.valueOf(existingOrderId));
-            mainForm.showPanel(taodon);
+            orderPanel.setOrder(String.valueOf(existingOrderId));
+            mainForm.showPanel(orderPanel);
             return;
         }
 
@@ -237,31 +265,39 @@ public class PanelChonBan extends javax.swing.JPanel {
             return;
         }
 
-        boolean confirm = Message.confirm(this, "Bạn có muốn tạo Order mới cho bàn " + table.getTableNumber() + "?");
-
-        if (confirm) {
-            OrderEntity od = new OrderEntity();
-            od.setCashierId(2);
-            od.setStatus("new");
-
-            int newOrderId = new OrderDAO().createOrder(od);
-            if (newOrderId > 0) {
-                MergeTableEntity mtb = new MergeTableEntity();
-                mtb.setOrderId(newOrderId);
-                mtb.setTableId(table.getTableId());
-                new MergeTableDAO().insertMergeTable(mtb);
-
-                TableEntity tb = new TableEntity();
-                tb.setTableId(table.getTableId());
-                tb.setStatus("occupied");
-                new TableDAO().updateTableStatus(tb);
-
-                taodon.setOrder(String.valueOf(newOrderId));
-                mainForm.showPanel(taodon);
-            } else {
-                Message.error(this, "Lỗi khi tạo Order!");
-            }
+        boolean confirmCreateOrder = Message.confirm(this, "Bạn có muốn tạo Order mới cho bàn " + table.getTableNumber() + "?");
+        if (!confirmCreateOrder) {
+            return;
         }
+
+        int newOrderId = createNewOrder(customerName, phoneNumber);
+        if (newOrderId <= 0) {
+            Message.error(this, "Lỗi khi tạo Order!");
+            return;
+        }
+
+        linkOrderToTable(newOrderId, table);
+        orderPanel.setOrder(String.valueOf(newOrderId));
+        mainForm.showPanel(orderPanel);
+    }
+
+    private int createNewOrder(String customerName, String phoneNumber) {
+        OrderEntity order = new OrderEntity();
+        order.setCashierId(Auth.user.getUserId());
+        order.setStatus("processing");
+        order.setCustomerName(customerName);
+        order.setCustomerPhone(phoneNumber);
+        return new OrderDAO().createOrder(order);
+    }
+
+    private void linkOrderToTable(int orderId, TableEntity table) {
+        MergeTableEntity mergeTable = new MergeTableEntity();
+        mergeTable.setOrderId(orderId);
+        mergeTable.setTableId(table.getTableId());
+        new MergeTableDAO().insertMergeTable(mergeTable);
+
+        table.setStatus("occupied");
+        new TableDAO().updateTableStatus(table);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

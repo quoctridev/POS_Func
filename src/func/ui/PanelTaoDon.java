@@ -11,9 +11,7 @@ import func.dao.ProductDAO;
 import func.dto.OrderDetailsDTO;
 import func.entity.CategoriesEntity;
 import func.entity.OrderDetailEntity;
-import func.entity.OrderEntity;
 import func.entity.ProductEntity;
-import func.entity.TableEntity;
 import func.utils.Currency;
 import java.awt.Component;
 import java.awt.Frame;
@@ -334,6 +332,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
         // TODO add your handling code here:
         JDialogThanhToan thanhToan = new JDialogThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
         thanhToan.setOrderId(order);
+        thanhToan.setTableId(table);
         thanhToan.setVisible(true);
     }//GEN-LAST:event_btnThanhToanActionPerformed
 

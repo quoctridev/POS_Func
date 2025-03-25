@@ -4,7 +4,9 @@
  */
 package func.ui;
 
+import func.dao.OrderDAO;
 import func.dao.PaymentDAO;
+import func.entity.OrderEntity;
 import func.entity.PaymentEntity;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
@@ -13,11 +15,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -27,13 +25,9 @@ import javax.swing.Timer;
  * @author quoca
  */
 public class JDialogQRThanhToan extends javax.swing.JDialog {
-    
+
     String urlCheck = null;
-    PaymentEntity pm = null;
-    
-    public void setPm(PaymentEntity pm) {
-        this.pm = pm;
-    }
+    OrderEntity od = null;
 
     /**
      * Creates new form JDialogQRThanhToan
@@ -42,11 +36,14 @@ public class JDialogQRThanhToan extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
-    
-    public JDialogQRThanhToan(Dialog parent, boolean modal, String amount) {
-        super(parent, modal);
-        initComponents();
-        init(amount);
+
+    public OrderEntity getOd() {
+        return od;
+    }
+
+    public void setOd(OrderEntity od) {
+        this.od = od;
+        init(String.valueOf(od.getTotalPrice()));
     }
 
     /**
@@ -101,7 +98,7 @@ String callAPI(String amount) {
             // Đọc phản hồi từ server
             int responseCode = conn.getResponseCode();
             System.out.println("Response Code: " + responseCode);
-            
+
             if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
                 try (BufferedReader br = new BufferedReader(
                         new InputStreamReader(conn.getInputStream(), "utf-8"))) {
@@ -113,15 +110,15 @@ String callAPI(String amount) {
                     return response.toString();
                 }
             }
-            
+
             conn.disconnect();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    
+
     void init(String amount) {
         setLocationRelativeTo(null);
         String url = callAPI(amount);
@@ -148,7 +145,7 @@ String callAPI(String amount) {
             }
         }
     }
-    
+
     String getAPI() {
         try {
             String url = "http://localhost:3030/get-payment/" + urlCheck; // URL API
@@ -159,7 +156,7 @@ String callAPI(String amount) {
             if (conn.getResponseCode() != 200) {
                 throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
             }
-            
+
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String output;
             StringBuilder response = new StringBuilder();
@@ -174,7 +171,7 @@ String callAPI(String amount) {
         }
         return null;
     }
-    
+
     void checkBank() {
         Timer timer = new Timer(2000, new ActionListener() {
             @Override
@@ -182,7 +179,7 @@ String callAPI(String amount) {
                 if (getAPI().equals("PAID")) {
                     ((Timer) e.getSource()).stop(); // Dừng timer khi điều kiện thỏa mãn
                     JOptionPane.showMessageDialog(rootPane, "Bạn đã thanh toán thành công");
-                    new PaymentDAO().insert(pm);
+                    new OrderDAO().insert(od);
                     dispose();
                 }
             }

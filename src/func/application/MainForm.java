@@ -7,6 +7,7 @@ package func.application;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import func.ui.JDialogDangNhap;
+import func.ui.PanelChonBan;
 import func.ui.PanelDoanhThu;
 import func.ui.PanelTaoDon;
 import func.ui.PanelQuanLyDanhMuc;
@@ -54,6 +55,7 @@ public class MainForm extends javax.swing.JFrame {
                 jLabel5.setText("Quản lý hóa đơn");
 //                clickPanel(jLabel5, new PanelQuanLyHoaDon());
                 jLabel6.setText("Quản lý bàn");
+                clickPanel(jLabel6, new PanelChonBan());
                 jLabel7.setText("Quản lý đơn hàng");
                 clickPanel(jLabel7, new PanelTaoDon());
                 jLabel9.setText("Thanh Toán");

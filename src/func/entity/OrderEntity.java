@@ -11,6 +11,7 @@ public class OrderEntity {
     String customerPhone;
     Date orderDate;
     String customerName;
+    String paymentMethod;
     BigDecimal totalPrice;
     String status;
     boolean isPaid;
@@ -19,17 +20,26 @@ public class OrderEntity {
     public OrderEntity() {
     }
 
-    public OrderEntity(int orderId, int discountId, int cashierId, String customerPhone, Date orderDate, String customerName, BigDecimal totalPrice, String status, boolean isPaid, int orderTableId) {
+    public OrderEntity(int orderId, int discountId, int cashierId, String customerPhone, Date orderDate, String customerName, String paymentMethod, BigDecimal totalPrice, String status, boolean isPaid, int orderTableId) {
         this.orderId = orderId;
         this.discountId = discountId;
         this.cashierId = cashierId;
         this.customerPhone = customerPhone;
         this.orderDate = orderDate;
         this.customerName = customerName;
+        this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
         this.status = status;
         this.isPaid = isPaid;
         this.orderTableId = orderTableId;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public int getOrderId() {
