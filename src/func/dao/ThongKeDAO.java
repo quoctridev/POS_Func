@@ -24,49 +24,37 @@ public class ThongKeDAO {
 
         switch (type) {
             case "day":
-                sql = "SELECT P.payment_method, O.[status] AS order_status, P.[status] AS payment_status, "
-                        + "SUM(P.total_amount) AS revenue "
+                sql = "SELECT O.payment_method, O.[status] AS order_status, SUM(O.total_price) AS revenue "
                         + "FROM Orders O "
-                        + "JOIN Payments P ON O.order_id = P.order_id "
-                        + "WHERE FORMAT(P.payment_time, 'yyyy-MM-dd') = ? "
+                        + "WHERE FORMAT(O.order_date, 'yyyy-MM-dd') = ? "
                         + "AND O.[status] IN ('completed', 'canceled') "
-                        + "AND P.[status] IN ('completed', 'canceled') "
-                        + "GROUP BY P.payment_method, O.[status], P.[status] "
-                        + "ORDER BY O.[status], P.payment_method;";
+                        + "GROUP BY O.payment_method, O.[status] "
+                        + "ORDER BY O.[status], O.payment_method;";
                 break;
             case "week":
-                sql = "SELECT P.payment_method, O.[status] AS order_status, P.[status] AS payment_status, "
-                        + "SUM(P.total_amount) AS revenue "
+                sql = "SELECT O.payment_method, O.[status] AS order_status, SUM(O.total_price) AS revenue "
                         + "FROM Orders O "
-                        + "JOIN Payments P ON O.order_id = P.order_id "
-                        + "WHERE DATEPART(YEAR, P.payment_time) = ? "
-                        + "AND DATEPART(WEEK, P.payment_time) = ? "
+                        + "WHERE DATEPART(YEAR, O.order_date) = ? "
+                        + "AND DATEPART(WEEK, O.order_date) = ? "
                         + "AND O.[status] IN ('completed', 'canceled') "
-                        + "AND P.[status] IN ('completed', 'canceled') "
-                        + "GROUP BY P.payment_method, O.[status], P.[status] "
-                        + "ORDER BY O.[status], P.payment_method;";
+                        + "GROUP BY O.payment_method, O.[status] "
+                        + "ORDER BY O.[status], O.payment_method;";
                 break;
             case "month":
-                sql = "SELECT P.payment_method, O.[status] AS order_status, P.[status] AS payment_status, "
-                        + "SUM(P.total_amount) AS revenue "
+                sql = "SELECT O.payment_method, O.[status] AS order_status, SUM(O.total_price) AS revenue "
                         + "FROM Orders O "
-                        + "JOIN Payments P ON O.order_id = P.order_id "
-                        + "WHERE FORMAT(P.payment_time, 'yyyy-MM') = ? "
+                        + "WHERE FORMAT(O.order_date, 'yyyy-MM') = ? "
                         + "AND O.[status] IN ('completed', 'canceled') "
-                        + "AND P.[status] IN ('completed', 'canceled') "
-                        + "GROUP BY P.payment_method, O.[status], P.[status] "
-                        + "ORDER BY O.[status], P.payment_method;";
+                        + "GROUP BY O.payment_method, O.[status] "
+                        + "ORDER BY O.[status], O.payment_method;";
                 break;
             case "year":
-                sql = "SELECT P.payment_method, O.[status] AS order_status, P.[status] AS payment_status, "
-                        + "SUM(P.total_amount) AS revenue "
+                sql = "SELECT O.payment_method, O.[status] AS order_status, SUM(O.total_price) AS revenue "
                         + "FROM Orders O "
-                        + "JOIN Payments P ON O.order_id = P.order_id "
-                        + "WHERE FORMAT(P.payment_time, 'yyyy') = ? "
+                        + "WHERE FORMAT(O.order_date, 'yyyy') = ? "
                         + "AND O.[status] IN ('completed', 'canceled') "
-                        + "AND P.[status] IN ('completed', 'canceled') "
-                        + "GROUP BY P.payment_method, O.[status], P.[status] "
-                        + "ORDER BY O.[status], P.payment_method;";
+                        + "GROUP BY O.payment_method, O.[status] "
+                        + "ORDER BY O.[status], O.payment_method;";
                 break;
             default:
                 return dataset;
@@ -85,15 +73,10 @@ public class ThongKeDAO {
             while (rs.next()) {
                 String method = rs.getString("payment_method").equals("cash") ? "Tiền mặt" : "QR-Code";
                 String orderStatus = rs.getString("order_status");
-                String paymentStatus = rs.getString("payment_status");
                 double revenue = rs.getDouble("revenue");
 
-                // Hiển thị cả trạng thái đơn hàng & trạng thái thanh toán
-                String label = method + " ("
-                        + (orderStatus.equals("completed") ? "Hoàn thành" : "Đơn huỷ")
-                        + " - "
-                        + (paymentStatus.equals("completed") ? "Đã thanh toán" : "Thanh toán huỷ")
-                        + ")";
+                // Nhãn chỉ chứa phương thức thanh toán và trạng thái đơn hàng
+                String label = method + " (" + (orderStatus.equals("completed") ? "Hoàn thành" : "Đơn huỷ") + ")";
                 dataset.setValue(label, revenue);
             }
             rs.getStatement().getConnection().close();
