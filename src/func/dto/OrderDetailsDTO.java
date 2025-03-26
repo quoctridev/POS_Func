@@ -4,25 +4,23 @@ import java.math.BigDecimal;
 
 public class OrderDetailsDTO {
 
-    int orderDetailId;
-    int orderId;
-    int productId;
     int quantity;
+    String productName;
     BigDecimal price;
-    String note;
+    int productId;
     String status;
+    int orderDetailId;
 
     public OrderDetailsDTO() {
     }
 
-    public OrderDetailsDTO(int orderDetailId, int orderId, int productId, int quantity, BigDecimal price, String note, String status) {
-        this.orderDetailId = orderDetailId;
-        this.orderId = orderId;
-        this.productId = productId;
+    public OrderDetailsDTO(int quantity, String productName, BigDecimal price, int productId, String status, int orderDetailId) {
         this.quantity = quantity;
+        this.productName = productName;
         this.price = price;
-        this.note = note;
+        this.productId = productId;
         this.status = status;
+        this.orderDetailId = orderDetailId;
     }
 
     public int getOrderDetailId() {
@@ -33,12 +31,12 @@ public class OrderDetailsDTO {
         this.orderDetailId = orderDetailId;
     }
 
-    public int getOrderId() {
-        return orderId;
+    public String getStatus() {
+        return status;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public int getProductId() {
@@ -57,28 +55,20 @@ public class OrderDetailsDTO {
         this.quantity = quantity;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
 }

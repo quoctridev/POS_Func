@@ -8,22 +8,6 @@ import java.sql.SQLException;
 
 public class Database {
 
-    private static String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    private static String dburl = "jdbc:sqlserver://db.quoctri.dev,1433;database=EduSys";
-    private static String username = "sa";
-    private static String password = "FuncDev@";
-
-    /*
-     * Nạp driver
-     */
-    static {
-        try {
-            Class.forName(driver);
-        } catch (ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
     public static PreparedStatement getStmt(String sql, Object... args) throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:sqlserver://103.118.28.181:1433;databaseName=POS_FUNC;user=sa;password=FuncDev@;encrypt=true;trustServerCertificate=true");
         PreparedStatement pstmt = null;
@@ -65,7 +49,7 @@ public class Database {
         try {
             ResultSet rs = Database.query(sql, args);
             if (rs.next()) {
-                return rs.getObject(0);
+                return rs.getObject(1);
             }
             rs.getStatement().getConnection().close();
             return null;

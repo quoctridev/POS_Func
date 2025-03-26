@@ -6,17 +6,15 @@ public class CategoriesEntity {
 
     int categoryId;
     String categoryName;
-    String description;
     boolean isActive;
     Date createdAt;
 
     public CategoriesEntity() {
     }
 
-    public CategoriesEntity(int categoryId, String categoryName, String description, boolean isActive, Date createdAt) {
+    public CategoriesEntity(int categoryId, String categoryName, boolean isActive, Date createdAt) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
-        this.description = description;
         this.isActive = isActive;
         this.createdAt = createdAt;
     }
@@ -35,14 +33,6 @@ public class CategoriesEntity {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public boolean isIsActive() {
