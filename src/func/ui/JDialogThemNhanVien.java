@@ -7,6 +7,9 @@ package func.ui;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import func.dao.UserDAO;
 import func.entity.UserEntity;
+import func.utils.Message;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,6 +21,8 @@ public class JDialogThemNhanVien extends javax.swing.JDialog {
     /**
      * Creates new form JDialogThemNhanVien
      */
+    private static final String PHONE_REGEX = "^(?:\\+84|0)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\\d{7}$";
+
     public JDialogThemNhanVien(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -95,7 +100,7 @@ public class JDialogThemNhanVien extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(282, 282, 282)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(291, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,8 +118,9 @@ public class JDialogThemNhanVien extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(112, 112, 112)
+                .addGap(113, 113, 113)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,14 +140,13 @@ public class JDialogThemNhanVien extends javax.swing.JDialog {
                             .addComponent(txtHoVaTen, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtSoDienThoai, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 132, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -162,7 +167,7 @@ public class JDialogThemNhanVien extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(cbChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(44, 44, 44)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
@@ -172,16 +177,68 @@ public class JDialogThemNhanVien extends javax.swing.JDialog {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
+        String username = txtTenTaiKhoan.getText();
+        String password = new String(pwfMatKhau.getPassword());
+        String fullName = txtHoVaTen.getText();
+        String phone = txtSoDienThoai.getText();
+        String role = String.valueOf(cbChucVu.getSelectedItem());
+
+        // Kiểm tra các trường không được để trống
+        if (username.isEmpty() || password.isEmpty() || fullName.isEmpty() || phone.isEmpty() || role.isEmpty()) {
+            Message.warning(this, "Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        if (username.isEmpty()) {
+            Message.warning(this, "Vui lòng nhập tên tài khoản!");
+            return;
+        }
+
+        if (password.isEmpty()) {
+            Message.warning(this, "Vui lòng nhập mật khẩu!");
+            return;
+        }
+
+        if (fullName.isEmpty()) {
+            Message.warning(this, "Vui lòng nhập họ và tên!");
+            return;
+        }
+        if (phone.isEmpty()) {
+            Message.warning(this, "Vui lòng nhập số điện thoại!");
+            return;
+        }
+
+        if (role.isEmpty()) {
+            Message.warning(this, "Vui lòng chọn chức vụ!");
+            return;
+        }
+
+        // matches: sử dụng để kiểm tra xem chuỗi có khớp với một biểu thức chính quy(ví dụ: chỉ có số và có ít nhất 10 ký tự)
+        if (!isValidPhoneNumber(phone)) {
+            Message.warning(this, "Số điện thoại không hợp lệ! \n Vui lòng nhập lại Số điện thoại từ 10 tới 11 số. \n Và bắt đầu từ 0");
+            return;
+        }
+
         UserEntity user = new UserEntity();
-        user.setUsername(txtTenTaiKhoan.getText());
-        String password = BCrypt.withDefaults().hashToString(10, pwfMatKhau.getPassword());
-        user.setPassword(password);
-        user.setFullName(txtHoVaTen.getText());
-        user.setPhone(txtSoDienThoai.getText());
-        user.setRole(String.valueOf(cbChucVu.getSelectedItem()));
-        new UserDAO().insert(user);
-        JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công");
-        this.dispose();
+        if (user != null) {
+            user.setUsername(username);
+            password = BCrypt.withDefaults().hashToString(10, pwfMatKhau.getPassword());
+            user.setPassword(password);
+            user.setFullName(fullName);
+            user.setPhone(phone);
+            user.setRole(role);
+
+            boolean confirm = Message.confirm(this, "Bạn có chắc chắn muốn thêm nhân viên này ?");
+            if (confirm) {
+                new UserDAO().insert(user);
+                Message.info(this, "Thêm nhân viên thành công");
+                user = null;
+            } else {
+                // Nếu người dùng không muốn thay đổi, thông báo hủy bỏ thao tác sửa                
+                Message.info(this, "Hủy thao tác thêm nhân viên.");
+            }
+        }
+        this.dispose(); // đóng cửa sổ
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void txtHoVaTenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHoVaTenActionPerformed
@@ -234,6 +291,11 @@ public class JDialogThemNhanVien extends javax.swing.JDialog {
         });
     }
 
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        Pattern pattern = Pattern.compile(PHONE_REGEX);
+        Matcher matcher = pattern.matcher(phoneNumber);
+        return matcher.matches();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnThem;
     private javax.swing.JComboBox<String> cbChucVu;
