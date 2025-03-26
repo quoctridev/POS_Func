@@ -39,9 +39,9 @@ public class TableDAO extends FuncDAO<TableEntity, String> {
     }
 
     public TableEntity selectById(String id) {
-        String sql = "SELECT TOP 1 FROM Tables WHERE table_id = ?";
-        List<TableEntity> list = selectBySql(sql, id);
-        return list.size() > 0 ? list.get(0) : null;
+    String sql = "SELECT TOP 1 * FROM Tables WHERE table_id = ?";
+    List<TableEntity> list = selectBySql(sql, id);
+    return list.size() > 0 ? list.get(0) : null;
     }
 
     public List<TableEntity> selectAll() {

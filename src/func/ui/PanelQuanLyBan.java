@@ -4,44 +4,43 @@
  */
 package func.ui;
 
-import func.dao.UserDAO;
-import func.entity.UserEntity;
-import func.utils.Message;
+import func.dao.TableDAO;
+import func.entity.TableEntity;
 import java.awt.Frame;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author AZ Tech
+ * @author ASUS
  */
-public class QuanLyNhanVienForm extends javax.swing.JPanel {
+public class PanelQuanLyBan extends javax.swing.JPanel {
 
     DefaultTableModel model;
-    UserEntity user = null;
-    List<UserEntity> list = new UserDAO().selectAll();
-
-    public QuanLyNhanVienForm() {
+    TableEntity table = null;
+    List<TableEntity> list = new TableDAO().selectAll();
+    
+    public PanelQuanLyBan() {
         initComponents();
         showTable();
     }
-
+    
     public void showTable() {
-        list = new UserDAO().selectAll(); // Cập nhật lại danh sách 
-        model = (DefaultTableModel) this.tblDanhSach.getModel();
-        model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
-        for (UserEntity user : list) {
-            String id = String.valueOf(user.getUserId());
-            String name = user.getUsername();
-            String fullName = user.getFullName();
-            String phone = user.getPhone();
-            String role = user.getRole();
-            Date date = user.getCreatedAt();
-            model.addRow(new Object[]{
-                id, name, fullName, phone, role, date
+        list = new TableDAO().selectAll();
+        model = (DefaultTableModel) this.tblDanhSachBan.getModel();
+        model.setRowCount(0);
+        
+        for(TableEntity table : list) {
+            String id = String.valueOf(table.getTableId());
+            String soBan = table.getTableNumber();
+            String trangThai = table.getStatus();
+            String soGhe = String.valueOf(table.getCapacity());
+            String khuVuc = table.getZone();
+            Date date = table.getCreatedAt();
+            model.addRow(new Object[] {
+                id, soBan, trangThai, soGhe, khuVuc, date
             });
         }
     }
@@ -57,9 +56,8 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         lbMenu = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblDanhSach = new javax.swing.JTable();
+        tblDanhSachBan = new javax.swing.JTable();
         btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
@@ -76,9 +74,7 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(lbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 1005, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,11 +84,7 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel1.setText("Danh Sách Nhân Viên");
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 102, 255)));
-
-        tblDanhSach.setModel(new javax.swing.table.DefaultTableModel(
+        tblDanhSachBan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -100,19 +92,21 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã Nhân Viên", "Tên Tài Khoản", "Tên Nhân Viên", "Số Điện Thoại", "Chức Vụ", "Ngày Tạo"
+                "Mã bàn", "Số bàn", "Trạng thái", "Số ghế/ bàn", "Khu vực", "Ngày tạo"
             }
         ));
-        tblDanhSach.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblDanhSachBan.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tblDanhSachBan.getTableHeader().setReorderingAllowed(false);
+        tblDanhSachBan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblDanhSachMouseClicked(evt);
+                tblDanhSachBanMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblDanhSach);
+        jScrollPane1.setViewportView(tblDanhSachBan);
 
         btnThem.setBackground(new java.awt.Color(153, 102, 255));
         btnThem.setForeground(new java.awt.Color(255, 255, 255));
-        btnThem.setText("Thêm Nhân Viên");
+        btnThem.setText("Thêm Bàn");
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThemActionPerformed(evt);
@@ -121,7 +115,7 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
 
         btnSua.setBackground(new java.awt.Color(153, 102, 255));
         btnSua.setForeground(new java.awt.Color(255, 255, 255));
-        btnSua.setText("Sửa Thông Tin Nhân Viên");
+        btnSua.setText("Sửa thông tin bàn");
         btnSua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSuaActionPerformed(evt);
@@ -130,7 +124,7 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
 
         btnXoa.setBackground(new java.awt.Color(153, 102, 255));
         btnXoa.setForeground(new java.awt.Color(255, 255, 255));
-        btnXoa.setText("Xóa Nhân Viên");
+        btnXoa.setText("Xóa bàn");
         btnXoa.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnXoaMouseClicked(evt);
@@ -148,46 +142,45 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
                         .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
+                        .addGap(194, 194, 194)
                         .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(164, 164, 164)
-                        .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(92, 92, 92)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(45, Short.MAX_VALUE))
+                    .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+    private void tblDanhSachBanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachBanMouseClicked
         // TODO add your handling code here:
-//        new JDialogSuaNhanVien((Frame) SwingUtilities.getWindowAncestor(this), true).setVisible(true);
-//        showTable();
+        int dongHienTai = tblDanhSachBan.getSelectedRow();
+        this.table = list.get(dongHienTai);
+    }//GEN-LAST:event_tblDanhSachBanMouseClicked
 
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+        // TODO add your handling code here:
+        new JDialogThemBan((Frame) SwingUtilities.getWindowAncestor(this), true).setVisible(true);
+        showTable();
+    }//GEN-LAST:event_btnThemActionPerformed
+
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         if (user == null) {
             Message.warning(this, "Chọn nhân viên muốn sửa thông tin");
             return;
@@ -199,20 +192,12 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
                 user = null;
                 showTable();
             }
-//                JDialogSuaNhanVien sua = new JDialogSuaNhanVien((Frame) SwingUtilities.getWindowAncestor(this), true, user);
-//                sua.setVisible(true); // Hiển thị cửa sổ sửa thông tin
-//                boolean confirm = Message.confirm(this, "Bạn có chắc chắn muốn sửa thông tin của nhân viên này ?");
-//                if (confirm) {
-//                    Message.info(this, "Sửa nhân viên thành công");
-//                    sua.dispose(); // Đóng dialog sau khi sửa xong
-//                    showTable();
-//                } else {
-//                    // Nếu người dùng không muốn thay đổi, thông báo hủy bỏ thao tác sửa                
-//                    Message.info(this, "Hủy thao tác sửa nhân viên.");
-//                    sua.dispose();
-//                }
         }
     }//GEN-LAST:event_btnSuaActionPerformed
+
+    private void btnXoaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnXoaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnXoaMouseClicked
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
@@ -230,31 +215,14 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnXoaActionPerformed
 
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-        // TODO add your handling code here:
-        new JDialogThemNhanVien((Frame) SwingUtilities.getWindowAncestor(this), true).setVisible(true);
-        showTable();
-    }//GEN-LAST:event_btnThemActionPerformed
-
-    private void btnXoaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnXoaMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnXoaMouseClicked
-
-    private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked
-        // TODO add your handling code here:
-        int dongDangChon = tblDanhSach.getSelectedRow();
-        this.user = list.get(dongDangChon);
-    }//GEN-LAST:event_tblDanhSachMouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbMenu;
-    private javax.swing.JTable tblDanhSach;
+    private javax.swing.JTable tblDanhSachBan;
     // End of variables declaration//GEN-END:variables
 }
