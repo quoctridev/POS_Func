@@ -220,15 +220,24 @@ public class JDialogChiTietMonAn extends javax.swing.JDialog {
             }
         }
         String note = Message.input(null, "Nhập lí do bạn huỷ đơn hàng");
+        if (note == null || note.isBlank()) {
+            Message.warning(null, "Bạn chưa nhập lý do hủy đơn hàng!");
+            return;
+        }
         OrderEntity order = new OrderEntity();
         order.setStatus("canceled");
         order.setOrderId(Integer.parseInt(this.order));
         order.setNote(note);
         new OrderDAO().cancelOrder(order);
-        TableEntity tb = new TableEntity();
-        tb.setStatus("available");
-        tb.setTableId(Integer.parseInt(table));
-        new TableDAO().updateTableStatus(tb);
+        TableDAO tableDAO = new TableDAO();
+        if (tableDAO.selectTableNumberByOrderId(this.order).size() > 1) {
+            for (String table : tableDAO.selectTableNumberByOrderId(this.order)) {
+                TableEntity tb = new TableEntity();
+                tb.setStatus("available");
+                tb.setTableId(Integer.parseInt(table));
+                tableDAO.updateTableStatus(tb);
+            }
+        }
         dispose();
         mainForm.showPanel(new PanelChonBan());
 

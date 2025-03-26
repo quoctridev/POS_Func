@@ -40,7 +40,7 @@ public class OrderDAO extends FuncDAO<OrderEntity, String> {
                 // Nếu không có order_table_id, bỏ cột này khỏi INSERT
                 sql = "DECLARE @InsertedTable TABLE (order_id INT); "
                         + "INSERT INTO Orders (cashier_id, status, customer_phone, customer_name) "
-                        + "OUTPUT INSERTED.order_id INTO @InsertedTable "
+                        + "OUTPUT INSERTED.order_id  INTO @InsertedTable "
                         + "VALUES (?, ?,?,?); "
                         + "SELECT order_id FROM @InsertedTable;";
                 rs = Database.query(sql, od.getCashierId(), od.getStatus(), od.getCustomerPhone(), od.getCustomerName());
@@ -103,12 +103,19 @@ public class OrderDAO extends FuncDAO<OrderEntity, String> {
 
     @Override
     public void update(OrderEntity entity) {
-        String sql = "UPDATE Orders SET discount_id = ?, cashier_id = ?,"
-                + "customer_phone = ?, customer_name = ?,"
-                + "total_price = ?, [status] = ?, is_paid =?, order_table_id = ? WHERE order_id = ?";
-        Database.update(sql, entity.getDiscountId(), entity.getCashierId(),
-                entity.getCustomerPhone(), entity.getCustomerName(), entity.getTotalPrice(),
-                entity.getStatus(), entity.isIsPaid(), entity.getOrderTableId());
+        String sql = "";
+        if (entity.getDiscountId() == 0) {
+            sql = "UPDATE Orders SET "
+                    + "total_price = ?, [status] = ?, is_paid =? WHERE order_id = ?";
+            Database.update(sql, entity.getTotalPrice(),
+                    entity.getStatus(), entity.isIsPaid(), entity.getOrderId());
+        } else {
+            sql = "UPDATE Orders SET discount_id = ?,"
+                    + "total_price = ?, [status] = ?, is_paid =? WHERE order_id = ?";
+            Database.update(sql, entity.getDiscountId(), entity.getTotalPrice(),
+                    entity.getStatus(), entity.isIsPaid(), entity.getOrderId());
+        }
+
     }
 
     @Override

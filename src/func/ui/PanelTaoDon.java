@@ -8,6 +8,7 @@ import func.application.MainForm;
 import func.dao.CategoryDAO;
 import func.dao.OrderDetailsDAO;
 import func.dao.ProductDAO;
+import func.dao.TableDAO;
 import func.dto.OrderDetailsDTO;
 import func.entity.CategoriesEntity;
 import func.entity.OrderDetailEntity;
@@ -15,6 +16,7 @@ import func.entity.OrderEntity;
 import func.entity.ProductEntity;
 import func.entity.TableEntity;
 import func.utils.Currency;
+import func.utils.Message;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -70,13 +72,15 @@ public class PanelTaoDon extends javax.swing.JPanel {
     }
 
     void init() {
+        TableDAO tableDAO = new TableDAO();
+        List<String> tableNumbers = tableDAO.selectTableNumberByOrderId(order);
         selectCategory();
         model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
         tblDanhSach.getColumnModel().getColumn(4).setMinWidth(0);
         tblDanhSach.getColumnModel().getColumn(4).setMaxWidth(0);
         tblDanhSach.getColumnModel().getColumn(4).setWidth(0);
-        lbSoBan.setText("Bàn " + table);
+        lbSoBan.setText("Bàn " + String.join(", ", tableNumbers));
         List<OrderDetailsDTO> od = new OrderDetailsDAO().selectById(order);
         for (OrderDetailsDTO or : od) {
             model.addRow(new Object[]{
@@ -351,9 +355,16 @@ public class PanelTaoDon extends javax.swing.JPanel {
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
+        luuThanhToan();
+        if (tblDanhSach.getRowCount() == 0) {
+            Message.warning(null, "Bạn phải thêm món ăn trước khi thanh toán");
+            return;
+        }
         JDialogThanhToan thanhToan = new JDialogThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
         thanhToan.setOrderId(order);
+        thanhToan.setTableId(table);
         thanhToan.setVisible(true);
+
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed

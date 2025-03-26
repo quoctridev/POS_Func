@@ -7,6 +7,7 @@ package func.ui;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import func.application.MainForm;
 import func.dao.DiscountDAO;
 import func.dao.OrderDAO;
 import func.dao.OrderDetailsDAO;
@@ -403,33 +404,39 @@ public class JDialogThanhToan extends javax.swing.JDialog {
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
-        if (getSelectedPayment() == 2) {
-            OrderEntity od = new OrderEntity();
-            od.setOrderId(Integer.parseInt(orderId));
-            od.setPaymentMethod(getSelectedPayment() == 1 ? "cash" : "qr-code");
-            od.setStatus("completed");
-            od.setTotalPrice(totalAmount);
-            od.setIsPaid(true);
-            od.setDiscountId(dc.getDiscountId());
+        OrderEntity od = new OrderEntity();
+        od.setOrderId(Integer.parseInt(orderId));
+        od.setPaymentMethod(getSelectedPayment() == 1 ? "cash" : "qr-code");
+        od.setStatus("completed");
+        od.setIsPaid(true);
+        od.setTotalPrice(totalAmount);
+        od.setDiscountId(dc.getDiscountId());
+
+        if (getSelectedPayment() == 2) { // Thanh toán QR
             JDialogQRThanhToan qr = new JDialogQRThanhToan((Frame) SwingUtilities.getWindowAncestor(this), false);
             qr.setOd(od);
+            qr.setTableId(tableId);
             qr.setVisible(true);
-            dispose();
-        } else {
-            OrderEntity od = new OrderEntity();
-            od.setOrderId(Integer.parseInt(orderId));
-            od.setPaymentMethod(getSelectedPayment() == 1 ? "cash" : "qr-code");
-            od.setStatus("completed");
-            od.setIsPaid(true);
-            od.setTotalPrice(totalAmount);
-            od.setDiscountId(dc.getDiscountId());
+        } else { // Thanh toán tiền mặt
+            TableDAO tableDAO = new TableDAO();
             new OrderDAO().update(od);
-            TableEntity tb = new TableEntity();
-            tb.setStatus("available");
-            tb.setTableId(Integer.parseInt(tableId));
-            new TableDAO().updateTableStatus(tb);
-            dispose();
+            List<String> tables = tableDAO.selectTableNumberByOrderId(orderId);
+            for (String table : tables) {
+                TableEntity tb = new TableEntity();
+                tb.setStatus("available");
+                tb.setTableId(Integer.parseInt(table));
+                tableDAO.updateTableStatus(tb);
+            }
         }
+        dispose();
+        boolean confirm = Message.confirm(null, "Bạn có muốn in hoá đơn không");
+        if (confirm) {
+            
+        }
+        MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
+        PanelChonBan chonBan = new PanelChonBan();
+        mainForm.showPanel(chonBan);
+
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void btnApDungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApDungActionPerformed
@@ -510,6 +517,7 @@ public class JDialogThanhToan extends javax.swing.JDialog {
     BigDecimal finalAmount = BigDecimal.ZERO;
 
     void init() {
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
         selectPayment(lbTienMat);
         int i = 1;
