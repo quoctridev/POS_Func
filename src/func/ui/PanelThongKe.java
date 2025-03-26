@@ -315,9 +315,11 @@ public class PanelThongKe extends javax.swing.JPanel {
             Comparable<?> key = (Comparable<?>) obj;
             String label = key.toString();  // Lấy nhãn
 
-            if (label.startsWith("Tiền mặt")) {
+            if (label.startsWith("Tiền mặt (Hoàn thành)")) {
                 plot.setSectionPaint(label, new Color(46, 204, 113));  // Xanh lá
-            } else if (label.startsWith("QR-Code")) {
+            } else if (label.startsWith("QR-Code (Hoàn thành)")) {
+                plot.setSectionPaint(label, new Color(241, 196, 15));  // Vàng
+            } else if (label.startsWith("QR-Code (Đơn huỷ)")) {
                 plot.setSectionPaint(label, new Color(231, 76, 60));  // Đỏ
             } else {
                 plot.setSectionPaint(label, new Color(52, 152, 219));  // Màu xanh dương mặc định

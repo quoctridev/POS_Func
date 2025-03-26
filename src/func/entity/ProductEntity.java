@@ -8,7 +8,7 @@ public class ProductEntity {
     int productId;
     String productName;
     BigDecimal price;
-    int stock;
+    boolean isActive;
     String image;
     int categoryId;
     Date createdAt;
@@ -16,11 +16,11 @@ public class ProductEntity {
     public ProductEntity() {
     }
 
-    public ProductEntity(int productId, String productName, BigDecimal price, int stock, String image, int categoryId, Date createdAt) {
+    public ProductEntity(int productId, String productName, BigDecimal price, boolean isActive, String image, int categoryId, Date createdAt) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
-        this.stock = stock;
+        this.isActive = isActive;
         this.image = image;
         this.categoryId = categoryId;
         this.createdAt = createdAt;
@@ -50,12 +50,12 @@ public class ProductEntity {
         this.price = price;
     }
 
-    public int getStock() {
-        return stock;
+    public boolean isIsActive() {
+        return isActive;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public String getImage() {

@@ -20,7 +20,7 @@ public class Auth {
                 return 1;
             case "cashier":
                 return 2;
-            case "cheff":
+            case "chef":
                 return 3;
             default:
                 return 0;

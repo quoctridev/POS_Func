@@ -25,4 +25,8 @@ public class Message {
         int result = JOptionPane.showConfirmDialog(parent, message, "Xác nhận", JOptionPane.OK_CANCEL_OPTION);
         return result == JOptionPane.OK_OPTION;
     }
+
+    public static String input(Component parent, String message) {
+        return JOptionPane.showInputDialog(parent, message, "Nhập dữ liệu", JOptionPane.QUESTION_MESSAGE);
+    }
 }
