@@ -16,6 +16,7 @@ public class ProductEntity {
     public ProductEntity() {
     }
 
+
     public ProductEntity(int productId, String productName, BigDecimal price, boolean isActive, String image, int categoryId, Date createdAt) {
         this.productId = productId;
         this.productName = productName;
