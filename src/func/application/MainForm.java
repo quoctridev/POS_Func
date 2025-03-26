@@ -8,11 +8,9 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import func.ui.JDialogDangNhap;
 import func.ui.PanelChonBan;
-import func.ui.PanelDoanhThu;
 import func.ui.PanelTaoDon;
 import func.ui.PanelQuanLyDanhMuc;
 import func.ui.PanelThongKe;
-//import func.ui.PanelQuanLyHoaDon;
 import func.ui.QuanLyNhanVienForm;
 import func.utils.Auth;
 import java.awt.event.MouseAdapter;
@@ -194,7 +192,7 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         Auth.clear();
         dispose();
-        new JDialogDangNhap(this, true).setVisible(true);
+        init();
     }//GEN-LAST:event_jLabel8MouseClicked
 
     /**

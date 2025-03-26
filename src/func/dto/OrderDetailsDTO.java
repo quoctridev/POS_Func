@@ -8,15 +8,35 @@ public class OrderDetailsDTO {
     String productName;
     BigDecimal price;
     int productId;
+    String status;
+    int orderDetailId;
 
     public OrderDetailsDTO() {
     }
 
-    public OrderDetailsDTO(int quantity, String productName, BigDecimal price, int productId) {
+    public OrderDetailsDTO(int quantity, String productName, BigDecimal price, int productId, String status, int orderDetailId) {
         this.quantity = quantity;
         this.productName = productName;
         this.price = price;
         this.productId = productId;
+        this.status = status;
+        this.orderDetailId = orderDetailId;
+    }
+
+    public int getOrderDetailId() {
+        return orderDetailId;
+    }
+
+    public void setOrderDetailId(int orderDetailId) {
+        this.orderDetailId = orderDetailId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public int getProductId() {
