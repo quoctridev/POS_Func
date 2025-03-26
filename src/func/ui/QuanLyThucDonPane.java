@@ -26,6 +26,7 @@ public class QuanLyThucDonPane extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+
         PnMenu8 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel40 = new javax.swing.JLabel();
@@ -172,6 +173,7 @@ public class QuanLyThucDonPane extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(PnMenu8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))

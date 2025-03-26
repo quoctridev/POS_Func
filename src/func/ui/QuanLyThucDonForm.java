@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
  * @author AZ Tech
  */
 public class QuanLyThucDonForm extends javax.swing.JFrame {
+
     DefaultTableModel model;
     String id = null;
 
@@ -27,6 +28,7 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
     public QuanLyThucDonForm() {
         initComponents();
         showTable();
+
     }
   void showTable(){
         List<ProductEntity> ls = new ProductDAO().selectAll();
@@ -38,6 +40,7 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
             String price = String.valueOf(pro.getPrice());
             String stock = String.valueOf(pro.getStock());
             String image = pro.getImage();
+
             Date date = pro.getCreatedAt();
             model.addRow(new Object[]{
                id,name,price,stock,image,date 
@@ -56,6 +59,7 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
 
         jLabel14 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+
         txtAnh = new javax.swing.JTextField();
         txtGia = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -80,8 +84,11 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
         btnTrang = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         btnThem = new javax.swing.JButton();
-        btnSua = new javax.swing.JButton();
+        jLabel40 = new javax.swing.JLabel();
+        txtGia = new javax.swing.JTextField();
+        txtTon = new javax.swing.JTextField();
         btnXoa = new javax.swing.JButton();
+
         jLabel40 = new javax.swing.JLabel();
         txtTon = new javax.swing.JTextField();
 
@@ -89,6 +96,7 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
 
         jLabel1.setBackground(new java.awt.Color(153, 102, 255));
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+
 
         txtAnh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,6 +113,7 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
         jLabel7.setText("Mã Món");
 
         jLabel39.setText("Tồn Kho");
+
 
         txtMa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -178,6 +187,7 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
+
                 "STT", "Tên Món", "Giá", "Tồn Kho", "Ảnh", "Ngày Tạo", "Tên Danh Mục"
             }
         ));
@@ -188,32 +198,30 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblDanhSach);
 
+
         btnResert.setBackground(new java.awt.Color(255, 255, 255));
         btnResert.setForeground(new java.awt.Color(0, 0, 0));
         btnResert.setText("Resert");
         btnResert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnResertActionPerformed(evt);
+                btnThemActionPerformed(evt);
             }
         });
 
-        btnLeft.setBackground(new java.awt.Color(255, 255, 255));
-        btnLeft.setForeground(new java.awt.Color(0, 0, 0));
-        btnLeft.setText("<");
-        btnLeft.addActionListener(new java.awt.event.ActionListener() {
+        jLabel40.setText("Giá");
+
+        txtGia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLeftActionPerformed(evt);
+                txtGiaActionPerformed(evt);
             }
         });
 
-        btnRight.setBackground(new java.awt.Color(255, 255, 255));
-        btnRight.setForeground(new java.awt.Color(0, 0, 0));
-        btnRight.setText(">");
-        btnRight.addActionListener(new java.awt.event.ActionListener() {
+        txtTon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRightActionPerformed(evt);
+                txtTonActionPerformed(evt);
             }
         });
+
 
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
@@ -223,10 +231,12 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
         btnTrang.setForeground(new java.awt.Color(0, 0, 0));
         btnTrang.setText("1");
         btnTrang.addActionListener(new java.awt.event.ActionListener() {
+
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTrangActionPerformed(evt);
+                btnSuaActionPerformed(evt);
             }
         });
+
 
         jLabel6.setBackground(new java.awt.Color(0, 0, 0));
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
@@ -237,9 +247,10 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
         btnThem.setText("Thêm");
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnThemActionPerformed(evt);
+                txtMaActionPerformed(evt);
             }
         });
+
 
         btnSua.setBackground(new java.awt.Color(204, 51, 255));
         btnSua.setForeground(new java.awt.Color(255, 255, 255));
@@ -277,6 +288,7 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(390, 390, 390))
             .addGroup(layout.createSequentialGroup()
+
                 .addContainerGap()
                 .addComponent(jScrollPane1)
                 .addContainerGap())
@@ -349,6 +361,7 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+
                 .addComponent(PnMenu7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -421,20 +434,23 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnResertActionPerformed
 
-    private void btnLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLeftActionPerformed
+    private void txtGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGiaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnLeftActionPerformed
+    }//GEN-LAST:event_txtGiaActionPerformed
 
-    private void btnRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRightActionPerformed
+    private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnRightActionPerformed
+        int dongHienTai = tblDanhSach.getSelectedRow();
+        id = tblDanhSach.getValueAt(dongHienTai, 0).toString();
+    }//GEN-LAST:event_tblDanhSachMouseClicked
 
-    private void btnTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrangActionPerformed
+    private void txtTonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnTrangActionPerformed
+    }//GEN-LAST:event_txtTonActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
+
         ProductEntity pro = new ProductEntity();
         pro.setProductName(txtTen.getText());
         BigDecimal price = new BigDecimal(txtGia.getText());
@@ -468,6 +484,7 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Xóa thành công");
         showTable();
     }//GEN-LAST:event_btnXoaActionPerformed
+
 
     private void txtTonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTonActionPerformed
         // TODO add your handling code here:
@@ -515,14 +532,17 @@ public class QuanLyThucDonForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+
     private javax.swing.JPanel PnMenu7;
     private javax.swing.JButton btnLeft;
     private javax.swing.JButton btnResert;
     private javax.swing.JButton btnRight;
+
     private javax.swing.JButton btnSua;
+    private javax.swing.JButton btnSua1;
     private javax.swing.JButton btnThem;
-    private javax.swing.JTextField btnTrang;
     private javax.swing.JButton btnXoa;
+    private javax.swing.JComboBox<String> cboTen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
