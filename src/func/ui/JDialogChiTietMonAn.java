@@ -4,11 +4,17 @@
  */
 package func.ui;
 
+import func.application.MainForm;
 import func.cell.ChinhSuaBang;
 import func.cell.KetHopBang;
 import func.cell.SuKienHanhDong;
+import func.dao.OrderDAO;
 import func.dao.OrderDetailsDAO;
+import func.dao.TableDAO;
 import func.dto.OrderDetailsDTO;
+import func.entity.OrderDetailEntity;
+import func.entity.OrderEntity;
+import func.entity.TableEntity;
 import func.utils.Message;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -19,14 +25,17 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JDialogChiTietMonAn extends javax.swing.JDialog {
 
-    String order = null;
+    String order;
     DefaultTableModel model;
+    private String table;
+    private MainForm mainForm;
 
     /**
      * Creates new form JDialogChiTietMonAn
      */
-    public JDialogChiTietMonAn(java.awt.Frame parent, boolean modal) {
+    public JDialogChiTietMonAn(MainForm parent, boolean modal) {
         super(parent, modal);
+        this.mainForm = parent;
         initComponents();
     }
 
@@ -39,7 +48,7 @@ public class JDialogChiTietMonAn extends javax.swing.JDialog {
         tblDanhSach.getColumnModel().getColumn(4).setWidth(0);
         List<OrderDetailsDTO> od = new OrderDetailsDAO().selectByIdOrder(order);
         for (OrderDetailsDTO order : od) {
-            String status = null;
+            String status = "Đã hủy";
             switch (order.getStatus()) {
                 case "pending":
                     status = "Đang chờ xác nhận";
@@ -50,22 +59,39 @@ public class JDialogChiTietMonAn extends javax.swing.JDialog {
                 case "ready":
                     status = "Đã nấu xong";
                     break;
-                default:
-                    status = "Đã hủy";
             }
             model.addRow(new Object[]{
                 i, order.getProductName(), status, "", order.getOrderDetailId()
             });
+            i++;
         }
         SuKienHanhDong event = new SuKienHanhDong() {
             @Override
             public void Edit(int row) {
-
+                Message.warning(null, "Chúng tôi chưa làm nút sửa. Mong quý khách thông cảm");
+                return;
             }
 
             @Override
             public void Delete(int row) {
                 String note = Message.input(null, "Lí do hủy đơn hàng");
+                if (note.trim().isBlank()) {
+                    Message.warning(null, "Bạn không thể để trống lí do");
+                    return;
+                }
+                OrderDetailsDTO statusProduct = new OrderDetailsDAO().selectStatusProductById(String.valueOf(tblDanhSach.getValueAt(row, 4)));
+                if (statusProduct.getStatus().equals("pending")) {
+                    OrderDetailEntity od = new OrderDetailEntity();
+                    od.setNote(note);
+                    od.setStatus("canceled");
+                    od.setOrderDetailId((int) tblDanhSach.getValueAt(row, 4));
+                    new OrderDetailsDAO().updateStatusOrderDetails(od);
+                    Message.info(null, "Món ăn đã được huỷ");
+                    init();
+                } else {
+                    Message.warning(null, "Món đang được nấu hoặc đã hoàn thành. Không thể huỷ được!");
+                    return;
+                }
             }
 
         };
@@ -81,6 +107,14 @@ public class JDialogChiTietMonAn extends javax.swing.JDialog {
     public void setOrder(String order) {
         this.order = order;
         init();
+    }
+
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
     }
 
     /**
@@ -132,6 +166,11 @@ public class JDialogChiTietMonAn extends javax.swing.JDialog {
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jButton1.setText("Hủy hóa đơn");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -140,7 +179,7 @@ public class JDialogChiTietMonAn extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(380, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
@@ -171,45 +210,42 @@ public class JDialogChiTietMonAn extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        List<OrderDetailsDTO> od = new OrderDetailsDAO().selectByIdOrder(order);
+        for (OrderDetailsDTO order : od) {
+            if (!order.getStatus().equals("pending") && !order.getStatus().equals("canceled")) {
+                Message.warning(null, "Bạn không thể huỷ đơn hàng khi có món đang được nấu và đã hoàn thành");
+                return;
+            }
+        }
+        String note = Message.input(null, "Nhập lí do bạn huỷ đơn hàng");
+        OrderEntity order = new OrderEntity();
+        order.setStatus("canceled");
+        order.setOrderId(Integer.parseInt(this.order));
+        order.setNote(note);
+        new OrderDAO().cancelOrder(order);
+        TableEntity tb = new TableEntity();
+        tb.setStatus("available");
+        tb.setTableId(Integer.parseInt(table));
+        new TableDAO().updateTableStatus(tb);
+        dispose();
+        mainForm.showPanel(new PanelChonBan());
+
+        Message.info(this, "Bạn đã huỷ hoá đơn thành công");
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JDialogChiTietMonAn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JDialogChiTietMonAn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JDialogChiTietMonAn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JDialogChiTietMonAn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+        java.awt.EventQueue.invokeLater(() -> {
+            MainForm mainForm = new MainForm(); // Khởi tạo MainForm
+            mainForm.setVisible(true);
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                JDialogChiTietMonAn dialog = new JDialogChiTietMonAn(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+            // Sau khi MainForm chạy, mở JDialogChiTietMonAn với MainForm
+            JDialogChiTietMonAn dialog = new JDialogChiTietMonAn(mainForm, true);
+            dialog.setVisible(true);
         });
     }
 

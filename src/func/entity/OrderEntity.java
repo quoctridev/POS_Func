@@ -14,13 +14,14 @@ public class OrderEntity {
     String paymentMethod;
     BigDecimal totalPrice;
     String status;
+    String note;
     boolean isPaid;
     int orderTableId;
 
     public OrderEntity() {
     }
 
-    public OrderEntity(int orderId, int discountId, int cashierId, String customerPhone, Date orderDate, String customerName, String paymentMethod, BigDecimal totalPrice, String status, boolean isPaid, int orderTableId) {
+    public OrderEntity(int orderId, int discountId, int cashierId, String customerPhone, Date orderDate, String customerName, String paymentMethod, BigDecimal totalPrice, String status, String note, boolean isPaid, int orderTableId) {
         this.orderId = orderId;
         this.discountId = discountId;
         this.cashierId = cashierId;
@@ -30,8 +31,17 @@ public class OrderEntity {
         this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
         this.status = status;
+        this.note = note;
         this.isPaid = isPaid;
         this.orderTableId = orderTableId;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public String getPaymentMethod() {
