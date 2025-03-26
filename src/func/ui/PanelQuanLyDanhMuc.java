@@ -9,10 +9,12 @@ import func.cell.KetHopBang;
 import func.cell.SuKienHanhDong;
 import func.dao.CategoryDAO;
 import func.entity.CategoriesEntity;
+import func.utils.Message;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 // Tạo TableCellRenderer để thay đổi màu sắc
-//import javax.swing.table.TableCellRenderer;
+// import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -27,60 +29,64 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
     CategoriesEntity category = null;
     List<CategoriesEntity> list = new CategoryDAO().selectAll();
     int categoryId;
-    
+
     public PanelQuanLyDanhMuc() {
         initComponents();
         showTable();
-        
+
         SuKienHanhDong event = new SuKienHanhDong() {
+
             @Override
             public void Edit(int row) {
-                System.out.println("Edit row : " + row);
+                categoryId = list.get(row).getCategoryId();
                 String tenDanhMuc = String.valueOf(tblDanhSach.getValueAt(row, 1));
                 txtTenDanhMuc.setText(tenDanhMuc);
                 String trangThai = String.valueOf(tblDanhSach.getValueAt(row, 2));
-                if (trangThai.equals("Hoạt động")) {
+                if (trangThai.equals("Đang hoạt động")) {
                     cboTrangThai.setSelectedItem("Đang hoạt động");
                 } else {
                     cboTrangThai.setSelectedItem("Không hoạt động");
                 }
-                categoryId = list.get(row).getCategoryId();
                 btnThem.setText("Lưu danh mục");
             }
-            
+
             @Override
             public void Delete(int row) {
-//                if (tblDanhSach.isEditing()) {
-//                    tblDanhSach.getCellEditor().stopCellEditing();
-//                }
-//                DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
-//                model.removeRow(row);
                 categoryId = list.get(row).getCategoryId();
-                new CategoryDAO().delete(String.valueOf(categoryId));
-                showTable();
+                boolean confirm = Message.confirm(PanelQuanLyDanhMuc.this, "Bạn có chắc chắn muốn xóa danh mục này không ?");
+                if (confirm) {
+                    new CategoryDAO().delete(String.valueOf(categoryId));
+                    showTable();
+                    Message.info(PanelQuanLyDanhMuc.this, "Xóa danh mục thành công");
+                    
+                } else {
+                    Message.info(PanelQuanLyDanhMuc.this, "Hủy thao tác xóa danh mục.");
+                }
+                clearText();
+                btnThem.setText("Thêm danh mục");
             }
-            
+
         };
-        
+
         tblDanhSach.getColumnModel().getColumn(3).setCellRenderer(new KetHopBang());
         tblDanhSach.getColumnModel().getColumn(3).setCellEditor(new ChinhSuaBang(event));
     }
-    
+
     void clearText() {
         txtTenDanhMuc.setText("");
         cboTrangThai.setSelectedIndex(0);
     }
-    
+
     public void showTable() {
         List<CategoriesEntity> list = new CategoryDAO().selectAll(); // Cập nhật lại danh sách 
         model = (DefaultTableModel) this.tblDanhSach.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
 
         int number = 1;
-        
+
         for (CategoriesEntity category : list) {
             String name = category.getCategoryName();
-            String trangThai = category.isIsActive() ? "Hoạt động" : "Không hoạt động";
+            String trangThai = category.isIsActive() ? "Đang hoạt động" : "Không hoạt động";
 
             // Thêm số thứ tự tự động vào bảng
             model.addRow(new Object[]{
@@ -282,25 +288,43 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-        if (btnThem.getText().equals("Thêm danh mục")) {
-            CategoriesEntity category = new CategoriesEntity();
-            category.setCategoryName(txtTenDanhMuc.getText());
-            category.setIsActive(String.valueOf(cboTrangThai.getSelectedItem()).equals("Đang hoạt động"));
-            new CategoryDAO().insert(category);
-            clearText();
-            showTable();
-        } else if (btnThem.getText().equals("Lưu danh mục")) {
-            CategoriesEntity category = new CategoriesEntity();
-            category.setCategoryName(txtTenDanhMuc.getText());
-            category.setIsActive(String.valueOf(cboTrangThai.getSelectedItem()).equals("Đang hoạt động"));
-            category.setCategoryId(categoryId);
-            new CategoryDAO().update(category);
-            clearText();
-            showTable();
-            categoryId = -1;
-            btnThem.setText("Thêm danh mục");
+
+        // trim() : Phương thức này sẽ loại bỏ tất cả các khoảng trắng (dấu cách) ở đầu và chuỗi cuối. Điều này đảm bảo rằng nếu người dùng vô tình nhập thêm khoảng trắng ở đầu hoặc cuối, chúng sẽ không gây ra lỗi khi lưu vào cơ sở dữ liệu hoặc khi xử lý.
+        String categoryName = txtTenDanhMuc.getText().trim();
+        boolean isActive = cboTrangThai.getSelectedItem().equals("Đang hoạt động");
+
+        if (categoryName.isEmpty()) {
+            Message.warning(this, "Tên danh mục không được để trống.");
+            return;
         }
 
+        CategoriesEntity category = new CategoriesEntity();
+
+        if (btnThem.getText().equals("Thêm danh mục")) {
+            category.setCategoryName(categoryName);
+            category.setIsActive(isActive);
+            boolean confirm = Message.confirm(PanelQuanLyDanhMuc.this, "Bạn có chắc chắn muốn thêm danh mục này không ?");
+            if (confirm) {
+                new CategoryDAO().insert(category);
+                Message.info(this, "Thêm danh mục thành công");
+            } else {
+                Message.info(this, "Hủy thao tác thêm danh mục.");
+            }
+        } else if (btnThem.getText().equals("Lưu danh mục")) {
+            category.setCategoryId(categoryId);
+            category.setCategoryName(categoryName);
+            category.setIsActive(isActive);
+            boolean confirm = Message.confirm(PanelQuanLyDanhMuc.this, "Bạn có chắc chắn muốn sửa danh mục này không ?");
+            if (confirm) {
+                new CategoryDAO().update(category);
+                Message.info(this, "Sửa danh mục thành công");
+            } else {
+                Message.info(this, "Hủy thao tác sửa danh mục.");
+            }
+            btnThem.setText("Thêm danh mục");
+        }
+        clearText();
+        showTable();
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked

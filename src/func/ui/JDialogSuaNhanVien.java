@@ -7,12 +7,18 @@ package func.ui;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import func.dao.UserDAO;
 import func.entity.UserEntity;
+import static func.ui.JDialogThemNhanVien.isValidPhoneNumber;
+import func.utils.Message;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
  * @author ASUS
  */
 public class JDialogSuaNhanVien extends javax.swing.JDialog {
+
+    private static final String PHONE_REGEX = "^(?:\\+84|0)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\\d{7}$";
 
     UserEntity user = null;
 
@@ -24,9 +30,7 @@ public class JDialogSuaNhanVien extends javax.swing.JDialog {
         initComponents();
     }
 
-    public JDialogSuaNhanVien(java.awt.Frame parent, boolean modal, UserEntity user) {
-        super(parent, modal);
-        initComponents();
+    public void setUser(UserEntity user) {
         this.user = user;
         fillText();
     }
@@ -195,20 +199,77 @@ public class JDialogSuaNhanVien extends javax.swing.JDialog {
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
-        UserEntity user = new UserEntity();
-        user.setUsername(txtTenTaiKhoan.getText());
-        String password = BCrypt.withDefaults().hashToString(10, pwfMatKhau.getPassword());
-        if (password.isEmpty()) { // nếu mật khẩu trống thì sẽ lấy mật khẩu cũ
-            password = this.user.getPassword();
+        String username = txtTenTaiKhoan.getText();
+        String password = new String(pwfMatKhau.getPassword());
+        String fullName = txtHoVaTen.getText();
+        String phone = txtSoDienThoai.getText();
+        String role = String.valueOf(cbChucVu.getSelectedItem());
+
+        // Kiểm tra các trường không được để trống
+        if (username.isEmpty()) {
+            Message.warning(this, "Vui lòng nhập tên tài khoản!");
+            return;
         }
-        user.setPassword(password);
-        user.setFullName(txtHoVaTen.getText());
-        user.setPhone(txtSoDienThoai.getText());
-        user.setRole(String.valueOf(cbChucVu.getSelectedItem()));
-        int id = this.user.getUserId();
-        user.setUserId(id);
-        new UserDAO().update(user);
-        this.dispose();
+
+        if (password.isEmpty()) {
+            boolean kiemTra = Message.confirm(this, "Bạn có chắc muốn giữ nguyên mật khẩu cũ ?");
+            if (kiemTra) {
+                password = this.user.getPassword();
+            } else {
+                Message.warning(this, "Nếu bạn muốn thay đổi mật khẩu, vui lòng nhập mật khẩu mới!");
+                return;
+            }
+        }
+
+        if (fullName.isEmpty()) {
+            Message.warning(this, "Vui lòng nhập họ và tên!");
+            return;
+        }
+        if (phone.isEmpty()) {
+            Message.warning(this, "Vui lòng nhập số điện thoại!");
+            return;
+        }
+
+        if (role.isEmpty()) {
+            Message.warning(this, "Vui lòng chọn chức vụ!");
+            return;
+        }
+
+        // matches: sử dụng để kiểm tra xem chuỗi có khớp với một biểu thức chính quy(ví dụ: chỉ có số và có ít nhất 10 ký tự)
+        if (!isValidPhoneNumber(phone)) {
+            Message.warning(this, "Số điện thoại không hợp lệ! \n Vui lòng nhập lại Số điện thoại từ 10 tới 11 số. \n Và bắt đầu từ 0");
+            return;
+        }
+        if (username.isEmpty() || password.isEmpty() || fullName.isEmpty() || phone.isEmpty() || role.isEmpty()) {
+            Message.warning(this, "Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        UserEntity user = new UserEntity();
+
+        user.setUsername(username);
+        if (!password.equals(this.user.getPassword())) {
+            password = BCrypt.withDefaults().hashToString(10, pwfMatKhau.getPassword());
+        }
+        user.setPassword(password);// Lưu mật khẩu vào đối tượng user
+        user.setFullName(fullName);
+        user.setPhone(phone);
+        user.setRole(role);
+        user.setUserId(this.user.getUserId());  // Lưu ID của người dùng
+//            int id = this.user.getUserId();
+//            user.setUserId(id);
+
+        // Xác nhận
+        boolean confirm = Message.confirm(this, "Bạn có chắc chắn muốn Sửa nhân viên này ?");
+        if (confirm) {
+            new UserDAO().update(user);
+            Message.info(this, "Sửa nhân viên thành công");
+            user = null;
+        } else {
+            // Nếu người dùng không muốn thay đổi, thông báo hủy bỏ thao tác sửa                
+            Message.info(this, "Hủy thao tác sửa nhân viên.");
+        }
+        this.dispose(); // đóng cửa sổ    
     }//GEN-LAST:event_btnSuaActionPerformed
 
     /**
@@ -253,23 +314,21 @@ public class JDialogSuaNhanVien extends javax.swing.JDialog {
         });
     }
 
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        Pattern pattern = Pattern.compile(PHONE_REGEX);
+        Matcher matcher = pattern.matcher(phoneNumber);
+        return matcher.matches();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSua;
     private javax.swing.JComboBox<String> cbChucVu;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPasswordField pwfMatKhau;
     private javax.swing.JTextField txtHoVaTen;

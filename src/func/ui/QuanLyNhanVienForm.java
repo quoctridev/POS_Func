@@ -6,6 +6,7 @@ package func.ui;
 
 import func.dao.UserDAO;
 import func.entity.UserEntity;
+import func.utils.Message;
 import java.awt.Frame;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +30,7 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
     }
 
     public void showTable() {
-        List<UserEntity> list = new UserDAO().selectAll(); // Cập nhật lại danh sách 
+        list = new UserDAO().selectAll(); // Cập nhật lại danh sách 
         model = (DefaultTableModel) this.tblDanhSach.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
         for (UserEntity user : list) {
@@ -184,26 +185,49 @@ public class QuanLyNhanVienForm extends javax.swing.JPanel {
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
-        if (user != null) {
-            JDialogSuaNhanVien sua = new JDialogSuaNhanVien((Frame) SwingUtilities.getWindowAncestor(this), true, user);
-            sua.setVisible(true);
-            sua.dispose(); // Đóng dialog sau khi sửa xong
-            showTable();  // Cập nhật lại bảng sau khi sửa
+//        new JDialogSuaNhanVien((Frame) SwingUtilities.getWindowAncestor(this), true).setVisible(true);
+//        showTable();
+
+        if (user == null) {
+            Message.warning(this, "Chọn nhân viên muốn sửa thông tin");
+            return;
         } else {
-            JOptionPane.showMessageDialog(this, "Chọn nhân viên muốn sửa thông tin");
+            if (user != null) {
+                JDialogSuaNhanVien sua = new JDialogSuaNhanVien((Frame) SwingUtilities.getWindowAncestor(this), true);
+                sua.setUser(user);
+                sua.setVisible(true); // Hiển thị cửa sổ sửa thông tin
+                user = null;
+                showTable();
+            }
+//                JDialogSuaNhanVien sua = new JDialogSuaNhanVien((Frame) SwingUtilities.getWindowAncestor(this), true, user);
+//                sua.setVisible(true); // Hiển thị cửa sổ sửa thông tin
+//                boolean confirm = Message.confirm(this, "Bạn có chắc chắn muốn sửa thông tin của nhân viên này ?");
+//                if (confirm) {
+//                    Message.info(this, "Sửa nhân viên thành công");
+//                    sua.dispose(); // Đóng dialog sau khi sửa xong
+//                    showTable();
+//                } else {
+//                    // Nếu người dùng không muốn thay đổi, thông báo hủy bỏ thao tác sửa                
+//                    Message.info(this, "Hủy thao tác sửa nhân viên.");
+//                    sua.dispose();
+//                }
         }
-        showTable();
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
-        if (user != null) {
-            new UserDAO().delete(String.valueOf(user.getUserId()));
-            showTable();
+        if (user == null) {
+            Message.warning(this, "Chọn nhân viên muốn xóa");
+            return;
         } else {
-            JOptionPane.showMessageDialog(this, "Chọn nhân viên muốn xóa");
+            boolean confirm = Message.confirm(this, "Bạn có chắc chắn muốn xóa nhân viên này ?");
+            if (confirm) {
+                new UserDAO().delete(String.valueOf(user.getUserId()));
+                showTable();
+                Message.info(this, "Xóa nhân viên thành công");
+                user = null;
+            }
         }
-        showTable();
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
