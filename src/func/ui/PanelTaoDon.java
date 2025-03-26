@@ -8,6 +8,7 @@ import func.application.MainForm;
 import func.dao.CategoryDAO;
 import func.dao.OrderDetailsDAO;
 import func.dao.ProductDAO;
+import func.dao.TableDAO;
 import func.dto.OrderDetailsDTO;
 import func.entity.CategoriesEntity;
 import func.entity.OrderDetailEntity;
@@ -15,6 +16,7 @@ import func.entity.OrderEntity;
 import func.entity.ProductEntity;
 import func.entity.TableEntity;
 import func.utils.Currency;
+import func.utils.Message;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -66,13 +68,19 @@ public class PanelTaoDon extends javax.swing.JPanel {
 
     public void setOrder(String order) {
         this.order = order;
+        init();
+    }
+
+    void init() {
+        TableDAO tableDAO = new TableDAO();
+        List<String> tableNumbers = tableDAO.selectTableNumberByOrderId(order);
         selectCategory();
         model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
         tblDanhSach.getColumnModel().getColumn(4).setMinWidth(0);
         tblDanhSach.getColumnModel().getColumn(4).setMaxWidth(0);
         tblDanhSach.getColumnModel().getColumn(4).setWidth(0);
-        lbSoBan.setText("Bàn " + table);
+        lbSoBan.setText("Bàn " + String.join(", ", tableNumbers));
         List<OrderDetailsDTO> od = new OrderDetailsDAO().selectById(order);
         for (OrderDetailsDTO or : od) {
             model.addRow(new Object[]{
@@ -114,6 +122,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
         lbTongTien = new javax.swing.JLabel();
         btnLuu = new javax.swing.JButton();
         btnThanhToan = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         lbSoBan = new javax.swing.JLabel();
         pnMonAn = new javax.swing.JPanel();
@@ -257,6 +266,13 @@ public class PanelTaoDon extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jButton2.setText("XEM CHI TIẾT MÓN ĂN");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnDanhSachMonLayout = new javax.swing.GroupLayout(pnDanhSachMon);
         pnDanhSachMon.setLayout(pnDanhSachMonLayout);
         pnDanhSachMonLayout.setHorizontalGroup(
@@ -267,16 +283,23 @@ public class PanelTaoDon extends javax.swing.JPanel {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnDanhSachMonLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnDanhSachMonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnDanhSachMonLayout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         pnDanhSachMonLayout.setVerticalGroup(
             pnDanhSachMonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnDanhSachMonLayout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 255));
@@ -326,15 +349,22 @@ public class PanelTaoDon extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pnMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 694, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
+        luuThanhToan();
+        if (tblDanhSach.getRowCount() == 0) {
+            Message.warning(null, "Bạn phải thêm món ăn trước khi thanh toán");
+            return;
+        }
         JDialogThanhToan thanhToan = new JDialogThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
         thanhToan.setOrderId(order);
+        thanhToan.setTableId(table);
         thanhToan.setVisible(true);
+
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
@@ -358,6 +388,15 @@ public class PanelTaoDon extends javax.swing.JPanel {
         PanelChonBan chonBan = new PanelChonBan();
         mainForm.showPanel(chonBan);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        JDialogChiTietMonAn chiTietMon = new JDialogChiTietMonAn((MainForm) SwingUtilities.getWindowAncestor(this), true);
+        chiTietMon.setOrder(order);
+        chiTietMon.setTable(table);
+        chiTietMon.setVisible(true);
+        init();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     public void selectCategory() {
         categoryList = new CategoryDAO().selectAll();
@@ -517,6 +556,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
     private javax.swing.JButton btnLuu;
     private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

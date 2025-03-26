@@ -6,12 +6,13 @@ package func.application;
 
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import func.ui.PanelDoanhThu;
+import func.ui.JDialogDangNhap;
+import func.ui.PanelChonBan;
 import func.ui.PanelTaoDon;
 import func.ui.PanelQuanLyDanhMuc;
 import func.ui.PanelThongKe;
-import func.ui.PanelQuanLyHoaDon;
 import func.ui.QuanLyNhanVienForm;
+import func.utils.Auth;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
@@ -22,8 +23,7 @@ import javax.swing.JPanel;
  */
 public class MainForm extends javax.swing.JFrame {
 
-
-    String role = "cashier";
+    int role;
     private static MainForm app;
 
     /**
@@ -36,8 +36,10 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     void init() {
+        new JDialogDangNhap(this, true).setVisible(true);
+        role = Auth.isRole();
         switch (role) {
-            case "admin":
+            case 1:
                 jLabel5.setText("Quản lý nhân viên");
                 clickPanel(jLabel5, new QuanLyNhanVienForm());
                 jLabel6.setText("Quản lý danh mục");
@@ -47,15 +49,16 @@ public class MainForm extends javax.swing.JFrame {
                 jLabel10.setText("Thống kê");
                 clickPanel(jLabel10, new PanelThongKe());
                 break;
-            case "cashier":
+            case 2:
                 jLabel5.setText("Quản lý hóa đơn");
-                clickPanel(jLabel5, new PanelQuanLyHoaDon());
+//                clickPanel(jLabel5, new PanelQuanLyHoaDon());
                 jLabel6.setText("Quản lý bàn");
+                clickPanel(jLabel6, new PanelChonBan());
                 jLabel7.setText("Quản lý đơn hàng");
                 clickPanel(jLabel7, new PanelTaoDon());
                 jLabel9.setText("Thanh Toán");
                 break;
-            case "chef":
+            case 3:
                 jLabel5.setText("Quản lí đơn hàng");
 //                clickPanel(jLabel7, panelTaoDon);
                 break;
@@ -71,7 +74,7 @@ public class MainForm extends javax.swing.JFrame {
         });
     }
 
-    private void showPanel(JPanel panel) {
+    public void showPanel(JPanel panel) {
         pnlMain.removeAll();
         pnlMain.setLayout(null); // Không sử dụng layout manager
 
@@ -109,6 +112,11 @@ public class MainForm extends javax.swing.JFrame {
         jLabel5.setText("");
 
         jLabel8.setText("Đăng xuất");
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
 
         jLabel6.setText("");
 
@@ -179,6 +187,13 @@ public class MainForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        // TODO add your handling code here:
+        Auth.clear();
+        dispose();
+        init();
+    }//GEN-LAST:event_jLabel8MouseClicked
 
     /**
      * @param args the command line arguments

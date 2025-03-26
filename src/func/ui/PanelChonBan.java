@@ -13,6 +13,7 @@ import func.entity.OrderEntity;
 import func.entity.TableEntity;
 import func.utils.Auth;
 import func.utils.Message;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -55,6 +56,8 @@ public class PanelChonBan extends javax.swing.JPanel {
         pnKhuVuc = new javax.swing.JPanel();
         pnBan = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 3, 48)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -75,7 +78,7 @@ public class PanelChonBan extends javax.swing.JPanel {
 
         pnZone.setBorder(javax.swing.BorderFactory.createTitledBorder("Khu vực"));
 
-        pnKhuVuc.setLayout(new java.awt.GridLayout());
+        pnKhuVuc.setLayout(new java.awt.GridLayout(1, 0));
         jScrollPane1.setViewportView(pnKhuVuc);
 
         javax.swing.GroupLayout pnZoneLayout = new javax.swing.GroupLayout(pnZone);
@@ -86,7 +89,7 @@ public class PanelChonBan extends javax.swing.JPanel {
         );
         pnZoneLayout.setVerticalGroup(
             pnZoneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
         );
 
         pnBan.setBorder(javax.swing.BorderFactory.createTitledBorder("Bàn"));
@@ -94,6 +97,20 @@ public class PanelChonBan extends javax.swing.JPanel {
 
         jLabel1.setText("Vui lòng chọn khu vực");
         pnBan.add(jLabel1);
+
+        jButton1.setText("Gộp bàn");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Chuyển bàn");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -104,7 +121,13 @@ public class PanelChonBan extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(pnZone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnBan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 509, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnBan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -114,10 +137,30 @@ public class PanelChonBan extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnZone, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnBan, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(pnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 642, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        JDialogGopBan tinhNangMoRong = new JDialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
+        tinhNangMoRong.setTrangThai(1);
+        tinhNangMoRong.setVisible(true);
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        JDialogGopBan tinhNangMoRong = new JDialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
+        tinhNangMoRong.setTrangThai(2);
+        tinhNangMoRong.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     public void selectZone() {
         zone = new TableDAO().selectZone();
@@ -155,53 +198,62 @@ public class PanelChonBan extends javax.swing.JPanel {
 
         for (TableEntity tb : table) {
             String status = tb.getStatus();
-            String color;
+            String borderColor;
+            String textColor;
             switch (status) {
                 case "available":
                     status = "Bàn đang trống";
-                    color = "green";
+                    borderColor = "#4CAF50"; // Xanh lá nhẹ
+                    textColor = "#2E7D32"; // Xanh lá đậm
                     break;
                 case "occupied":
                     status = "Bàn đang có người sử dụng";
-                    color = "yellow";
+                    borderColor = "#FFD700"; // Vàng
+                    textColor = "#FFA000"; // Cam vàng đậm
                     break;
                 case "reserved":
                     status = "Bàn đã đặt trước";
-                    color = "orange";
+                    borderColor = "#FF9800"; // Cam
+                    textColor = "#E65100"; // Cam đậm
                     break;
                 case "waiting_payment":
                     status = "Bàn đang chờ thanh toán";
-                    color = "blue";
+                    borderColor = "#2196F3"; // Xanh dương
+                    textColor = "#0D47A1"; // Xanh dương đậm
                     break;
                 case "cleaning":
                     status = "Bàn đang dọn dẹp";
-                    color = "purple";
+                    borderColor = "#9C27B0"; // Tím
+                    textColor = "#6A1B9A"; // Tím đậm
                     break;
                 case "maintenance":
                     status = "Bàn đang được bảo trì";
-                    color = "red";
+                    borderColor = "#F44336"; // Đỏ
+                    textColor = "#B71C1C"; // Đỏ đậm
                     break;
                 default:
                     Message.warning(this, "Bàn không được xác định");
-                    color = "gray"; // Màu mặc định nếu trạng thái không hợp lệ
+                    borderColor = "#BDBDBD"; // Xám
+                    textColor = "#424242"; // Xám đậm
             }
 
             JButton jButtonRecipe = new JButton();
             jButtonRecipe.setText(String.valueOf(tb.getTableNumber()));
-            jButtonRecipe.setPreferredSize(new java.awt.Dimension(110, 110));
+            jButtonRecipe.setPreferredSize(new java.awt.Dimension(120, 120));
 
-//            if (displayPicture(menu) == null) {
-//            } else {
-//                jButtonRecipe.setIcon(displayPicture(menu));
-//            }
-//            jButtonRecipe.setBackground(new Color(192,192,192));
-            jButtonRecipe.setText("<html><body style=\"text-align:center; padding:5px; margin:0;"
-                    + "border-radius:10px; border: 2px solid " + color + "; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);\">"
-                    + "<p style=\"font-size: 14px; font-weight: bold; color:black; margin:5px 0;\">"
-                    + "BÀN " + tb.getTableNumber() + "</p>"
-                    + "<p style=\"font-size: 13px; font-weight: bold; color:" + color + "; margin:5px 0;\">"
-                    + status + "</p>"
-                    + "</body></html>");
+            jButtonRecipe.setText("<html>\n"
+                    + "<body style=\"text-align:center; padding:15px; margin:0;\n"
+                    + "            border-radius:15px; border: 4px solid " + borderColor + "; \n"
+                    + "            box-shadow: 6px 6px 12px rgba(0,0,0,0.3);\n"
+                    + "            display: flex; align-items: center; justify-content: center; flex-direction: column;\">\n"
+                    + "    <p style=\"font-size: 26px; font-weight: bold; color:black; margin:5px 0;\">\n"
+                    + "        BÀN " + tb.getTableNumber() + "\n"
+                    + "    </p>\n"
+                    + "    <p style=\"font-size: 22px; font-weight: bold; color:" + textColor + "; margin:5px 0;\">\n"
+                    + "       " + status + "\n"
+                    + "    </p>\n"
+                    + "</body>\n"
+                    + "</html>");
             jButtonRecipe.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
             jButtonRecipe.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
             jButtonRecipe.setMargin(new java.awt.Insets(2, 2, 2, 2));
@@ -219,6 +271,35 @@ public class PanelChonBan extends javax.swing.JPanel {
     }
 
     private void handleTableClick(TableEntity table) {
+        int existingOrderId = new MergeTableDAO().getActiveOrderIdByTable(table.getTableId());
+
+        MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
+        PanelTaoDon orderPanel = new PanelTaoDon();
+        orderPanel.setTable(table.getTableNumber());
+
+        // Nếu bàn đã có order, mở lại order đó
+        if (existingOrderId > 0) {
+            orderPanel.setOrder(String.valueOf(existingOrderId));
+            mainForm.showPanel(orderPanel);
+            return;
+        }
+
+        boolean saveCustomerInfo = Message.confirm(this, "Khách hàng muốn lưu thông tin không?");
+        String customerName = null, phoneNumber = null;
+
+        if (saveCustomerInfo) {
+            JDialogThongTinKhachHang customerInfoDialog = new JDialogThongTinKhachHang(
+                    (Frame) SwingUtilities.getWindowAncestor(this), true);
+            customerInfoDialog.setVisible(true);
+            customerName = customerInfoDialog.getTenKhach();
+            phoneNumber = customerInfoDialog.getSoDienThoai();
+        }
+
+        // Gọi hàm tạo order (hỗ trợ cả gộp bàn và không gộp bàn)
+        createOrderForTable(table, customerName, phoneNumber);
+    }
+
+    private void createOrderForTable(TableEntity table, String customerName, String phoneNumber) {
         MergeTableDAO mergeTableDAO = new MergeTableDAO();
         int existingOrderId = mergeTableDAO.getActiveOrderIdByTable(table.getTableId());
 
@@ -226,26 +307,33 @@ public class PanelChonBan extends javax.swing.JPanel {
         PanelTaoDon taodon = new PanelTaoDon();
         taodon.setTable(table.getTableNumber());
 
+        // Nếu bàn đã có Order, mở lại order đó
         if (existingOrderId > 0) {
             taodon.setOrder(String.valueOf(existingOrderId));
             mainForm.showPanel(taodon);
             return;
         }
 
+        // Kiểm tra nếu bàn đang bị chiếm dụng
         if (!"available".equals(table.getStatus())) {
             Message.warning(this, "Bàn đang được sử dụng hoặc đã đặt trước!");
             return;
         }
 
+        // Xác nhận tạo Order mới
         boolean confirm = Message.confirm(this, "Bạn có muốn tạo Order mới cho bàn " + table.getTableNumber() + "?");
 
         if (confirm) {
             OrderEntity od = new OrderEntity();
-            od.setCashierId(2);
+            od.setCashierId(Auth.user.getUserId());
             od.setStatus("new");
+            od.setCustomerName(customerName);
+            od.setCustomerPhone(phoneNumber);
 
             int newOrderId = new OrderDAO().createOrder(od);
             if (newOrderId > 0) {
+
+                // Nếu không có danh sách gộp bàn, chỉ tạo order cho bàn hiện tại
                 MergeTableEntity mtb = new MergeTableEntity();
                 mtb.setOrderId(newOrderId);
                 mtb.setTableId(table.getTableId());
@@ -263,7 +351,10 @@ public class PanelChonBan extends javax.swing.JPanel {
             }
         }
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel3;

@@ -24,11 +24,17 @@ public class JDialogDangNhap extends javax.swing.JDialog {
     public JDialogDangNhap(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-    }
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                boolean confirm = Message.confirm(JDialogDangNhap.this, "Bạn có chắc muốn đóng chương trình");
+                if (confirm) {
+                    System.exit(0); // Tắt toàn bộ chương trình khi ấn "X"
+                }
 
-    public JDialogDangNhap(Dialog parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
+            }
+        });
     }
 
     /**
@@ -219,9 +225,9 @@ public class JDialogDangNhap extends javax.swing.JDialog {
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
     private void lbQuenMatKhauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbQuenMatKhauMouseClicked
-        JDialogQuenMatKhau dialog = new JDialogQuenMatKhau((java.awt.Frame) this.getParent(), true);
+        JDialogQuenMatKhau dialog = new JDialogQuenMatKhau();
         dialog.setLocationRelativeTo(null);
-        this.dispose(); // Đóng JDialog hiện tại (JDialogDangNhap)
+        this.dispose();
         dialog.setVisible(true);
     }//GEN-LAST:event_lbQuenMatKhauMouseClicked
 
@@ -268,30 +274,32 @@ public class JDialogDangNhap extends javax.swing.JDialog {
     }
 
     private void login() {
+
         String username = txtTenTaiKhoan.getText();
         String password = String.valueOf(pwfMatKhau.getPassword());
         //validate
         if (username.equals("")) {
-            Message.message(this, "Không được để trống Tên Tài Khoản", "Thong bao!");
+            Message.warning(this, "Không được để trống Tên Tài Khoản");
             return;
         }
         if (password.equals("")) {
-            Message.message(this, "Không được để trống mật khẩu", "Thong bao!");
+            Message.warning(this, "Không được để trống mật khẩu");
             return;
         }
         UserEntity user = new UserDAO().selectById(username);
         if (user == null) {
-            Message.message(this, "Sai Ten Tai Khoan", "Thong bao!");
+            Message.warning(this, "Tài khoản mật khẩu không đúng");
+            return;
         }
         //hashpass
         BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
         if (result.verified) {
-            Message.message(this, "Dang nhap thanh cong", "Thong bao!");// chua co ham message
+            Message.info(this, "Dang nhap thanh cong");// chua co ham message
             Auth.user = user;
             this.dispose();
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Fail");
-            this.dispose();
+            Message.warning(this, "Tài khoản mật khẩu không đúng");
+            return;
         }
     }
 
