@@ -93,12 +93,22 @@ public class OrderDAO extends FuncDAO<OrderEntity, String> {
 //                + "LEFT JOIN OrderDetails od ON o.order_id = od.order_id";
 //        return OrderDTO(sql);
 //    }
+    public void cancelOrder(OrderEntity od) {
+        String sql = "UPDATE Orders\n"
+                + "SET status = ?,\n"
+                + "note = ?"
+                + "WHERE order_id = ?";
+        Database.update(sql, od.getStatus(), od.getNote(), od.getOrderId());
+    }
+
     @Override
     public void update(OrderEntity entity) {
-        String sql = "UPDATE Orders SET discount_id = ?,payment_method = ?, "
-                + "total_price = ?, [status] = ?, is_paid = ? WHERE order_id = ?";
-        Database.update(sql, entity.getDiscountId() == 0 ? null : entity.getDiscountId(), entity.getPaymentMethod(), entity.getTotalPrice(),
-                entity.getStatus(), entity.isIsPaid(), entity.getOrderId());
+        String sql = "UPDATE Orders SET discount_id = ?, cashier_id = ?,"
+                + "customer_phone = ?, customer_name = ?,"
+                + "total_price = ?, [status] = ?, is_paid =?, order_table_id = ? WHERE order_id = ?";
+        Database.update(sql, entity.getDiscountId(), entity.getCashierId(),
+                entity.getCustomerPhone(), entity.getCustomerName(), entity.getTotalPrice(),
+                entity.getStatus(), entity.isIsPaid(), entity.getOrderTableId());
     }
 
     @Override
@@ -139,7 +149,7 @@ public class OrderDAO extends FuncDAO<OrderEntity, String> {
                     entity.setStatus(rs.getString("status"));
                     entity.setIsPaid(rs.getBoolean("is_paid"));
                     entity.setOrderTableId(rs.getInt("order_table_id"));
-
+                    entity.setNote(rs.getNString("note"));
                     list.add(entity);
                 }
 

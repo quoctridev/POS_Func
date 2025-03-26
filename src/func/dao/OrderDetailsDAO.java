@@ -9,21 +9,21 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 
 public class OrderDetailsDAO {
-    
+
     public List<OrderDetailsDTO> selectById(String id) {
-        String sql = "SELECT \n"
-                + "    p.product_name,od.order_detail_id, \n"
-                + "    SUM(od.quantity) AS quantity, \n"
-                + "    od.price, od.product_id\n"
-                + "FROM OrderDetails od\n"
-                + "JOIN Products p ON od.product_id = p.product_id\n"
-                + "JOIN Orders o ON od.order_id = o.order_id\n"
-                + "WHERE od.order_id = ?\n"
-                + "GROUP BY p.product_name, od.price,od.product_id;";
+        String sql = "         SELECT \n"
+                + "                    p.product_name, \n"
+                + "                  quantity, \n"
+                + "                    od.price, od.product_id\n"
+                + "                FROM OrderDetails od\n"
+                + "                JOIN Products p ON od.product_id = p.product_id\n"
+                + "                JOIN Orders o ON od.order_id = o.order_id\n"
+                + "                WHERE od.order_id = ? and od.[status] != 'canceled'";
         return selectBySql(sql, id);
     }
-    
+
     public List<OrderDetailsDTO> selectByIdOrder(String id) {
+        System.out.println(id);
         String sql = "SELECT \n"
                 + "    od.order_detail_id,p.product_name, \n"
                 + "     od.quantity, \n"
@@ -34,7 +34,20 @@ public class OrderDetailsDAO {
                 + "WHERE od.order_id = ?\n";
         return selectBySql(sql, id);
     }
-    
+
+    public OrderDetailsDTO selectStatusProductById(String orderDetailId) {
+        String sql = "SELECT TOP 1 od.*,p.product_name FROM OrderDetails AS od JOIN Products AS p ON od.product_id = p.product_id WHERE order_detail_id = ?";
+        List<OrderDetailsDTO> ls = selectBySql(sql, orderDetailId);
+        return ls.size() > 0 ? ls.get(0) : null;
+    }
+
+    public void updateStatusOrderDetails(OrderDetailEntity od) {
+        String sql = "UPDATE OrderDetails\n"
+                + "SET note = ?,[status] = ?\n"
+                + "WHERE order_detail_id = ?";
+        Database.update(sql, od.getNote(), od.getStatus(), od.getOrderDetailId());
+    }
+
     public void createOrderDetails(OrderDetailEntity od) {
         // Lấy tổng số lượng sản phẩm đã có trong OrderDetails
         String checkOrderSql = "SELECT COALESCE(SUM(quantity), 0) FROM OrderDetails WHERE order_id = ? AND product_id = ?";
@@ -44,14 +57,14 @@ public class OrderDetailsDAO {
         while (orderedQuantity < od.getQuantity()) {
             String sql = "INSERT INTO OrderDetails (order_id, product_id, quantity, price, note, status, created_at)\n"
                     + "VALUES (?, ?, ?, ?, ?, ?, GETDATE())";
-            
+
             Database.update(sql, od.getOrderId(), od.getProductId(), 1, od.getPrice(), od.getNote(), "pending");
 
             // Cập nhật lại tổng số lượng đã đặt
             orderedQuantity++;
         }
     }
-    
+
     protected List<OrderDetailsDTO> selectBySql(String sql, Object... args) {
         List<OrderDetailsDTO> list = new ArrayList<>();
         try {
@@ -83,5 +96,5 @@ public class OrderDetailsDAO {
         }
         return list;
     }
-    
+
 }

@@ -119,7 +119,6 @@ public static boolean isValidPhoneNumber(String phoneNumber) {
             setTenKhach(txtTenKhach.getText());
             Message.info(this, "Bạn đã thêm thông tin khách hàng thành công");
             dispose();
-
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
