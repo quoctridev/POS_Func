@@ -6,8 +6,10 @@ package func.ui;
 
 import func.dao.OrderDAO;
 import func.dao.PaymentDAO;
+import func.dao.TableDAO;
 import func.entity.OrderEntity;
 import func.entity.PaymentEntity;
+import func.entity.TableEntity;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +30,7 @@ public class JDialogQRThanhToan extends javax.swing.JDialog {
 
     String urlCheck = null;
     OrderEntity od = null;
+    String tableId = null;
 
     /**
      * Creates new form JDialogQRThanhToan
@@ -44,6 +47,14 @@ public class JDialogQRThanhToan extends javax.swing.JDialog {
     public void setOd(OrderEntity od) {
         this.od = od;
         init(String.valueOf(od.getTotalPrice()));
+    }
+
+    public String getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
     }
 
     /**
@@ -178,8 +189,16 @@ String callAPI(String amount) {
             public void actionPerformed(ActionEvent e) {
                 if (getAPI().equals("PAID")) {
                     ((Timer) e.getSource()).stop(); // Dừng timer khi điều kiện thỏa mãn
-                    JOptionPane.showMessageDialog(rootPane, "Bạn đã thanh toán thành công");
-                    new OrderDAO().insert(od);
+                    TableDAO tableDAO = new TableDAO();
+                    new OrderDAO().update(od);
+                    if (tableDAO.selectTableNumberByOrderId(String.valueOf(od.getOrderId())).size() > 1) {
+                        for (String table : tableDAO.selectTableNumberByOrderId(String.valueOf(od.getOrderId()))) {
+                            TableEntity tb = new TableEntity();
+                            tb.setStatus("available");
+                            tb.setTableId(Integer.parseInt(table));
+                            tableDAO.updateTableStatus(tb);
+                        }
+                    }
                     dispose();
                 }
             }
