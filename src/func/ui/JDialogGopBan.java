@@ -14,6 +14,7 @@ import func.entity.TableEntity;
 import func.utils.Auth;
 import func.utils.Message;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -32,6 +33,9 @@ public class JDialogGopBan extends javax.swing.JDialog {
     List<String> selectedTables = new ArrayList<>();
     int trangThai;
     String selectedZone = null;
+    private List<String> selectedTargetTables = new ArrayList<>();
+    private int selectedSeats = 0;
+    private int requiredSeats = 0;
 
     /**
      * Creates new form JDialogGopBan
@@ -52,67 +56,165 @@ public class JDialogGopBan extends javax.swing.JDialog {
     }
 
     void init() {
-        List<String> zone = new TableDAO().selectZone();
         if (trangThai == 1) {
-            jLabel1.setText("Gộp bàn");
-            List<String> zones = new TableDAO().selectZone();
-            for (String z : zones) {
-                JPanel panel = new JPanel();
-                panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-                jTabbedPane1.addTab(z, panel);
-
-                List<TableEntity> tables = new TableDAO().selectByZone(z);
-                for (TableEntity tb : tables) {
-                    JButton btn = new JButton("Bàn " + tb.getTableNumber() + " (" + tb.getCapacity() + " chỗ)");
-                    btn.setPreferredSize(new Dimension(120, 80));
-                    Color defaultColor = getStatusColor(tb.getStatus());
-                    btn.setBackground(defaultColor);
-
-                    btn.addActionListener(e -> {
-                        String tableNumber = String.valueOf(tb.getTableId()); // Lấy id bàn
-                        String tableZone = z; // Zone của bàn hiện tại
-
-                        if (!tb.getStatus().equals("available")) {
-                            Message.warning(null, "Bạn không thể chọn bàn này do đang có người sử dụng hoặc đặt trước");
-                            return;
-                        }
-
-                        // Nếu chưa có zone nào được chọn, đặt zone hiện tại
-                        if (selectedZone == null) {
-                            selectedZone = tableZone;
-                        }
-
-                        // Kiểm tra nếu bàn cùng zone thì mới cho chọn
-                        if (!tableZone.equals(selectedZone)) {
-                            Message.warning(null, "Bạn chỉ có thể chọn bàn trong khu vực " + selectedZone);
-                            return;
-                        }
-
-                        if (selectedTables.contains(tableNumber)) {
-                            // Nếu đã chọn, bỏ chọn
-                            selectedTables.remove(tableNumber);
-                            btn.setBackground(defaultColor);
-
-                            // Nếu bỏ hết bàn, reset lại zone
-                            if (selectedTables.isEmpty()) {
-                                selectedZone = null;
-                            }
-                        } else {
-                            // Nếu chưa chọn, thêm vào danh sách chọn
-                            selectedTables.add(tableNumber);
-                            btn.setBackground(Color.GREEN);
-                        }
-
-                        System.out.println("Bàn đã chọn: " + selectedTables);
-                    });
-
-                    panel.add(btn);
-                }
-            }
+            gopBan();
         } else {
-            jLabel1.setText("Chuyển bàn");
+            chuyenBan();
         }
 
+    }
+
+    void chuyenBan() {
+        jLabel1.setText("Chuyển bàn");
+        List<String> zones = new TableDAO().selectZone();
+
+        for (String z : zones) {
+            JPanel panel = new JPanel();
+            panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+            jTabbedPane1.addTab(z, panel);
+
+            List<TableEntity> tables = new TableDAO().selectByZone(z);
+            for (TableEntity tb : tables) {
+                JButton btn = new JButton("Bàn " + tb.getTableNumber() + " (" + tb.getCapacity() + " chỗ)");
+                btn.setPreferredSize(new Dimension(120, 80));
+                Color defaultColor = getStatusColor(tb.getStatus());
+                btn.setBackground(defaultColor);
+
+                btn.addActionListener(e -> {
+                    String tableNumber = String.valueOf(tb.getTableId()); // ID bàn nguồn
+                    String tableZone = z; // Zone của bàn nguồn
+                    System.out.println(tb.getTableId());
+
+                    // Nếu chưa chọn bàn nguồn
+                    if (selectedTables.isEmpty()) {
+                        if (!tb.getStatus().equals("occupied")) {
+                            Message.warning(null, "Chỉ có thể chọn bàn đang có khách làm bàn nguồn");
+                            return;
+                        }
+
+                        // Lấy tất cả bàn đã gộp
+                        List<String> mergedTables = new TableDAO().getMergedTables(tb.getTableId());
+
+                        // Tính tổng số chỗ đã sử dụng từ tất cả bàn gộp
+                        int seatsUsed = 0;
+                        for (String mergedTable : mergedTables) {
+                            seatsUsed += new TableDAO().getSeatsUsed(Integer.parseInt(mergedTable));
+                        }
+
+                        if (seatsUsed == 0) {
+                            Message.warning(null, "Không tìm thấy hóa đơn của bàn này!");
+                            return;
+                        }
+
+                        requiredSeats = seatsUsed; // Cần chọn đủ số bàn đích có sức chứa ≥ seatsUsed
+                        selectedTables.addAll(mergedTables); // Chọn cả bàn gộp làm bàn nguồn
+                        selectedZone = tableZone;
+                        btn.setBackground(Color.ORANGE);
+                        System.out.println("Bàn nguồn: " + selectedTables + " - Cần chọn bàn đích cho " + requiredSeats + " chỗ.");
+                    } // Nếu đã có bàn nguồn, chọn bàn đích
+                    else {
+                        if (!tb.getStatus().equals("available")) {
+                            Message.warning(null, "Chỉ có thể chọn bàn trống làm bàn đích");
+                            return;
+                        }
+                        if (!tableZone.equals(selectedZone)) {
+                            Message.warning(null, "Bạn chỉ có thể chuyển bàn trong cùng khu vực " + selectedZone);
+                            return;
+                        }
+
+                        selectedTargetTables.add(tableNumber);
+                        selectedSeats += tb.getCapacity();
+                        btn.setBackground(Color.GREEN);
+                        System.out.println("Bàn đích: " + selectedTargetTables + " - Đã chọn " + selectedSeats + "/" + requiredSeats + " chỗ.");
+
+                        // Nếu đủ chỗ, thực hiện chuyển bàn
+                        if (selectedSeats >= requiredSeats) {
+                            boolean confirm = Message.confirm(null, "Bạn có muốn chuyển bàn ngay không?");
+                            if (confirm) {
+                                boolean success = new TableDAO().chuyenBan(selectedTables, selectedTargetTables);
+                                if (success) {
+                                    Message.info(null, "Chuyển bàn thành công!");
+                                    for (Component comp : panel.getComponents()) {
+                                        if (comp instanceof JButton) {
+                                            JButton tableBtn = (JButton) comp;
+                                            String tableId = tableBtn.getText().split(" ")[1]; // Giả sử format là "Bàn X (...)"
+                                            tableBtn.setBackground(getStatusColor(new TableDAO().getTableStatus(Integer.parseInt(tableId))));
+                                        }
+                                    }
+
+                                    // Reset trạng thái chọn bàn
+                                    selectedTables.clear();
+                                    selectedTargetTables.clear();
+                                    selectedSeats = 0;
+                                    selectedZone = null;
+                                }
+                            }
+                        }
+                    }
+                }
+                );
+
+                panel.add(btn);
+            }
+        }
+    }
+
+    void gopBan() {
+        jLabel1.setText("Gộp bàn");
+        List<String> zones = new TableDAO().selectZone();
+        for (String z : zones) {
+            JPanel panel = new JPanel();
+            panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+            jTabbedPane1.addTab(z, panel);
+
+            List<TableEntity> tables = new TableDAO().selectByZone(z);
+            for (TableEntity tb : tables) {
+                JButton btn = new JButton("Bàn " + tb.getTableNumber() + " (" + tb.getCapacity() + " chỗ)");
+                btn.setPreferredSize(new Dimension(120, 80));
+                Color defaultColor = getStatusColor(tb.getStatus());
+                btn.setBackground(defaultColor);
+
+                btn.addActionListener(e -> {
+                    String tableNumber = String.valueOf(tb.getTableId()); // Lấy id bàn
+                    String tableZone = z; // Zone của bàn hiện tại
+
+                    if (!tb.getStatus().equals("available")) {
+                        Message.warning(null, "Bạn không thể chọn bàn này do đang có người sử dụng hoặc đặt trước");
+                        return;
+                    }
+
+                    // Nếu chưa có zone nào được chọn, đặt zone hiện tại
+                    if (selectedZone == null) {
+                        selectedZone = tableZone;
+                    }
+
+                    // Kiểm tra nếu bàn cùng zone thì mới cho chọn
+                    if (!tableZone.equals(selectedZone)) {
+                        Message.warning(null, "Bạn chỉ có thể chọn bàn trong khu vực " + selectedZone);
+                        return;
+                    }
+
+                    if (selectedTables.contains(tableNumber)) {
+                        // Nếu đã chọn, bỏ chọn
+                        selectedTables.remove(tableNumber);
+                        btn.setBackground(defaultColor);
+
+                        // Nếu bỏ hết bàn, reset lại zone
+                        if (selectedTables.isEmpty()) {
+                            selectedZone = null;
+                        }
+                    } else {
+                        // Nếu chưa chọn, thêm vào danh sách chọn
+                        selectedTables.add(tableNumber);
+                        btn.setBackground(Color.GREEN);
+                    }
+
+                    System.out.println("Bàn đã chọn: " + selectedTables);
+                });
+
+                panel.add(btn);
+            }
+        }
     }
 
     private Color getStatusColor(String status) {
@@ -207,16 +309,44 @@ public class JDialogGopBan extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if (selectedTables.isEmpty()) {
-            if (!Message.confirm(null, "Bạn có chắc không muốn gộp bàn không?")) {
+        // Nếu chưa chọn bàn nguồn và bàn đích, thì kiểm tra xem có đang gộp bàn không
+        if (selectedTables.isEmpty() && selectedTargetTables.isEmpty()) {
+            if (!Message.confirm(null, "Bạn có chắc không muốn gộp bàn hoặc chuyển bàn không?")) {
                 return;
             }
         }
 
-        if (selectedTables.size() <= 0) {
-            Message.warning(this, "Bạn phải chọn thêm 1 bàn nữa mới được");
+        // Trường hợp CHUYỂN BÀN
+        if (!selectedTables.isEmpty() && !selectedTargetTables.isEmpty()) {
+            if (selectedSeats < requiredSeats) {
+                Message.warning(null, "Bạn chưa chọn đủ số chỗ cần thiết để chuyển!");
+                return;
+            }
+
+            boolean confirm = Message.confirm(null, "Bạn có muốn thực hiện chuyển bàn ngay không?");
+
+            if (confirm) {
+                boolean success = new TableDAO().chuyenBan(selectedTables, selectedTargetTables);
+                if (success) {
+                    Message.info(null, "Chuyển bàn thành công!");
+                    selectedTables.clear();
+                    selectedTargetTables.clear();
+                    selectedSeats = 0;
+                    selectedZone = null;
+                    dispose();
+                } else {
+                    Message.error(null, "Chuyển bàn thất bại!");
+                }
+            }
             return;
         }
+
+        // Trường hợp GỘP BÀN
+        if (selectedTables.size() <= 1) {
+            Message.warning(this, "Bạn phải chọn ít nhất 2 bàn để gộp!");
+            return;
+        }
+
         boolean saveCustomerInfo = Message.confirm(this, "Khách hàng muốn lưu thông tin không?");
         String customerName = null, phoneNumber = null;
 
