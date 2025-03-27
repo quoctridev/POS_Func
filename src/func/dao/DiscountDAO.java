@@ -24,7 +24,7 @@ public class DiscountDAO extends FuncDAO<DiscountEntity, String> {
 
     @Override
     public void delete(String id) {
-        String sql = "DELETE FROM Discounts WHERE discount_id = ?";
+        String sql = "DELETE FROM Discounts WHERE code = ?";
         Database.update(sql, id);
     }
 
