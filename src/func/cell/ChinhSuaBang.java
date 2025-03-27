@@ -4,6 +4,7 @@
  */
 package func.cell;
 
+import func.cellView.SuKienHanhDong;
 import java.awt.Component;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
