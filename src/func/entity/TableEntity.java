@@ -8,19 +8,21 @@ public class TableEntity {
     String tableNumber;
     String status;
     int capacity;
-    String zone;
+    int zoneId;
     Date createdAt;
+    String zone_name;
 
     public TableEntity() {
     }
 
-    public TableEntity(int tableId, String tableNumber, String status, int capacity, String zone, Date createdAt) {
+    public TableEntity(int tableId, String tableNumber, String status, int capacity, int zoneId, Date createdAt, String zone_name) {
         this.tableId = tableId;
         this.tableNumber = tableNumber;
         this.status = status;
         this.capacity = capacity;
-        this.zone = zone;
+        this.zoneId = zoneId;
         this.createdAt = createdAt;
+        this.zone_name = zone_name;
     }
 
     public int getTableId() {
@@ -55,12 +57,20 @@ public class TableEntity {
         this.capacity = capacity;
     }
 
-    public String getZone() {
-        return zone;
+    public int getZoneId() {
+        return zoneId;
     }
 
-    public void setZone(String zone) {
-        this.zone = zone;
+    public void setZoneId(int zoneId) {
+        this.zoneId = zoneId;
+    }
+
+    public String getZone_name() {
+        return zone_name;
+    }
+
+    public void setZone_name(String zone_name) {
+        this.zone_name = zone_name;
     }
 
     public Date getCreatedAt() {

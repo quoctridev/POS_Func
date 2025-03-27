@@ -152,7 +152,7 @@ public class PanelChonBan extends javax.swing.JPanel {
         JDialogGopBan tinhNangMoRong = new JDialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
         tinhNangMoRong.setTrangThai(1);
         tinhNangMoRong.setVisible(true);
-
+            
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -175,7 +175,7 @@ public class PanelChonBan extends javax.swing.JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Ví dụ: Hiển thị danh sách món theo danh mục
-                    selectProductById(zone);
+                    selectTableByZone(zone);
                 }
             });
             jButtonCategory.setMargin(new java.awt.Insets(2, 2, 2, 2));
@@ -188,7 +188,7 @@ public class PanelChonBan extends javax.swing.JPanel {
         pnKhuVuc.setLayout(new java.awt.GridLayout(i, 0));
     }
 
-    public void selectProductById(String id) {
+    public void selectTableByZone(String id) {
 
         table = new TableDAO().selectByZone(id);
         pnBan.removeAll();
@@ -239,17 +239,17 @@ public class PanelChonBan extends javax.swing.JPanel {
 
             JButton jButtonRecipe = new JButton();
             jButtonRecipe.setText(String.valueOf(tb.getTableNumber()));
-            jButtonRecipe.setPreferredSize(new java.awt.Dimension(120, 120));
+            jButtonRecipe.setPreferredSize(new java.awt.Dimension(135, 135));
 
             jButtonRecipe.setText("<html>\n"
                     + "<body style=\"text-align:center; padding:15px; margin:0;\n"
                     + "            border-radius:15px; border: 4px solid " + borderColor + "; \n"
                     + "            box-shadow: 6px 6px 12px rgba(0,0,0,0.3);\n"
                     + "            display: flex; align-items: center; justify-content: center; flex-direction: column;\">\n"
-                    + "    <p style=\"font-size: 26px; font-weight: bold; color:black; margin:5px 0;\">\n"
+                    + "    <p style=\"font-size: 14px; font-weight: bold; color:black; margin:5px 0;\">\n"
                     + "        BÀN " + tb.getTableNumber() + "\n"
                     + "    </p>\n"
-                    + "    <p style=\"font-size: 22px; font-weight: bold; color:" + textColor + "; margin:5px 0;\">\n"
+                    + "    <p style=\"font-size: 14px; font-weight: bold; color:" + textColor + "; margin:5px 0;\">\n"
                     + "       " + status + "\n"
                     + "    </p>\n"
                     + "</body>\n"
