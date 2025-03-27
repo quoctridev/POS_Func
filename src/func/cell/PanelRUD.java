@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package func.cellView;
+package func.cell;
 
 import func.ui.JDialogSuaHoaDon;
 import java.awt.Frame;
@@ -10,9 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.SwingUtilities;
 
-public class PanelAction extends javax.swing.JPanel {
+public class PanelRUD extends javax.swing.JPanel {
 
-    public PanelAction() {
+    public PanelRUD() {
         initComponents();
     }
 
@@ -45,7 +45,7 @@ public class PanelAction extends javax.swing.JPanel {
 
         acbSua = new func.cell.ActionButton();
         acbXoa = new func.cell.ActionButton();
-        cmdView = new func.cellView.ActionButton();
+        acbXem = new func.cell.ActionButton();
 
         acbSua.setIcon(new javax.swing.ImageIcon(getClass().getResource("/func/image/edit.png"))); // NOI18N
         acbSua.addActionListener(new java.awt.event.ActionListener() {
@@ -61,7 +61,12 @@ public class PanelAction extends javax.swing.JPanel {
             }
         });
 
-        cmdView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/func/image/view.png"))); // NOI18N
+        acbXem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/func/image/view.png"))); // NOI18N
+        acbXem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                acbXemActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -72,19 +77,18 @@ public class PanelAction extends javax.swing.JPanel {
                 .addComponent(acbSua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(acbXoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmdView, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(acbXem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cmdView, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(acbXoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(acbSua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(acbXem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(acbXoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(acbSua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -98,10 +102,14 @@ public class PanelAction extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_acbXoaActionPerformed
 
+    private void acbXemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acbXemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_acbXemActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private func.cell.ActionButton acbSua;
+    private func.cell.ActionButton acbXem;
     private func.cell.ActionButton acbXoa;
-    private func.cellView.ActionButton cmdView;
     // End of variables declaration//GEN-END:variables
 }

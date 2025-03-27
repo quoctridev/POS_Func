@@ -3,14 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package func.ui;
-import func.cellView.ChinhSuaBang;
-import func.cellView.KetHopBang;
-import func.cellView.SuKienHanhDong;
+
+import func.cell.ChinhSuaBang;
+import func.cell.KetHopBang;
+import func.cell.SuKienHanhDong;
 import func.dao.DiscountDAO;
 import func.entity.DiscountEntity;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author This PC
@@ -26,61 +28,68 @@ public class QuanLyGiamGia extends javax.swing.JFrame {
         SuKienHanhDong event = new SuKienHanhDong() {
             @Override
             public void Edit(int row) {
-                System.out.println("Edit row : " + row);                
+                System.out.println("Edit row : " + row);
             }
-            
+
             @Override
             public void Delete(int row) {
                 try {
-        DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
-        String code = model.getValueAt(row, 0).toString(); // Lấy mã code từ hàng được chọn
-        
-        int confirm = JOptionPane.showConfirmDialog(null, 
-            "Bạn có chắc chắn muốn xóa mã khuyến mãi này không?", 
-            "Xác nhận xóa", 
-            JOptionPane.YES_NO_OPTION);
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            DiscountDAO discountDAO = new DiscountDAO();
-            discountDAO.delete(code); // Xóa dựa trên mã code
-            JOptionPane.showMessageDialog(null, "Xóa thành công!");
-            showTable(); // Làm mới bảng
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Lỗi khi xóa dữ liệu!");
-    }
+                    DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
+                    String code = model.getValueAt(row, 0).toString(); // Lấy mã code từ hàng được chọn
+
+                    int confirm = JOptionPane.showConfirmDialog(null,
+                            "Bạn có chắc chắn muốn xóa mã khuyến mãi này không?",
+                            "Xác nhận xóa",
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        DiscountDAO discountDAO = new DiscountDAO();
+                        discountDAO.delete(code); // Xóa dựa trên mã code
+                        JOptionPane.showMessageDialog(null, "Xóa thành công!");
+                        showTable(); // Làm mới bảng
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Lỗi khi xóa dữ liệu!");
+                }
             }
-            
+
+            @Override
+            public void View(int row) {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+
         };
-        
-        tblDanhSach.getColumnModel().getColumn(4).setCellRenderer(new KetHopBang());
-        tblDanhSach.getColumnModel().getColumn(4).setCellEditor(new ChinhSuaBang(event));
+
+        tblDanhSach.getColumnModel().getColumn(4).setCellRenderer(new KetHopBang(false));
+        tblDanhSach.getColumnModel().getColumn(4).setCellEditor(new ChinhSuaBang(false, event));
     }
-    void showTable(){
+
+    void showTable() {
         DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
-    model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ trong bảng
-    
-    try {
-        DiscountDAO discountDAO = new DiscountDAO();
-        List<DiscountEntity> discounts = discountDAO.selectAll(); // Lấy tất cả dữ liệu
-        java.util.Date currentDate = new java.util.Date(); // Lấy ngày hiện tại
-        
-        for (DiscountEntity discount : discounts) {
-            String status = discount.getEndDate().before(currentDate) ? "Hết hạn" : "Còn hiệu lực";
-            
-            model.addRow(new Object[]{
-                discount.getCode(),
-                discount.getDiscountValue(),
-                discount.getEndDate(),
-                status
-            });
+        model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ trong bảng
+
+        try {
+            DiscountDAO discountDAO = new DiscountDAO();
+            List<DiscountEntity> discounts = discountDAO.selectAll(); // Lấy tất cả dữ liệu
+            java.util.Date currentDate = new java.util.Date(); // Lấy ngày hiện tại
+
+            for (DiscountEntity discount : discounts) {
+                String status = discount.getEndDate().before(currentDate) ? "Hết hạn" : "Còn hiệu lực";
+
+                model.addRow(new Object[]{
+                    discount.getCode(),
+                    discount.getDiscountValue(),
+                    discount.getEndDate(),
+                    status
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu lên bảng!");
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu lên bảng!");
     }
-    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

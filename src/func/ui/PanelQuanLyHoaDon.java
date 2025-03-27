@@ -4,9 +4,11 @@
  */
 package func.ui;
 
+import func.cell.ChinhSuaBang;
+import func.cell.KetHopBang;
+import func.cell.SuKienHanhDong;
 import java.awt.Frame;
 import func.entity.OrderEntity;
-import func.cellView.SuKienHanhDong;
 import func.dao.OrderDAO;
 import func.dto.OrderOrderDetailsDTO;
 import func.utils.Message;
@@ -19,7 +21,9 @@ import javax.swing.table.DefaultTableModel;
  * @author This PC
  */
 public class PanelQuanLyHoaDon extends javax.swing.JPanel {
+
     OrderEntity order = null;
+
     public PanelQuanLyHoaDon() {
         initComponents();
         load();
@@ -54,10 +58,11 @@ public class PanelQuanLyHoaDon extends javax.swing.JPanel {
                 System.out.println("View row : " + row);
             }
         };
-        tblDanhSach.getColumnModel().getColumn(5).setCellRenderer(new func.cellView.KetHopBang());
-        tblDanhSach.getColumnModel().getColumn(5).setCellEditor(new func.cellView.ChinhSuaBang(event));    
+        tblDanhSach.getColumnModel().getColumn(5).setCellRenderer(new KetHopBang(true));
+        tblDanhSach.getColumnModel().getColumn(5).setCellEditor(new ChinhSuaBang(true, event));
     }
-        public void load() {
+
+    public void load() {
         OrderDAO orDAO = new OrderDAO();
         List<OrderOrderDetailsDTO> orderLst = orDAO.readSP();
         DefaultTableModel tblDanhSach = (DefaultTableModel) this.tblDanhSach.getModel();
@@ -71,12 +76,12 @@ public class PanelQuanLyHoaDon extends javax.swing.JPanel {
                 orderOrderDetailsDTO.getStatus(),});
         }
     }
-public void updateRow(int rowIndex, String updatedTime, String updatedCustomer) {
-    DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
-    model.setValueAt(updatedTime, rowIndex, 1); // Cập nhật thời gian
-    model.setValueAt(updatedCustomer, rowIndex, 2); // Cập nhật khách hàng
-}
 
+    public void updateRow(int rowIndex, String updatedTime, String updatedCustomer) {
+        DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
+        model.setValueAt(updatedTime, rowIndex, 1); // Cập nhật thời gian
+        model.setValueAt(updatedCustomer, rowIndex, 2); // Cập nhật khách hàng
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -65,10 +65,15 @@ public class PanelQuanLyBan extends javax.swing.JPanel {
                 }
 
             }
+
+            @Override
+            public void View(int row) {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
         };
 
-        tblDanhSach.getColumnModel().getColumn(5).setCellRenderer(new KetHopBang());
-        tblDanhSach.getColumnModel().getColumn(5).setCellEditor(new ChinhSuaBang(event));
+        tblDanhSach.getColumnModel().getColumn(5).setCellRenderer(new KetHopBang(false));
+        tblDanhSach.getColumnModel().getColumn(5).setCellEditor(new ChinhSuaBang(false, event));
     }
 
     void fillcboKhuVuc() {

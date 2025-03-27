@@ -4,14 +4,13 @@
  */
 package func.cell;
 
-import func.cellView.SuKienHanhDong;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PanelAction extends javax.swing.JPanel {
+public class PanelUD extends javax.swing.JPanel {
 
 
-    public PanelAction() {
+    public PanelUD() {
         initComponents();
     }
     

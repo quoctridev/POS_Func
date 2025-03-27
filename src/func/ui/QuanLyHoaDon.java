@@ -3,9 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package func.ui;
+import func.cell.ChinhSuaBang;
+import func.cell.KetHopBang;
+import func.cell.SuKienHanhDong;
 import java.awt.Frame;
 import func.entity.OrderEntity;
-import func.cellView.SuKienHanhDong;
 import func.dao.OrderDAO;
 import func.dto.OrderOrderDetailsDTO;
 import func.utils.Message;
@@ -56,8 +58,8 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
                 System.out.println("View row : " + row);
             }
         };
-        tblDanhSach.getColumnModel().getColumn(5).setCellRenderer(new func.cellView.KetHopBang());
-        tblDanhSach.getColumnModel().getColumn(5).setCellEditor(new func.cellView.ChinhSuaBang(event));
+        tblDanhSach.getColumnModel().getColumn(5).setCellRenderer(new KetHopBang(true));
+        tblDanhSach.getColumnModel().getColumn(5).setCellEditor(new ChinhSuaBang(true,event));
     }
 
     public void load() {

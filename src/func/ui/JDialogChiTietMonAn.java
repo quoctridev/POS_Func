@@ -94,10 +94,15 @@ public class JDialogChiTietMonAn extends javax.swing.JDialog {
                 }
             }
 
+            @Override
+            public void View(int row) {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+
         };
 
-        tblDanhSach.getColumnModel().getColumn(3).setCellRenderer(new KetHopBang());
-        tblDanhSach.getColumnModel().getColumn(3).setCellEditor(new ChinhSuaBang(event));
+        tblDanhSach.getColumnModel().getColumn(3).setCellRenderer(new KetHopBang(false));
+        tblDanhSach.getColumnModel().getColumn(3).setCellEditor(new ChinhSuaBang(false, event));
     }
 
     public String getOrder() {

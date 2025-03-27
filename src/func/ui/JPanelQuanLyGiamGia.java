@@ -3,9 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package func.ui;
-import func.cellView.ChinhSuaBang;
-import func.cellView.KetHopBang;
-import func.cellView.SuKienHanhDong;
+
+import func.cell.ChinhSuaBang;
+import func.cell.KetHopBang;
+import func.cell.SuKienHanhDong;
 import func.dao.DiscountDAO;
 import func.entity.DiscountEntity;
 import javax.swing.table.DefaultTableModel;
@@ -52,11 +53,16 @@ public class JPanelQuanLyGiamGia extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(null, "Lỗi khi xóa dữ liệu!");
     }
             }
+
+            @Override
+            public void View(int row) {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
             
         };
         
-        tblDanhSach.getColumnModel().getColumn(4).setCellRenderer(new KetHopBang());
-        tblDanhSach.getColumnModel().getColumn(4).setCellEditor(new ChinhSuaBang(event));
+        tblDanhSach.getColumnModel().getColumn(4).setCellRenderer(new KetHopBang(false));
+        tblDanhSach.getColumnModel().getColumn(4).setCellEditor(new ChinhSuaBang(false,event));
 
     }
 
