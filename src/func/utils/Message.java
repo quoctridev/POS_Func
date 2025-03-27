@@ -29,4 +29,17 @@ public class Message {
     public static String input(Component parent, String message) {
         return JOptionPane.showInputDialog(parent, message, "Nhập dữ liệu", JOptionPane.QUESTION_MESSAGE);
     }
+
+    public static int customOptionIndex(Component parent, String message, String title, Object[] options) {
+        return JOptionPane.showOptionDialog(
+                parent,
+                message,
+                title,
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+    }
 }

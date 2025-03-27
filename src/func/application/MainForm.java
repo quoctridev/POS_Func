@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import func.ui.JDialogDangNhap;
 import func.ui.PanelChonBan;
+import func.ui.PanelQuanLyBan;
 import func.ui.PanelTaoDon;
 import func.ui.PanelQuanLyDanhMuc;
 import func.ui.PanelThongKe;
@@ -22,7 +23,6 @@ import javax.swing.JPanel;
  * @author quoca
  */
 public class MainForm extends javax.swing.JFrame {
-
 
     int role;
 
@@ -47,6 +47,7 @@ public class MainForm extends javax.swing.JFrame {
                 jLabel6.setText("Quản lý danh mục");
                 clickPanel(jLabel6, new PanelQuanLyDanhMuc());
                 jLabel7.setText("Quản lý sản phẩm");
+                clickPanel(jLabel7, new PanelQuanLyBan());
                 jLabel9.setText("Quản lý giảm giá");
                 jLabel10.setText("Thống kê");
                 clickPanel(jLabel10, new PanelThongKe());
