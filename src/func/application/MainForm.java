@@ -8,9 +8,12 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import func.ui.JDialogDangNhap;
 import func.ui.PanelChonBan;
-import func.ui.PanelQuanLyBan;
+import func.ui.PanelDanhSachDonHang;
 import func.ui.PanelTaoDon;
 import func.ui.PanelQuanLyDanhMuc;
+import func.ui.PanelQuanLyGiamGia;
+import func.ui.PanelQuanLyHoaDon;
+import func.ui.PanelQuanLySanPham;
 import func.ui.PanelThongKe;
 import func.ui.QuanLyNhanVienForm;
 import func.utils.Auth;
@@ -47,18 +50,19 @@ public class MainForm extends javax.swing.JFrame {
                 jLabel6.setText("Quản lý danh mục");
                 clickPanel(jLabel6, new PanelQuanLyDanhMuc());
                 jLabel7.setText("Quản lý sản phẩm");
-                clickPanel(jLabel7, new PanelQuanLyBan());
+                clickPanel(jLabel7, new PanelQuanLySanPham());
                 jLabel9.setText("Quản lý giảm giá");
+                clickPanel(jLabel9, new PanelQuanLyGiamGia());
                 jLabel10.setText("Thống kê");
                 clickPanel(jLabel10, new PanelThongKe());
                 break;
             case 2:
                 jLabel5.setText("Quản lý hóa đơn");
-//                clickPanel(jLabel5, new PanelQuanLyHoaDon());
+                clickPanel(jLabel5, new PanelQuanLyHoaDon());
                 jLabel6.setText("Quản lý bàn");
                 clickPanel(jLabel6, new PanelChonBan());
                 jLabel7.setText("Quản lý đơn hàng");
-                clickPanel(jLabel7, new PanelTaoDon());
+                clickPanel(jLabel7, new PanelDanhSachDonHang());
                 jLabel9.setText("Thanh Toán");
                 break;
             case 3:
@@ -195,7 +199,8 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         Auth.clear();
         dispose();
-        init();
+        MainForm main = new MainForm();
+        main.setVisible(true);
     }//GEN-LAST:event_jLabel8MouseClicked
 
     /**

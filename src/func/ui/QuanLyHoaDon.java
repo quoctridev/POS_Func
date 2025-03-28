@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package func.ui;
+
 import func.cell.ChinhSuaBang;
 import func.cell.KetHopBang;
 import func.cell.SuKienHanhDong;
@@ -20,7 +21,9 @@ import javax.swing.table.DefaultTableModel;
  * @author This PC
  */
 public class QuanLyHoaDon extends javax.swing.JFrame {
+
     OrderEntity order = null;
+
     /**
      * Creates new form QuanLyHoaDon
      */
@@ -30,19 +33,8 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
         SuKienHanhDong event = new SuKienHanhDong() {
             @Override
             public void Edit(int row) {
-                System.out.println("Edit row : " + row);
-//                if (order == null){
-//                    Message.warning(this, "Chọn dòng muốn sửa");
-//                    return;
-//                }else {
-//                    if(order != null){
-//                    JDialogSuaHoaDon sua = new JDialogSuaHoaDon((Frame)SwingUtilities.getWindowAncestor(this),true);
-//                    sua.setOrder(order);
-//                    sua.setVisible(true);
-//                    order = null;
-//                    load();
-//                }
-//                }
+                new JDialogSuaHoaDon((Frame) SwingUtilities.getWindowAncestor(QuanLyHoaDon.this), true).setVisible(true);
+
             }
 
             public void Delete(int row) {
@@ -59,7 +51,7 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
             }
         };
         tblDanhSach.getColumnModel().getColumn(5).setCellRenderer(new KetHopBang(true));
-        tblDanhSach.getColumnModel().getColumn(5).setCellEditor(new ChinhSuaBang(true,event));
+        tblDanhSach.getColumnModel().getColumn(5).setCellEditor(new ChinhSuaBang(true, event));
     }
 
     public void load() {
@@ -76,11 +68,13 @@ public class QuanLyHoaDon extends javax.swing.JFrame {
                 orderOrderDetailsDTO.getStatus(),});
         }
     }
-public void updateRow(int rowIndex, String updatedTime, String updatedCustomer) {
-    DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
-    model.setValueAt(updatedTime, rowIndex, 1); // Cập nhật thời gian
-    model.setValueAt(updatedCustomer, rowIndex, 2); // Cập nhật khách hàng
-}
+
+    public void updateRow(int rowIndex, String updatedTime, String updatedCustomer) {
+        DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
+        model.setValueAt(updatedTime, rowIndex, 1); // Cập nhật thời gian
+        model.setValueAt(updatedCustomer, rowIndex, 2); // Cập nhật khách hàng
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
