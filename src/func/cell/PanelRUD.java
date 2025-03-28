@@ -95,7 +95,7 @@ public class PanelRUD extends javax.swing.JPanel {
 
     private void acbSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acbSuaActionPerformed
         // TODO add your handling code here:
-        new JDialogSuaHoaDon((Frame) SwingUtilities.getWindowAncestor(this), true).setVisible(true);
+//        new JDialogSuaHoaDon((Frame) SwingUtilities.getWindowAncestor(this), true).setVisible(true);
     }//GEN-LAST:event_acbSuaActionPerformed
 
     private void acbXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acbXoaActionPerformed

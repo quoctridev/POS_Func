@@ -29,8 +29,12 @@ public class PanelDanhSachDonHang extends javax.swing.JPanel {
         init();
         refreshTable();
     }
-
+    
     void init() {
+        lblBan.setText("");
+        lblKhuVuc.setText("");
+        lblThoiGian.setText("");
+        lblThuNgan.setText("");
         DefaultTableModel model = (DefaultTableModel) tableDanhSach.getModel();
         model.setRowCount(0);
         List<OrderOrderDetailDTO> orders = OrderOrderDetailDAO.loadAllOrdersToTable();
@@ -55,9 +59,9 @@ public class PanelDanhSachDonHang extends javax.swing.JPanel {
                 default:
                     trangThai = "Không Xác Định";
                     break;
-
+                
             }
-
+            
             model.addRow(new Object[]{
                 order.getOrderId(),
                 order.getOrderDate(),
@@ -68,12 +72,12 @@ public class PanelDanhSachDonHang extends javax.swing.JPanel {
                 order.getNote()
             });
         }
-
+        
     }
-
+    
     void refreshTable() {
         Timer time = new Timer(10000, new ActionListener() {
-
+            
             @Override
             public void actionPerformed(ActionEvent e) {
                 init();
@@ -358,7 +362,7 @@ public class PanelDanhSachDonHang extends javax.swing.JPanel {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
-
+    
 
     private void btnXemChiTietActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXemChiTietActionPerformed
         if (maThamChieu == 0) {
@@ -372,7 +376,7 @@ public class PanelDanhSachDonHang extends javax.swing.JPanel {
     }//GEN-LAST:event_btnXemChiTietActionPerformed
     private int maThamChieu;
     private void tableDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableDanhSachMouseClicked
-
+        
         int selectedRow = tableDanhSach.getSelectedRow(); // Lấy hàng được chọn
         if (selectedRow >= 0) {
             try {
@@ -392,7 +396,7 @@ public class PanelDanhSachDonHang extends javax.swing.JPanel {
                 } else if (orderIdObj instanceof String) {
                     orderId = Integer.parseInt((String) orderIdObj);
                 }
-
+                
                 String orderDate = (orderDateObj != null) ? orderDateObj.toString() : "";
                 String cashierName = (cashierNameObj != null) ? cashierNameObj.toString() : "";
                 String zone = (zoneObj != null) ? zoneObj.toString() : "";
@@ -404,26 +408,26 @@ public class PanelDanhSachDonHang extends javax.swing.JPanel {
                 status = StatusConverter.convertStatus(status);
                 String Status;
                 switch (status) {
-                case "pending":
-                    Status = "Đang Chờ";
-                    break;
-                case "processing":
-                    Status = "Đang Xử Lý";
-                    break;
-                case "cooking":
-                    Status = "Đang Chế Biến";
-                    break;
-                case "completed":
-                    Status = "Đã Hoàn Thành";
-                    break;
-                case "canceled":
-                    Status = "Hủy";
-                    break;
-                default:
-                    Status = "Không Xác Định";
-                    break;
-
-            }
+                    case "pending":
+                        Status = "Đang Chờ";
+                        break;
+                    case "processing":
+                        Status = "Đang Xử Lý";
+                        break;
+                    case "cooking":
+                        Status = "Đang Chế Biến";
+                        break;
+                    case "completed":
+                        Status = "Đã Hoàn Thành";
+                        break;
+                    case "canceled":
+                        Status = "Hủy";
+                        break;
+                    default:
+                        Status = "Không Xác Định";
+                        break;
+                    
+                }
                 maThamChieu = orderId;
                 // Hiển thị dữ liệu lên giao diện
                 lblKhuVuc.setText(zone);

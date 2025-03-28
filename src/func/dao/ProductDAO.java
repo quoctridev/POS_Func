@@ -19,14 +19,14 @@ public class ProductDAO extends FuncDAO<ProductEntity, String> {
 
     @Override
     public void insert(ProductEntity entity) {
-        String sql = "INSERT INTO Products (product_name, price, is_active, image, category_id, created_at) VALUES (?, ?, ?, ?, ?, ?)";
-        Database.update(sql, entity.getProductName(), entity.getPrice(), entity.isIsActive(), entity.getImage(), entity.getCategoryId(), entity.getCreatedAt());
+        String sql = "INSERT INTO Products (product_name, price, is_active, image, category_id) VALUES (?, ?, ?, ?, ?)";
+        Database.update(sql, entity.getProductName(), entity.getPrice(), entity.isIsActive(), entity.getImage(), entity.getCategoryId());
     }
 
     @Override
     public void update(ProductEntity entity) {
-        String sql = "UPDATE Products SET product_name=?, price=?, is_active=?, image=?, category_id=?, created_at=? WHERE product_id = ?";
-        Database.update(sql, entity.getProductName(), entity.getPrice(), entity.isIsActive(), entity.getImage(), entity.getCategoryId(), entity.getCreatedAt(), entity.getProductId());
+        String sql = "UPDATE Products SET product_name=?, price=?, is_active=?, image=?, category_id=? WHERE product_id = ?";
+        Database.update(sql, entity.getProductName(), entity.getPrice(), entity.isIsActive(), entity.getImage(), entity.getCategoryId(), entity.getProductId());
     }
 
     @Override
