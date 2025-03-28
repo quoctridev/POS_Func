@@ -12,36 +12,25 @@ import org.json.JSONObject;
 
 public class XImage {
 
-    public static Image getAppIcon() {
-        String fileName = "icon.jpg";
-        File localFile = new File("image", fileName);
-        String imageUrl = "http://103.118.28.181/uploads/" + fileName;
-
-        if (!localFile.exists()) {
-            // Nếu file chưa có, tải từ VPS về
-            if (!downloadImage(imageUrl, localFile)) {
-                System.err.println("Không thể tải logo từ VPS");
-                return null;
-            }
-        }
-        return new ImageIcon(localFile.getAbsolutePath()).getImage();
-    }
-
     public static String save(File src) {
+        if (src == null) {
+            return null;
+        }
         File dst = new File("image", src.getName());
         if (!dst.getParentFile().exists()) {
             dst.getParentFile().mkdirs();
         }
         try {
             Files.copy(src.toPath(), dst.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            return uploadToServer(dst);
+            return uploadFile(dst);
         } catch (Exception ex) {
             throw new RuntimeException("Lỗi khi lưu ảnh: " + ex.getMessage(), ex);
         }
     }
 
-    private static String uploadToServer(File file) {
-        String uploadURL = "http://103.118.28.181/upload/" + file.getName();
+    public static String uploadFile(File file) {
+        String uploadURL = "http://103.118.28.181/upload/" + file.getName().replace("\\", "/");
+        System.out.println("Uploading to: " + uploadURL);
         String contentType;
 
         try {
@@ -79,18 +68,8 @@ public class XImage {
             }
             reader.close();
 
-            if (response.toString().trim().startsWith("{")) {
-                JSONObject jsonResponse = new JSONObject(response.toString());
-                if (jsonResponse.has("url")) {
-                    String imageUrl = jsonResponse.getString("url");
-                    System.out.println("Ảnh đã upload: " + imageUrl);
-                    return imageUrl;
-                } else {
-                    return "Lỗi khi upload: Không tìm thấy URL trong JSON phản hồi";
-                }
-            } else {
-                return "Lỗi khi upload: Server trả về nội dung không phải JSON -> " + response;
-            }
+            System.out.println("Upload response: " + response);
+            return response.toString();
         } catch (Exception e) {
             e.printStackTrace();
             return "Lỗi khi upload: " + e.getMessage();
@@ -102,7 +81,7 @@ public class XImage {
         if (path.exists()) {
             return new ImageIcon(path.getAbsolutePath());
         } else {
-            return downloadImageFromServer("http://103.118.28.181/uploads/" + fileName, path);
+            return downloadImageFromServer("http://103.118.28.181/upload/" + fileName, path);
         }
     }
 
@@ -117,19 +96,6 @@ public class XImage {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        }
-    }
-
-    private static boolean downloadImage(String imageUrl, File saveFile) {
-        try {
-            URL url = new URL(imageUrl);
-            BufferedImage image = ImageIO.read(url);
-            saveFile.getParentFile().mkdirs();
-            ImageIO.write(image, "jpg", saveFile);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
         }
     }
 

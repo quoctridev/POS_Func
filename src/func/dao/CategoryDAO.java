@@ -7,7 +7,6 @@ import java.util.List;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 public class CategoryDAO extends FuncDAO<CategoriesEntity, String> {
 
     @Override
@@ -30,7 +29,7 @@ public class CategoryDAO extends FuncDAO<CategoriesEntity, String> {
 
     @Override
     public CategoriesEntity selectById(String id) {
-        String sql = "SELECT TOP 1 FROM Categories WHERE category_id = ?";
+        String sql = "SELECT TOP 1 * FROM Categories WHERE category_id = ?";
         List<CategoriesEntity> list = selectBySql(sql, id);
         return list.size() > 0 ? list.get(0) : null;
     }
@@ -44,12 +43,12 @@ public class CategoryDAO extends FuncDAO<CategoriesEntity, String> {
     @Override
     protected List<CategoriesEntity> selectBySql(String sql, Object... args) {
         List<CategoriesEntity> list = new ArrayList<>();
-        
+
         try {
             ResultSet rs = null;
-            try{
+            try {
                 rs = Database.query(sql, args);
-                while(rs.next()) {
+                while (rs.next()) {
                     CategoriesEntity category = new CategoriesEntity();
                     category.setCategoryId(rs.getInt("category_id"));
                     category.setCategoryName(rs.getString("category_name"));
@@ -57,8 +56,7 @@ public class CategoryDAO extends FuncDAO<CategoriesEntity, String> {
                     category.setCreatedAt(rs.getDate("created_at"));
                     list.add(category);
                 }
-            }
-            finally{
+            } finally {
                 rs.getStatement().getConnection().close();
             }
         } catch (SQLException e) {
@@ -67,5 +65,17 @@ public class CategoryDAO extends FuncDAO<CategoriesEntity, String> {
         }
         return list;
     }
-    
+
+    public int selectIdByName(String name) {
+    String sql = "SELECT category_id FROM Categories WHERE category_name = ?";
+
+    try (ResultSet rs = Database.query(sql, name)) {
+        if (rs.next()) { // Kiểm tra xem có dữ liệu hay không
+            return rs.getInt("category_id");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // In lỗi để dễ debug
+    }
+    return -1; // Trả về -1 nếu không tìm thấy
+}
 }

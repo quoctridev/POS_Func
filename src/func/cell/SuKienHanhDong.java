@@ -11,4 +11,5 @@ package func.cell;
 public interface SuKienHanhDong {
     public void Edit(int row);
     public void Delete(int row);
+    public void View(int row);
 }

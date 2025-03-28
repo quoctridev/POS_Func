@@ -14,6 +14,7 @@ import java.util.List;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.Date;
+import func.dto.OrderOrderDetailsDTO;
 
 /**
  *
@@ -30,7 +31,32 @@ public class OrderDAO extends FuncDAO<OrderEntity, String> {
                 entity.getCustomerPhone(), entity.getCustomerName(), entity.getTotalPrice(),
                 entity.getStatus(), entity.isIsPaid(), entity.getOrderTableId());
     }
-
+    public List<OrderOrderDetailsDTO> readSP() {
+    String sql = "SELECT "
+            + "    o.order_id, "
+            + "    o.order_date, "
+            + "    o.customer_name, "
+            + "    o.total_price, "
+            + "    o.status "
+            + "FROM Orders o";
+    
+    List<OrderOrderDetailsDTO> list = new ArrayList<>();
+    try (ResultSet rs = Database.query(sql)) { // Sử dụng try-with-resources để tự động đóng ResultSet
+        while (rs.next()) {
+            OrderOrderDetailsDTO orderDTO = new OrderOrderDetailsDTO();
+            orderDTO.setOrder_id(rs.getInt("order_id"));
+            orderDTO.setOrder_date(rs.getTimestamp("order_date"));
+            orderDTO.setCustomer_name(rs.getString("customer_name"));
+            orderDTO.setTotal_price(rs.getBigDecimal("total_price"));
+            orderDTO.setStatus(rs.getString("status"));
+            list.add(orderDTO);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        throw new RuntimeException("Lỗi khi đọc danh sách đơn hàng từ cơ sở dữ liệu", e);
+    }
+    return list;
+}
     public int createOrder(OrderEntity od) {
         String sql;
         ResultSet rs;

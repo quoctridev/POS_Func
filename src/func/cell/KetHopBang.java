@@ -6,6 +6,7 @@ package func.cell;
 
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -14,15 +15,20 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author ASUS
  */
 public class KetHopBang extends DefaultTableCellRenderer {
-     public Component getTableCellRendererComponent(JTable jtable, Object o, boolean isSeleted, boolean bln1, int row, int column) {
-        Component com = super.getTableCellRendererComponent(jtable, o, isSeleted, bln1, row, column);
-        
-        PanelAction action = new PanelAction();
-        if (isSeleted == false && row % 2 == 0) {
-            action.setBackground(Color.WHITE);
-        } else {
-            action.setBackground(com.getBackground());
-        }
+
+    private boolean useRUD; // Xác định dùng PanelRUD hay PanelUD
+
+    public KetHopBang(boolean useRUD) {
+        this.useRUD = useRUD;
+    }
+
+    @Override
+    public Component getTableCellRendererComponent(JTable jtable, Object o, boolean isSelected, boolean hasFocus, int row, int column) {
+        Component com = super.getTableCellRendererComponent(jtable, o, isSelected, hasFocus, row, column);
+
+        JPanel action = useRUD ? new PanelRUD() : new PanelUD();
+        action.setBackground(isSelected || row % 2 != 0 ? com.getBackground() : Color.WHITE);
+
         return action;
     }
 }

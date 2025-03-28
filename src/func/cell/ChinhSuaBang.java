@@ -5,10 +5,11 @@
 package func.cell;
 
 import java.awt.Component;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JPanel;
+
 /**
  *
  * @author ASUS
@@ -16,18 +17,26 @@ import javax.swing.DefaultCellEditor;
 public class ChinhSuaBang extends DefaultCellEditor {
 
     private SuKienHanhDong event;
-    
-    public ChinhSuaBang(SuKienHanhDong event) {
-        super(new JCheckBox() );
+    private boolean useRUD;
+
+    public ChinhSuaBang(boolean useRUD, SuKienHanhDong event) {
+        super(new JCheckBox());
+        this.useRUD = useRUD;
         this.event = event;
     }
-    
 
     @Override
-    public Component getTableCellEditorComponent(JTable jtable, Object o, boolean bln, int row, int column) {
-        PanelAction action = new PanelAction();
-        action.initEvent(event, row);
+    public Component getTableCellEditorComponent(JTable jtable, Object o, boolean isSelected, int row, int column) {
+        JPanel action = useRUD ? new PanelRUD() : new PanelUD();
+
+        if (useRUD) {
+            ((PanelRUD) action).initEvent(event, row);
+        } else {
+            ((PanelUD) action).initEvent(event, row);
+        }
+
         action.setBackground(jtable.getSelectionBackground());
         return action;
     }
 }
+    

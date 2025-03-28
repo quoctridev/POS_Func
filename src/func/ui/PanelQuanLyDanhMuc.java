@@ -6,12 +6,12 @@ package func.ui;
 
 import func.cell.ChinhSuaBang;
 import func.cell.KetHopBang;
+import func.cell.PanelUD;
 import func.cell.SuKienHanhDong;
 import func.dao.CategoryDAO;
 import func.entity.CategoriesEntity;
 import func.utils.Message;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 // Tạo TableCellRenderer để thay đổi màu sắc
 // import javax.swing.table.TableCellRenderer;
@@ -58,7 +58,7 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
                     new CategoryDAO().delete(String.valueOf(categoryId));
                     showTable();
                     Message.info(PanelQuanLyDanhMuc.this, "Xóa danh mục thành công");
-                    
+
                 } else {
                     Message.info(PanelQuanLyDanhMuc.this, "Hủy thao tác xóa danh mục.");
                 }
@@ -66,10 +66,15 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
                 btnThem.setText("Thêm danh mục");
             }
 
+            @Override
+            public void View(int row) {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+
         };
 
-        tblDanhSach.getColumnModel().getColumn(3).setCellRenderer(new KetHopBang());
-        tblDanhSach.getColumnModel().getColumn(3).setCellEditor(new ChinhSuaBang(event));
+        tblDanhSach.getColumnModel().getColumn(3).setCellRenderer(new KetHopBang(false));
+        tblDanhSach.getColumnModel().getColumn(3).setCellEditor(new ChinhSuaBang(false,event));
     }
 
     void clearText() {

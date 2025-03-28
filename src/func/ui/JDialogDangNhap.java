@@ -5,12 +5,12 @@
 package func.ui;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.formdev.flatlaf.FlatClientProperties;
 import func.dao.UserDAO;
 import func.entity.UserEntity;
 import func.utils.Auth;
 import func.utils.Message;
-import java.awt.Dialog;
-import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -24,6 +24,7 @@ public class JDialogDangNhap extends javax.swing.JDialog {
     public JDialogDangNhap(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -35,6 +36,12 @@ public class JDialogDangNhap extends javax.swing.JDialog {
 
             }
         });
+        txtTenTaiKhoan.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "User Name");
+        pwfMatKhau.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Password");
+        pwfMatKhau.putClientProperty(FlatClientProperties.STYLE, ""
+                + "showRevealButton:true;"
+                + "showCapsLock:true");
+
     }
 
     /**
@@ -294,7 +301,7 @@ public class JDialogDangNhap extends javax.swing.JDialog {
         //hashpass
         BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
         if (result.verified) {
-            Message.info(this, "Dang nhap thanh cong");// chua co ham message
+
             Auth.user = user;
             this.dispose();
         } else {
