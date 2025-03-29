@@ -67,7 +67,7 @@ public class MainForm extends javax.swing.JFrame {
                 break;
             case 3:
                 jLabel5.setText("Quản lí đơn hàng");
-//                clickPanel(jLabel7, panelTaoDon);
+                clickPanel(jLabel7, new PanelDanhSachDonHang());
                 break;
         }
     }

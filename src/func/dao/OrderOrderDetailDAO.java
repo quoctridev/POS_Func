@@ -76,21 +76,23 @@ public class OrderOrderDetailDAO {
     }
 
     public static List<OrderOrderDetailDTO> loadAllOrdersToTable() {
-         List<OrderOrderDetailDTO> orders = new ArrayList<>();
+        List<OrderOrderDetailDTO> orders = new ArrayList<>();
 
         String sql = "SELECT \n"
-                + "o.order_id AS orderId, \n"
-                + "o.order_date AS orderDate, \n"
-                + "u.full_name AS cashierName, \n"
-                + "z.zone_name AS zone, \n"
-                + "t.table_number AS tableNumber, \n"
-                + "o.status AS status\n"
-                + "FROM Orders o \n"
-                + "JOIN Users u ON o.cashier_id = u.user_id \n"
-                + "JOIN MergedTables ot ON o.order_id = ot.order_id \n"
-                + "JOIN Tables t ON ot.table_id = t.table_id \n"
-                + "JOIN Zones z on t.zone_id = z.zone_id\n"
-                + "ORDER BY o.order_date DESC";
+                + "    O.order_id as orderId, \n"
+                + "    OD.created_at as orderDate, \n"
+                + "    U.full_name as cashierName, \n"
+                + "    OD.[status] as status, \n"
+                + "    Z.zone_name as zone, \n"
+                + "    T.table_number as tableNumber, \n"
+                + "    OD.note as note\n"
+                + "FROM OrderDetails OD\n"
+                + "JOIN Orders O ON OD.order_id = O.order_id\n"
+                + "JOIN Users U ON O.cashier_id = U.user_id\n"
+                + "JOIN MergedTables MT ON MT.order_id = O.order_id\n"
+                + "JOIN Tables T ON MT.table_id = T.table_id\n"
+                + "JOIN Zones Z ON T.zone_id = Z.zone_id\n"
+                + "WHERE OD.status NOT IN ('confirmed', 'completed');";
 
         try (ResultSet rs = Database.query(sql)) {
             while (rs.next()) {
@@ -101,11 +103,10 @@ public class OrderOrderDetailDAO {
                 order.setZone(rs.getString("zone"));
                 order.setTableNumber(rs.getInt("tableNumber"));
                 order.setStatus(rs.getString("status"));
-
+                order.setNote(rs.getNString("note"));
                 orders.add(order);
             }
 
-            
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Lỗi khi lấy danh sách đơn hàng từ database", e);
