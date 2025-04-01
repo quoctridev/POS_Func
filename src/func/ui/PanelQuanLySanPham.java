@@ -39,7 +39,7 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
         SuKienHanhDong event = new SuKienHanhDong() {
             @Override
             public void Edit(int row) {
-                JDialogThemSuaSanPham sp = new JDialogThemSuaSanPham((Frame) SwingUtilities.getWindowAncestor(PanelQuanLySanPham.this), true);
+                DialogThemSuaSanPham sp = new DialogThemSuaSanPham((Frame) SwingUtilities.getWindowAncestor(PanelQuanLySanPham.this), true);
                 sp.setPd(pd.get(row));
                 sp.setVisible(true);
                 fillTable();
@@ -182,7 +182,7 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        JDialogThemSuaSanPham sp = new JDialogThemSuaSanPham((Frame) SwingUtilities.getWindowAncestor(PanelQuanLySanPham.this), true);
+        DialogThemSuaSanPham sp = new DialogThemSuaSanPham((Frame) SwingUtilities.getWindowAncestor(PanelQuanLySanPham.this), true);
         sp.setVisible(true);
         fillTable();
     }//GEN-LAST:event_jButton1ActionPerformed

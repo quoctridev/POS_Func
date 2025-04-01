@@ -22,6 +22,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
@@ -67,8 +68,10 @@ public class PanelTaoDon extends javax.swing.JPanel {
     }
 
     public void setOrder(String order) {
-        this.order = order;
-        init();
+        if (this.order == null || !this.order.equals(order)) {
+            this.order = order;
+            init();
+        }
     }
 
     void init() {
@@ -360,7 +363,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
             Message.warning(null, "Bạn phải thêm món ăn trước khi thanh toán");
             return;
         }
-        JDialogThanhToan thanhToan = new JDialogThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
+        DialogThanhToan thanhToan = new DialogThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
         thanhToan.setOrderId(order);
         thanhToan.setTableId(table);
         thanhToan.setVisible(true);
@@ -375,7 +378,8 @@ public class PanelTaoDon extends javax.swing.JPanel {
         for (int i = 0; i < tblDanhSach.getRowCount(); i++) {
             OrderDetailEntity od = new OrderDetailEntity();
             od.setProductId(Integer.parseInt(String.valueOf(tblDanhSach.getValueAt(i, 4))));
-            od.setPrice(new BigDecimal(String.valueOf(tblDanhSach.getValueAt(i, 2))));
+            BigDecimal price = new BigDecimal(String.valueOf(tblDanhSach.getValueAt(i, 2)));
+            od.setPrice(price);
             od.setQuantity(Integer.parseInt(String.valueOf(tblDanhSach.getValueAt(i, 1))));
             od.setOrderId(Integer.parseInt(order));
             new OrderDetailsDAO().createOrderDetails(od);
@@ -391,7 +395,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        JDialogChiTietMonAn chiTietMon = new JDialogChiTietMonAn((MainForm) SwingUtilities.getWindowAncestor(this), true);
+        DialogChiTietMonAn chiTietMon = new DialogChiTietMonAn((MainForm) SwingUtilities.getWindowAncestor(this), true);
         chiTietMon.setOrder(order);
         chiTietMon.setTable(table);
         chiTietMon.setVisible(true);
@@ -530,7 +534,6 @@ public class PanelTaoDon extends javax.swing.JPanel {
                         if (priceObj instanceof BigDecimal) {
                             BigDecimal price = (BigDecimal) priceObj;
                             BigDecimal total = price.multiply(BigDecimal.valueOf(quantity)); // Thành tiền = Đơn giá * Số lượng
-
                             table.getModel().setValueAt(total, row, 3);
                             lbTongTien.setText(Currency.formatVND(tinhTongTien()));
                         }

@@ -123,7 +123,7 @@ public class PanelChonBan extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 509, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -149,7 +149,7 @@ public class PanelChonBan extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        JDialogGopBan tinhNangMoRong = new JDialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
+        DialogGopBan tinhNangMoRong = new DialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
         tinhNangMoRong.setTrangThai(1);
         tinhNangMoRong.setVisible(true);
             
@@ -157,7 +157,7 @@ public class PanelChonBan extends javax.swing.JPanel {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        JDialogGopBan tinhNangMoRong = new JDialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
+        DialogGopBan tinhNangMoRong = new DialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
         tinhNangMoRong.setTrangThai(2);
         tinhNangMoRong.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -288,7 +288,7 @@ public class PanelChonBan extends javax.swing.JPanel {
         String customerName = null, phoneNumber = null;
 
         if (saveCustomerInfo) {
-            JDialogThongTinKhachHang customerInfoDialog = new JDialogThongTinKhachHang(
+            DialogThongTinKhachHang customerInfoDialog = new DialogThongTinKhachHang(
                     (Frame) SwingUtilities.getWindowAncestor(this), true);
             customerInfoDialog.setVisible(true);
             customerName = customerInfoDialog.getTenKhach();

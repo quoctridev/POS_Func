@@ -6,16 +6,15 @@ package func.application;
 
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import func.ui.JDialogDangNhap;
+import func.ui.DialogDangNhap;
 import func.ui.PanelChonBan;
-import func.ui.PanelDanhSachDonHang;
-import func.ui.PanelTaoDon;
+import func.ui.PanelDonHang;
+import func.ui.PanelHoaDon;
 import func.ui.PanelQuanLyDanhMuc;
 import func.ui.PanelQuanLyGiamGia;
-import func.ui.PanelQuanLyHoaDon;
 import func.ui.PanelQuanLySanPham;
 import func.ui.PanelThongKe;
-import func.ui.QuanLyNhanVienForm;
+import func.ui.PanelQuanLyNhanVien;
 import func.utils.Auth;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -41,12 +40,12 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     void init() {
-        new JDialogDangNhap(this, true).setVisible(true);
+        new DialogDangNhap(this, true).setVisible(true);
         role = Auth.isRole();
         switch (role) {
             case 1:
                 jLabel5.setText("Quản lý nhân viên");
-                clickPanel(jLabel5, new QuanLyNhanVienForm());
+                clickPanel(jLabel5, new PanelQuanLyNhanVien());
                 jLabel6.setText("Quản lý danh mục");
                 clickPanel(jLabel6, new PanelQuanLyDanhMuc());
                 jLabel7.setText("Quản lý sản phẩm");
@@ -58,16 +57,16 @@ public class MainForm extends javax.swing.JFrame {
                 break;
             case 2:
                 jLabel5.setText("Quản lý hóa đơn");
-                clickPanel(jLabel5, new PanelQuanLyHoaDon());
+                clickPanel(jLabel5, new PanelHoaDon());
                 jLabel6.setText("Quản lý bàn");
                 clickPanel(jLabel6, new PanelChonBan());
                 jLabel7.setText("Quản lý đơn hàng");
-                clickPanel(jLabel7, new PanelDanhSachDonHang());
-                jLabel9.setText("Thanh Toán");
+                clickPanel(jLabel7, new PanelDonHang());
+
                 break;
             case 3:
                 jLabel5.setText("Quản lí đơn hàng");
-                clickPanel(jLabel7, new PanelDanhSachDonHang());
+                clickPanel(jLabel7, new PanelDonHang());
                 break;
         }
     }
