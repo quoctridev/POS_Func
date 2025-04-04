@@ -5,51 +5,40 @@
 package func.ui;
 
 import func.dao.CategoryDAO;
-import func.dao.ProductDAO;
 import func.dto.ProductDTO;
 import func.entity.CategoriesEntity;
-import func.entity.ProductEntity;
-import func.utils.Message;
 import func.utils.XImage;
 import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 
 /**
  *
  * @author quoctris.dev
  */
-public class DialogThemSuaSanPham extends javax.swing.JDialog {
+public class DialogXemSanPham extends javax.swing.JDialog {
 
     ProductDTO pd;
     List<CategoriesEntity> cat = new CategoryDAO().selectAll();
-    private File selectedFile = null;
 
     /**
-     * Creates new form JDialogThemSuaSanPham
+     * Creates new form DialogXemSanPham
      */
-    public DialogThemSuaSanPham(java.awt.Frame parent, boolean modal) {
+    public DialogXemSanPham(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        addProduct();
     }
 
-    void addProduct() {
-        cboDanhMuc.removeAllItems();
-        for (CategoriesEntity category : cat) {
-            if (category.isIsActive()) {
-                cboDanhMuc.addItem(category.getCategoryName());
-            }
-        }
+    public ProductDTO getPd() {
+        return pd;
+    }
+
+    public void setPd(ProductDTO pd) {
+        this.pd = pd;
+        fillText();
     }
 
     void fillText() {
-        jButton1.setText("Sửa");
         cboDanhMuc.removeAllItems();
         for (CategoriesEntity category : cat) {
             if (category.isIsActive()) {
@@ -72,15 +61,6 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
 
     }
 
-    public ProductDTO getPd() {
-        return pd;
-    }
-
-    public void setPd(ProductDTO pd) {
-        this.pd = pd;
-        fillText();
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -90,7 +70,6 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        fileChooser = new javax.swing.JFileChooser();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lbAnh = new javax.swing.JLabel();
@@ -101,14 +80,13 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
         cboDanhMuc = new javax.swing.JComboBox<>();
         cboTrangThai = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Tên sản phẩm");
 
         lbAnh.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbAnh.setText("Thêm Ảnh");
+        lbAnh.setText("Thêm ảnh");
         lbAnh.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lbAnhMouseClicked(evt);
@@ -136,34 +114,23 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
 
         jLabel5.setText("Trạng thái");
 
-        jButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jButton1.setText("Thêm");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTenSanPham)
-                            .addComponent(txtGia)
-                            .addComponent(cboDanhMuc, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cboTrangThai, 0, 146, Short.MAX_VALUE)))
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtTenSanPham)
+                    .addComponent(txtGia)
+                    .addComponent(cboDanhMuc, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cboTrangThai, 0, 146, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -191,8 +158,7 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cboTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(46, 46, 46))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -202,78 +168,8 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
 
     private void lbAnhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbAnhMouseClicked
         // TODO add your handling code here:
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Chọn ảnh sản phẩm");
 
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            selectedFile = fileChooser.getSelectedFile(); // Lưu file tạm thời
-            System.out.println(selectedFile);
-            // Load ảnh và resize theo kích thước của lbAnh
-            ImageIcon icon = new ImageIcon(selectedFile.getAbsolutePath());
-            Image img = icon.getImage().getScaledInstance(lbAnh.getWidth(), lbAnh.getHeight(), Image.SCALE_SMOOTH);
-            lbAnh.setText("");
-            lbAnh.setIcon(new ImageIcon(img)); // Set icon đã resize
-            lbAnh.setToolTipText(selectedFile.getName());
-        }
     }//GEN-LAST:event_lbAnhMouseClicked
-
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        if (jButton1.getText().equals("Sửa")) {
-            String tenSp = txtTenSanPham.getText();
-            String gia = txtGia.getText();
-            boolean trangThai = cboTrangThai.getSelectedItem().equals("Có sẵn");
-            int idDanhMuc = new CategoryDAO().selectIdByName((String) cboDanhMuc.getSelectedItem());
-            ProductEntity pd = new ProductEntity();
-            pd.setProductName(tenSp);
-            BigDecimal price = new BigDecimal(gia);
-            //Làm tròn
-            price = price.setScale(2, RoundingMode.HALF_UP);
-            pd.setPrice(price);
-            try {
-                if (selectedFile != null) {
-                    String image = XImage.uploadFileWithOkHttp(selectedFile);
-                    pd.setImage(image);
-                }
-            } catch (IOException ex) {
-                Message.error(null, "Tải ảnh lên không thành công");
-                ex.printStackTrace();
-            }
-
-            pd.setIsActive(trangThai);
-            pd.setCategoryId(idDanhMuc);
-            pd.setProductId(this.pd.getProductId());
-            new ProductDAO().update(pd);
-            dispose();
-            Message.info(null, "Cập nhật sản phẩm thành công");
-        } else {
-            String tenSp = txtTenSanPham.getText();
-            String gia = txtGia.getText();
-            boolean trangThai = cboTrangThai.getSelectedItem().equals("Có sẵn");
-            int idDanhMuc = new CategoryDAO().selectIdByName((String) cboDanhMuc.getSelectedItem());
-            ProductEntity pd = new ProductEntity();
-            pd.setProductName(tenSp);
-            BigDecimal price = new BigDecimal(gia);
-            //Làm tròn
-            price = price.setScale(2, RoundingMode.HALF_UP);
-            pd.setPrice(price);
-            pd.setIsActive(trangThai);
-            pd.setCategoryId(idDanhMuc);
-            try {
-                String image = XImage.uploadFileWithOkHttp(selectedFile);
-                pd.setImage(image);
-                new ProductDAO().insert(pd);
-                dispose();
-                Message.info(null, "Thêm sản phẩm thành công");
-
-            } catch (IOException ex) {
-                Message.error(null, "Tải ảnh lên không thành công");
-                ex.printStackTrace();
-            }
-
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -292,21 +188,20 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DialogThemSuaSanPham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogXemSanPham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DialogThemSuaSanPham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogXemSanPham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DialogThemSuaSanPham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogXemSanPham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DialogThemSuaSanPham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogXemSanPham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                DialogThemSuaSanPham dialog = new DialogThemSuaSanPham(new javax.swing.JFrame(), true);
+                DialogXemSanPham dialog = new DialogXemSanPham(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -321,8 +216,6 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cboDanhMuc;
     private javax.swing.JComboBox<String> cboTrangThai;
-    private javax.swing.JFileChooser fileChooser;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

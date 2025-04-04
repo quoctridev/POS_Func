@@ -58,6 +58,9 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
 
             @Override
             public void View(int row) {
+                DialogXemSanPham sp = new DialogXemSanPham((Frame) SwingUtilities.getWindowAncestor(PanelQuanLySanPham.this), true);
+                sp.setPd(pd.get(row));
+                sp.setVisible(true);
             }
         };
 

@@ -5,13 +5,22 @@
 package func.ui;
 
 import func.dao.ThongKeDAO;
+import func.dto.ProductStatistics;
+import func.utils.Currency;
+import func.utils.Message;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
@@ -19,6 +28,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.CategoryItemEntity;
 import org.jfree.chart.entity.ChartEntity;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -32,12 +42,21 @@ import org.jfree.data.general.DefaultPieDataset;
  */
 public class PanelThongKe extends javax.swing.JPanel {
 
+    List<ProductStatistics> lsThongKeMonAn;
+    DefaultTableModel model;
+
     /**
      * Creates new form PanelThongKe
      */
     public PanelThongKe() {
         initComponents();
         hienThiBieuDo();
+        Date now = new Date();
+        selectDate.setDate(now);
+        selectDate.setDateFormatString("dd/MM/yyyy");
+        model = (DefaultTableModel) tblDanhSach.getModel();
+        selectDate.setMaxSelectableDate(new Date());
+
     }
 
     /**
@@ -58,14 +77,13 @@ public class PanelThongKe extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jPanel5 = new javax.swing.JPanel();
+        tblDanhSach = new javax.swing.JTable();
+        pnMonAn = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         cboChonThongKe = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         selectDate = new com.toedter.calendar.JDateChooser();
         selectYear = new com.toedter.calendar.JYearChooser();
-        selectMonth = new com.toedter.calendar.JMonthChooser();
         btnConfirm = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -101,7 +119,7 @@ public class PanelThongKe extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 993, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1052, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,7 +146,7 @@ public class PanelThongKe extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("Thống kê doanh thu", jPanel1);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblDanhSach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -147,23 +165,24 @@ public class PanelThongKe extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
+        tblDanhSach.setRowHeight(40);
+        tblDanhSach.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblDanhSach);
+        if (tblDanhSach.getColumnModel().getColumnCount() > 0) {
+            tblDanhSach.getColumnModel().getColumn(0).setResizable(false);
+            tblDanhSach.getColumnModel().getColumn(1).setResizable(false);
+            tblDanhSach.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 473, Short.MAX_VALUE)
+        javax.swing.GroupLayout pnMonAnLayout = new javax.swing.GroupLayout(pnMonAn);
+        pnMonAn.setLayout(pnMonAnLayout);
+        pnMonAnLayout.setHorizontalGroup(
+            pnMonAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 615, Short.MAX_VALUE)
+        pnMonAnLayout.setVerticalGroup(
+            pnMonAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
@@ -184,7 +203,6 @@ public class PanelThongKe extends javax.swing.JPanel {
         jPanel6.setLayout(new java.awt.CardLayout());
         jPanel6.add(selectDate, "card3");
         jPanel6.add(selectYear, "card2");
-        jPanel6.add(selectMonth, "card4");
 
         btnConfirm.setText("Xác nhận");
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
@@ -198,26 +216,26 @@ public class PanelThongKe extends javax.swing.JPanel {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cboChonThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnConfirm)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(btnConfirm)
+                        .addContainerGap(450, Short.MAX_VALUE))
+                    .addComponent(pnMonAn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
+                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4)
@@ -226,8 +244,8 @@ public class PanelThongKe extends javax.swing.JPanel {
                     .addComponent(btnConfirm))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
+                    .addComponent(pnMonAn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 3, 48)); // NOI18N
@@ -294,10 +312,11 @@ public class PanelThongKe extends javax.swing.JPanel {
         // TODO add your handling code here:
         hienThiBieuDo();
     }//GEN-LAST:event_cboThongKeActionPerformed
+
     void hideSelect() {
         selectDate.setVisible(false);
-        selectMonth.setVisible(false);
         selectYear.setVisible(false);
+
     }
     private void cboChonThongKeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cboChonThongKeMouseClicked
         // TODO add your handling code here:
@@ -316,19 +335,93 @@ public class PanelThongKe extends javax.swing.JPanel {
                 hideSelect();
                 selectDate.setVisible(true);
                 break;
-            case "Tháng":
-                hideSelect();
-                selectMonth.setVisible(true);
-                break;
             case "Năm":
                 hideSelect();
                 selectYear.setVisible(true);
                 break;
         }
     }//GEN-LAST:event_cboChonThongKeActionPerformed
+    void fillTable() {
+        model.setRowCount(0);
+        for (ProductStatistics pd : lsThongKeMonAn) {
+            model.addRow(new Object[]{pd.getProductName(), pd.getQuantity(), Currency.formatVND(pd.getTotal())});
+        }
+    }
 
+    public void showPieChartInPanel(List<ProductStatistics> list, JPanel pnlBieuDo) {
+        pnlBieuDo.removeAll(); // Xoá nội dung cũ
+
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        for (ProductStatistics ps : list) {
+            dataset.setValue(ps.getProductName(), ps.getQuantity());
+        }
+
+        JFreeChart chart = ChartFactory.createPieChart(
+                "Top 5 sản phẩm bán chạy",
+                dataset,
+                true, false, false
+        );
+
+        PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0} ({2})"));
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setOutlineVisible(false);
+
+        // Bảng màu đẹp cho tối đa 5 phần
+        Color[] colors = {
+            new Color(102, 204, 255),
+            new Color(255, 153, 102),
+            new Color(153, 255, 153),
+            new Color(255, 102, 178),
+            new Color(255, 255, 102),};
+
+        int i = 0;
+        for (Object key : dataset.getKeys()) {
+            plot.setSectionPaint((Comparable) key, colors[i % colors.length]); // vòng lặp nếu ít hơn hoặc bằng 5
+            i++;
+        }
+
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setPreferredSize(new java.awt.Dimension(671, 532));
+        chartPanel.setMouseWheelEnabled(true);
+
+        pnlBieuDo.setLayout(new java.awt.BorderLayout());
+        pnlBieuDo.add(chartPanel, java.awt.BorderLayout.CENTER);
+        pnlBieuDo.validate();
+        pnlBieuDo.repaint();
+    }
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         // TODO add your handling code here:
+        String luaChon = String.valueOf(cboChonThongKe.getSelectedItem());
+        Date date = selectDate.getDate();
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        int ngay = 0, thang = 0, nam = 0;
+        switch (luaChon) {
+            case "Ngày":
+                ngay = localDate.getDayOfMonth();
+                thang = localDate.getMonthValue();
+                nam = localDate.getYear();
+                break;
+            case "Tháng":
+                thang = localDate.getMonthValue();
+                nam = localDate.getYear();
+                break;
+            case "Năm":
+                nam = selectYear.getYear();
+                break;
+        }
+
+        lsThongKeMonAn = ThongKeDAO.thongKeMonAn(luaChon, ngay, thang, nam);
+        if (lsThongKeMonAn.size() == 0) {
+            model.setRowCount(0);
+            pnMonAn.removeAll();
+            Message.warning(null, "Vui lòng chọn thời gian khác. Do thời gian này không thể thống kê món ăn được");
+            return;
+        }
+        fillTable();
+        showPieChartInPanel(lsThongKeMonAn, pnMonAn);
+
     }//GEN-LAST:event_btnConfirmActionPerformed
     private void hienThiBieuDo() {
         String luaChon = (String) cboThongKe.getSelectedItem();
@@ -451,7 +544,6 @@ public class PanelThongKe extends javax.swing.JPanel {
         for (Object obj : dataset.getKeys()) {
             Comparable<?> key = (Comparable<?>) obj;
             String label = key.toString();  // Lấy nhãn
-
             if (label.startsWith("Tiền mặt (Hoàn thành)")) {
                 plot.setSectionPaint(label, new Color(46, 204, 113));  // Xanh lá
             } else if (label.startsWith("QR-Code (Hoàn thành)")) {
@@ -521,14 +613,13 @@ public class PanelThongKe extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel pnDoanhThu;
+    private javax.swing.JPanel pnMonAn;
     private com.toedter.calendar.JDateChooser selectDate;
-    private com.toedter.calendar.JMonthChooser selectMonth;
     private com.toedter.calendar.JYearChooser selectYear;
+    private javax.swing.JTable tblDanhSach;
     // End of variables declaration//GEN-END:variables
 }

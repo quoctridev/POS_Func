@@ -31,8 +31,11 @@ public class ProductDAO extends FuncDAO<ProductEntity, String> {
 
     @Override
     public void delete(String id) {
-        String sql = "DELETE FROM Products WHERE product_id = ?";
-        Database.update(sql, id);
+        String deleteOrderDetailsSql = "DELETE FROM OrderDetails WHERE product_id = ?";
+        Database.update(deleteOrderDetailsSql, id);
+
+        String deleteProductSql = "DELETE FROM Products WHERE product_id = ?";
+        Database.update(deleteProductSql, id);
     }
 
     @Override

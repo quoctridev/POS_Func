@@ -6,10 +6,12 @@ package func.dao;
 
 import func.dto.ProductStatistics;
 import func.utils.Database;
+import java.math.BigDecimal;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -210,24 +212,80 @@ public class ThongKeDAO {
     }
 
     //Mon an duoc mua nhieu nhat
-    public static List<ProductStatistics> thongKeMonTheoThang(String month) {
-        String sql = "SELECT \n"
-                + "    P.product_id,\n"
-                + "    P.product_name,\n"
-                + "    SUM(OD.quantity) AS total_quantity_sold,\n"
-                + "    SUM(OD.quantity * OD.price) AS total_revenue\n"
-                + "FROM \n"
-                + "    OrderDetails OD\n"
-                + "JOIN \n"
-                + "    Products P ON OD.product_id = P.product_id\n"
-                + "WHERE \n"
-                + "    OD.status != 'canceled'\n"
-                + "    AND MONTH(OD.created_at) = ?\n"
-                + "    AND YEAR(OD.created_at) = 2025\n"
-                + "GROUP BY \n"
-                + "    P.product_id, P.product_name\n"
-                + "ORDER BY \n"
-                + "    total_quantity_sold DESC";
-        
+    public static List<ProductStatistics> thongKeMonAn(String type, int day, int month, int year) {
+        List<ProductStatistics> ls = new ArrayList<>();
+        String sql = "";
+
+        switch (type) {
+            case "Ngày":
+                sql = "SELECT TOP 5 \n"
+                        + "P.product_name,\n"
+                        + "SUM(OD.quantity) AS total_quantity_sold,\n"
+                        + "SUM(OD.quantity * OD.price) AS total_revenue\n"
+                        + "FROM OrderDetails OD\n"
+                        + "JOIN Products P ON OD.product_id = P.product_id\n"
+                        + "WHERE OD.status != 'canceled'\n"
+                        + "AND DAY(OD.created_at) = ?\n"
+                        + "AND MONTH(OD.created_at) = ?\n"
+                        + "AND YEAR(OD.created_at) = ?\n"
+                        + "GROUP BY P.product_name\n"
+                        + "ORDER BY total_quantity_sold DESC";
+                break;
+
+            case "Tháng":
+                sql = "SELECT TOP 5 \n"
+                        + "    P.product_name,\n"
+                        + "    SUM(OD.quantity) AS total_quantity_sold,\n"
+                        + "    SUM(OD.quantity * OD.price) AS total_revenue\n"
+                        + "FROM OrderDetails OD\n"
+                        + "JOIN Products P ON OD.product_id = P.product_id\n"
+                        + "WHERE OD.status != 'canceled'\n"
+                        + "    AND MONTH(OD.created_at) = ?\n"
+                        + "    AND YEAR(OD.created_at) = ?\n"
+                        + "GROUP BY P.product_name\n"
+                        + "ORDER BY total_quantity_sold DESC";
+                break;
+
+            case "Năm":
+                sql = "SELECT TOP 5 \n"
+                        + "    P.product_name,\n"
+                        + "    SUM(OD.quantity) AS total_quantity_sold,\n"
+                        + "    SUM(OD.quantity * OD.price) AS total_revenue\n"
+                        + "FROM OrderDetails OD\n"
+                        + "JOIN Products P ON OD.product_id = P.product_id\n"
+                        + "WHERE OD.status != 'canceled'\n"
+                        + "    AND YEAR(OD.created_at) = ?\n"
+                        + "GROUP BY P.product_name\n"
+                        + "ORDER BY total_quantity_sold DESC";
+                break;
+
+            default:
+                System.out.println("Loại thống kê không hợp lệ.");
+                return ls;
+        }
+
+        try (ResultSet rs = switch (type) {
+            case "Ngày" ->
+                Database.query(sql, day, month, year);
+            case "Tháng" ->
+                Database.query(sql, month, year);
+            case "Năm" ->
+                Database.query(sql, year);
+            default ->
+                null;
+        }) {
+            if (rs != null) {
+                while (rs.next()) {
+                    String name = rs.getString("product_name");
+                    int quantity = rs.getInt("total_quantity_sold");
+                    BigDecimal revenue = rs.getBigDecimal("total_revenue");
+                    ls.add(new ProductStatistics(name, quantity, revenue));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ls;
     }
 }
