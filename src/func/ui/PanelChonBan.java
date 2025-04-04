@@ -294,12 +294,13 @@ public class PanelChonBan extends javax.swing.JPanel {
             return;
         }
 
-        boolean saveCustomerInfo = Message.confirm(this, "Khách hàng muốn lưu thông tin không?");
-        String customerName = null, phoneNumber = null;
+        String customerName = null, phoneNumber = null, orderTableId = null;
         if (datTruoc != null) {
             customerName = datTruoc.getCustomer_name();
             phoneNumber = datTruoc.getPhone();
+            orderTableId = String.valueOf(datTruoc.getOrderTableId());
         } else {
+            boolean saveCustomerInfo = Message.confirm(this, "Khách hàng muốn lưu thông tin không?");
             if (saveCustomerInfo) {
                 DialogThongTinKhachHang customerInfoDialog = new DialogThongTinKhachHang(
                         (Frame) SwingUtilities.getWindowAncestor(this), true);
@@ -311,10 +312,10 @@ public class PanelChonBan extends javax.swing.JPanel {
         }
 
         // Gọi hàm tạo order (hỗ trợ cả gộp bàn và không gộp bàn)
-        createOrderForTable(table, customerName, phoneNumber);
+        createOrderForTable(table, customerName, phoneNumber, orderTableId);
     }
 
-    private void createOrderForTable(TableEntity table, String customerName, String phoneNumber) {
+    private void createOrderForTable(TableEntity table, String customerName, String phoneNumber, String orderTableId) {
         MergeTableDAO mergeTableDAO = new MergeTableDAO();
         int existingOrderId = mergeTableDAO.getActiveOrderIdByTable(table.getTableId());
 
@@ -336,34 +337,32 @@ public class PanelChonBan extends javax.swing.JPanel {
         }
 
         // Xác nhận tạo Order mới
-        boolean confirm = Message.confirm(this, "Bạn có muốn tạo Order mới cho bàn " + table.getTableNumber() + "?");
+        OrderEntity od = new OrderEntity();
+        od.setCashierId(Auth.user.getUserId());
+        od.setStatus("new");
+        od.setCustomerName(customerName);
+        od.setCustomerPhone(phoneNumber);
+        if (datTruoc != null) {
+            od.setOrderTableId(Integer.parseInt(orderTableId));
+        }
 
-        if (confirm) {
-            OrderEntity od = new OrderEntity();
-            od.setCashierId(Auth.user.getUserId());
-            od.setStatus("new");
-            od.setCustomerName(customerName);
-            od.setCustomerPhone(phoneNumber);
+        int newOrderId = new OrderDAO().createOrder(od);
+        if (newOrderId > 0) {
 
-            int newOrderId = new OrderDAO().createOrder(od);
-            if (newOrderId > 0) {
+            // Nếu không có danh sách gộp bàn, chỉ tạo order cho bàn hiện tại
+            MergeTableEntity mtb = new MergeTableEntity();
+            mtb.setOrderId(newOrderId);
+            mtb.setTableId(table.getTableId());
+            new MergeTableDAO().insertMergeTable(mtb);
 
-                // Nếu không có danh sách gộp bàn, chỉ tạo order cho bàn hiện tại
-                MergeTableEntity mtb = new MergeTableEntity();
-                mtb.setOrderId(newOrderId);
-                mtb.setTableId(table.getTableId());
-                new MergeTableDAO().insertMergeTable(mtb);
+            TableEntity tb = new TableEntity();
+            tb.setTableId(table.getTableId());
+            tb.setStatus("occupied");
+            new TableDAO().updateTableStatus(tb);
 
-                TableEntity tb = new TableEntity();
-                tb.setTableId(table.getTableId());
-                tb.setStatus("occupied");
-                new TableDAO().updateTableStatus(tb);
+            taodon.setOrder(String.valueOf(newOrderId));
+            mainForm.showPanel(taodon);
 
-                taodon.setOrder(String.valueOf(newOrderId));
-                mainForm.showPanel(taodon);
-            } else {
-                Message.error(this, "Lỗi khi tạo Order!");
-            }
         }
     }
 
