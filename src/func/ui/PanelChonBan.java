@@ -10,6 +10,7 @@ import func.dao.OrderDAO;
 import func.dao.TableDAO;
 import func.entity.MergeTableEntity;
 import func.entity.OrderEntity;
+import func.entity.OrderTableEntity;
 import func.entity.TableEntity;
 import func.utils.Auth;
 import func.utils.Message;
@@ -30,6 +31,7 @@ public class PanelChonBan extends javax.swing.JPanel {
 
     private List<String> zone;
     private List<TableEntity> table;
+    OrderTableEntity datTruoc;
 
     /**
      * Creates new form JDialogChonBan
@@ -38,6 +40,14 @@ public class PanelChonBan extends javax.swing.JPanel {
         initComponents();
         selectZone();
 
+    }
+
+    public OrderTableEntity getDatTruoc() {
+        return datTruoc;
+    }
+
+    public void setDatTruoc(OrderTableEntity datTruoc) {
+        this.datTruoc = datTruoc;
     }
 
     /**
@@ -152,7 +162,7 @@ public class PanelChonBan extends javax.swing.JPanel {
         DialogGopBan tinhNangMoRong = new DialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
         tinhNangMoRong.setTrangThai(1);
         tinhNangMoRong.setVisible(true);
-            
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -286,13 +296,18 @@ public class PanelChonBan extends javax.swing.JPanel {
 
         boolean saveCustomerInfo = Message.confirm(this, "Khách hàng muốn lưu thông tin không?");
         String customerName = null, phoneNumber = null;
+        if (datTruoc != null) {
+            customerName = datTruoc.getCustomer_name();
+            phoneNumber = datTruoc.getPhone();
+        } else {
+            if (saveCustomerInfo) {
+                DialogThongTinKhachHang customerInfoDialog = new DialogThongTinKhachHang(
+                        (Frame) SwingUtilities.getWindowAncestor(this), true);
+                customerInfoDialog.setVisible(true);
+                customerName = customerInfoDialog.getTenKhach();
+                phoneNumber = customerInfoDialog.getSoDienThoai();
 
-        if (saveCustomerInfo) {
-            DialogThongTinKhachHang customerInfoDialog = new DialogThongTinKhachHang(
-                    (Frame) SwingUtilities.getWindowAncestor(this), true);
-            customerInfoDialog.setVisible(true);
-            customerName = customerInfoDialog.getTenKhach();
-            phoneNumber = customerInfoDialog.getSoDienThoai();
+            }
         }
 
         // Gọi hàm tạo order (hỗ trợ cả gộp bàn và không gộp bàn)
