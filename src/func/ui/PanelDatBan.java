@@ -4,6 +4,7 @@
  */
 package func.ui;
 
+import func.application.MainForm;
 import func.cell.ChinhSuaBang;
 import func.cell.KetHopBang;
 import func.cell.SuKienHanhDong;
@@ -24,6 +25,8 @@ import javax.swing.table.DefaultTableModel;
 public class PanelDatBan extends javax.swing.JPanel {
 
     DefaultTableModel model;
+    List<OrderTableEntity> ls;
+    OrderTableEntity taoDon;
 
     /**
      * Creates new form PanelDatBan
@@ -41,7 +44,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         statusMap.put("canceled", "Đã huỷ");
         model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
-        List<OrderTableEntity> ls = new OrderTableDAO().selectAll();
+        ls = new OrderTableDAO().selectAll();
         int i = 1;
         for (OrderTableEntity od : ls) {
 
@@ -122,6 +125,11 @@ public class PanelDatBan extends javax.swing.JPanel {
         });
         tblDanhSach.setRowHeight(40);
         tblDanhSach.getTableHeader().setReorderingAllowed(false);
+        tblDanhSach.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDanhSachMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblDanhSach);
         if (tblDanhSach.getColumnModel().getColumnCount() > 0) {
             tblDanhSach.getColumnModel().getColumn(0).setResizable(false);
@@ -202,7 +210,18 @@ public class PanelDatBan extends javax.swing.JPanel {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
+        PanelChonBan chonBan = new PanelChonBan();
+        chonBan.setDatTruoc(taoDon);
+        mainForm.showPanel(chonBan);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked
+        // TODO add your handling code here:
+        int dongDangChon = tblDanhSach.getSelectedRow();
+        int soThuTu = Integer.parseInt(String.valueOf(tblDanhSach.getValueAt(dongDangChon, 0)));
+        taoDon = ls.get(soThuTu - 1);
+    }//GEN-LAST:event_tblDanhSachMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

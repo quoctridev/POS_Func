@@ -46,39 +46,43 @@ public class MainForm extends javax.swing.JFrame {
         switch (role) {
             case 1:
                 jLabel5.setText("Quản lý nhân viên");
-                clickPanel(jLabel5, new PanelQuanLyNhanVien());
+                clickPanel(jLabel5, PanelQuanLyNhanVien.class);
                 jLabel6.setText("Quản lý danh mục");
-                clickPanel(jLabel6, new PanelQuanLyDanhMuc());
+                clickPanel(jLabel6, PanelQuanLyDanhMuc.class);
                 jLabel7.setText("Quản lý sản phẩm");
-                clickPanel(jLabel7, new PanelQuanLySanPham());
+                clickPanel(jLabel7, PanelQuanLySanPham.class);
                 jLabel9.setText("Quản lý giảm giá");
-                clickPanel(jLabel9, new PanelQuanLyGiamGia());
+                clickPanel(jLabel9, PanelQuanLyGiamGia.class);
                 jLabel10.setText("Thống kê");
-                clickPanel(jLabel10, new PanelThongKe());
+                clickPanel(jLabel10, PanelThongKe.class);
                 break;
             case 2:
                 jLabel5.setText("Quản lý hóa đơn");
-                clickPanel(jLabel5, new PanelHoaDon());
+                clickPanel(jLabel5, PanelHoaDon.class);
                 jLabel6.setText("Quản lý bàn");
-                clickPanel(jLabel6, new PanelChonBan());
-                jLabel9.setText("Đặt bàn");
-                clickPanel(jLabel9, new PanelDatBan());
+                clickPanel(jLabel6, PanelChonBan.class);
                 jLabel7.setText("Quản lý đơn hàng");
-                clickPanel(jLabel7, new PanelDonHang());
-
+                clickPanel(jLabel7, PanelDonHang.class);
+                jLabel9.setText("Đặt bàn");
+                clickPanel(jLabel9, PanelDatBan.class);
                 break;
             case 3:
                 jLabel5.setText("Quản lí đơn hàng");
-                clickPanel(jLabel7, new PanelDonHang());
+                clickPanel(jLabel7, PanelDonHang.class);
                 break;
         }
     }
 
-    private void clickPanel(javax.swing.JLabel label, JPanel panel) {
+    private void clickPanel(javax.swing.JLabel label, Class<? extends JPanel> panelClass) {
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                showPanel(panel);
+                try {
+                    JPanel panel = panelClass.getDeclaredConstructor().newInstance(); // Tạo mới panel
+                    showPanel(panel);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }
