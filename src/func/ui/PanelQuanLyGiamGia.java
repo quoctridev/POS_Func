@@ -48,7 +48,7 @@ public class PanelQuanLyGiamGia extends javax.swing.JPanel {
                 if (confirm) {
                     DiscountDAO discountDAO = new DiscountDAO();
                     discountDAO.delete(code); // Xóa dựa trên mã code
-                    JOptionPane.showMessageDialog(null, "Xóa thành công!");
+                    Message.info(null, "Xóa thành công!");
                     showTable();
                 }
             }

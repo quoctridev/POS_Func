@@ -4,17 +4,74 @@
  */
 package func.ui;
 
+import func.cell.ChinhSuaBang;
+import func.cell.KetHopBang;
+import func.cell.SuKienHanhDong;
+import func.dao.OrderTableDAO;
+import func.entity.OrderTableEntity;
+import func.utils.Message;
+import java.awt.Frame;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author quoctris.dev
  */
 public class PanelDatBan extends javax.swing.JPanel {
 
+    DefaultTableModel model;
+
     /**
      * Creates new form PanelDatBan
      */
     public PanelDatBan() {
         initComponents();
+        init();
+    }
+
+    void init() {
+        Map<String, String> statusMap = new HashMap();
+        statusMap.put("pending", "Đang chờ xác nhận");
+        statusMap.put("confirmed", "Đã xác nhận");
+        statusMap.put("completed", "Đã hoàn thành");
+        statusMap.put("canceled", "Đã huỷ");
+        model = (DefaultTableModel) tblDanhSach.getModel();
+        model.setRowCount(0);
+        List<OrderTableEntity> ls = new OrderTableDAO().selectAll();
+        int i = 1;
+        for (OrderTableEntity od : ls) {
+
+            String trangThai = statusMap.getOrDefault(od.getStatus(), "Đang chờ xác nhận");
+
+            model.addRow(new Object[]{
+                i, od.getCustomer_name(), od.getPhone(), od.getCapacity(), od.getReservationTime(), trangThai});
+        }
+        SuKienHanhDong event = new SuKienHanhDong() {
+            @Override
+            public void Edit(int row) {
+                DialogTrangThaiDatBan datBan = new DialogTrangThaiDatBan((Frame) SwingUtilities.getWindowAncestor(PanelDatBan.this), true);
+                datBan.setOrder(ls.get(row));
+                datBan.setVisible(true);
+            }
+
+            @Override
+            public void Delete(int row) {
+
+            }
+
+            @Override
+            public void View(int row) {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+
+        };
+
+        tblDanhSach.getColumnModel().getColumn(6).setCellRenderer(new KetHopBang(false));
+        tblDanhSach.getColumnModel().getColumn(6).setCellEditor(new ChinhSuaBang(false, event));
     }
 
     /**
@@ -28,7 +85,7 @@ public class PanelDatBan extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblDanhSach = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -44,7 +101,7 @@ public class PanelDatBan extends javax.swing.JPanel {
             .addGap(0, 90, Short.MAX_VALUE)
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblDanhSach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -56,23 +113,23 @@ public class PanelDatBan extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
-            jTable1.getColumnModel().getColumn(5).setResizable(false);
-            jTable1.getColumnModel().getColumn(6).setResizable(false);
+        tblDanhSach.setRowHeight(40);
+        tblDanhSach.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblDanhSach);
+        if (tblDanhSach.getColumnModel().getColumnCount() > 0) {
+            tblDanhSach.getColumnModel().getColumn(0).setResizable(false);
+            tblDanhSach.getColumnModel().getColumn(1).setResizable(false);
+            tblDanhSach.getColumnModel().getColumn(2).setResizable(false);
+            tblDanhSach.getColumnModel().getColumn(3).setResizable(false);
+            tblDanhSach.getColumnModel().getColumn(4).setResizable(false);
+            tblDanhSach.getColumnModel().getColumn(5).setResizable(false);
         }
 
         jButton1.setText("Đặt bàn");
@@ -83,6 +140,11 @@ public class PanelDatBan extends javax.swing.JPanel {
         });
 
         jButton3.setText("Tạo đơn hàng");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -134,7 +196,13 @@ public class PanelDatBan extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        DialogDatBan datBan = new DialogDatBan((Frame) SwingUtilities.getWindowAncestor(this), true);
+        datBan.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -143,6 +211,6 @@ public class PanelDatBan extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblDanhSach;
     // End of variables declaration//GEN-END:variables
 }

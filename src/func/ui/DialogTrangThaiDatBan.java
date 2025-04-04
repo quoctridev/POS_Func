@@ -6,29 +6,45 @@ package func.ui;
 
 import func.dao.OrderTableDAO;
 import func.entity.OrderTableEntity;
-import func.utils.Message;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 /**
  *
  * @author quoctris.dev
  */
-public class DialogDatBan extends javax.swing.JDialog {
+public class DialogTrangThaiDatBan extends javax.swing.JDialog {
+
+    OrderTableEntity order;
 
     /**
-     * Creates new form DialogDatBan
+     * Creates new form DialogTrangThaiDatBan
      */
-    public DialogDatBan(java.awt.Frame parent, boolean modal) {
+    public DialogTrangThaiDatBan(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+
+    public OrderTableEntity getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderTableEntity order) {
+        this.order = order;
         init();
+    }
+
+    void init() {
+        txtChoNgoi.setText(String.valueOf(order.getCapacity()));
+        txtSoDienThoai.setText(order.getPhone());
+        txtTenKhach.setText(order.getCustomer_name());
+        taGhiChu.setText(order.getNote());
+        LocalDateTime dateTime = order.getReservationTime().toLocalDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String formattedTime = dateTime.format(formatter);
+        txtThoiGian.setText(formattedTime);
+        java.util.Date date = java.util.Date.from(dateTime.atZone(java.time.ZoneId.systemDefault()).toInstant());
+        dateNgay.setDate(date);
     }
 
     /**
@@ -54,10 +70,16 @@ public class DialogDatBan extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         dateNgay = new com.toedter.calendar.JDateChooser();
         txtChoNgoi = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        cboTrangThai = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Tên khách");
+
+        txtTenKhach.setEditable(false);
+
+        txtSoDienThoai.setEditable(false);
 
         jLabel2.setText("Số điện thoại");
 
@@ -67,18 +89,29 @@ public class DialogDatBan extends javax.swing.JDialog {
 
         jLabel5.setText("Ghi chú");
 
+        taGhiChu.setEditable(false);
         taGhiChu.setColumns(20);
         taGhiChu.setRows(5);
         jScrollPane1.setViewportView(taGhiChu);
 
-        jButton1.setText("Đặt bàn");
+        jButton1.setText("Cập nhật");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        txtThoiGian.setEditable(false);
+
         jLabel6.setText("Ngày đặt");
+
+        dateNgay.setEnabled(false);
+
+        txtChoNgoi.setEditable(false);
+
+        jLabel7.setText("Trạng thái");
+
+        cboTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đang chờ xác nhận", "Đã xác nhận", "Đã hoàn thành", "Đã huỷ" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -97,7 +130,7 @@ public class DialogDatBan extends javax.swing.JDialog {
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtSoDienThoai, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 88, Short.MAX_VALUE)
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -111,13 +144,17 @@ public class DialogDatBan extends javax.swing.JDialog {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dateNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(dateNgay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cboTrangThai, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -148,7 +185,11 @@ public class DialogDatBan extends javax.swing.JDialog {
                             .addComponent(dateNgay, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cboTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,70 +200,28 @@ public class DialogDatBan extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
- public static String formatTime(String input) {
-        String regex = "(\\d{1,2})h(\\d{1,2})?";
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
-        java.util.regex.Matcher matcher = pattern.matcher(input);
 
-        if (matcher.matches()) {
-            String hours = String.format("%02d", Integer.parseInt(matcher.group(1)));
-            String minutes = matcher.group(2) != null ? String.format("%02d", Integer.parseInt(matcher.group(2))) : "00";
-            return hours + ":" + minutes + ":00";
-        }
-        return null; // Trả về null nếu không đúng định dạng
-    }
 
-    void init() {
-        dateNgay.setDateFormatString("dd/MM/yyyy");
-        dateNgay.setMinSelectableDate(new Date());
-    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String tenKhach = txtTenKhach.getText();
-        String choNgoi = txtChoNgoi.getText();
-        String soDienThoai = txtSoDienThoai.getText();
-        String thoiGian = formatTime(txtThoiGian.getText());
-        String ghiChu = taGhiChu.getText();
-        Date date = dateNgay.getDate();
-
-        // Kiểm tra giá trị null
-        if (date == null || thoiGian == null) {
-            Message.warning(null, "Vui lòng nhập đúng định dạng thời gian và chọn ngày.");
-            return;
+        String trangThai = (String) cboTrangThai.getSelectedItem();
+        String status = "";
+        switch (trangThai) {
+            case "Đang chờ xác nhận":
+                status = "pending";
+                break;
+            case "Đã xác nhận":
+                status = "confirmed";
+                break;
+            case "Đã hoàn thành":
+                status = "completed";
+                break;
+            case "Đã huỷ":
+                status = "canceled";
+                break;
         }
-
-        // Chuyển đổi ngày sang LocalDate
-        Instant instant = date.toInstant();
-        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
-
-        // Chuyển đổi thời gian sang LocalTime
-        LocalTime localTime = LocalTime.parse(thoiGian, DateTimeFormatter.ofPattern("HH:mm:ss"));
-
-        // Kết hợp ngày và giờ thành Timestamp
-        LocalDateTime dateTime = LocalDateTime.of(localDate, localTime);
-        Timestamp timestamp = Timestamp.valueOf(dateTime);
-
-        // Tạo đối tượng OrderTableEntity
-        OrderTableEntity od = new OrderTableEntity();
-        od.setReservationTime(timestamp);
-        od.setPhone(soDienThoai);
-        od.setNote(ghiChu);
-        od.setCustomer_name(tenKhach);
-
-        try {
-            od.setCapacity(Integer.parseInt(choNgoi));
-        } catch (NumberFormatException e) {
-            Message.warning(null, "Số chỗ ngồi phải là số nguyên hợp lệ!");
-            return;
-        }
-
-        // Lưu vào database
-        new OrderTableDAO().createOrderTable(od);
+        new OrderTableDAO().updateOrderTable(status, String.valueOf(order.getOrderTableId()));
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void btnChonBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChonBanActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnChonBanActionPerformed
 
     /**
      * @param args the command line arguments
@@ -241,20 +240,20 @@ public class DialogDatBan extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DialogDatBan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogTrangThaiDatBan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DialogDatBan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogTrangThaiDatBan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DialogDatBan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogTrangThaiDatBan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DialogDatBan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogTrangThaiDatBan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                DialogDatBan dialog = new DialogDatBan(new javax.swing.JFrame(), true);
+                DialogTrangThaiDatBan dialog = new DialogTrangThaiDatBan(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -267,6 +266,7 @@ public class DialogDatBan extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cboTrangThai;
     private com.toedter.calendar.JDateChooser dateNgay;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -275,6 +275,7 @@ public class DialogDatBan extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea taGhiChu;
     private javax.swing.JTextField txtChoNgoi;

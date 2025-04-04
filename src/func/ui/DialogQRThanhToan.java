@@ -5,7 +5,6 @@
 package func.ui;
 
 import func.dao.OrderDAO;
-import func.dao.PaymentDAO;
 import func.dao.TableDAO;
 import func.entity.OrderEntity;
 import func.entity.PaymentEntity;

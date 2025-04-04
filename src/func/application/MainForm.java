@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import func.ui.DialogDangNhap;
 import func.ui.PanelChonBan;
+import func.ui.PanelDatBan;
 import func.ui.PanelDonHang;
 import func.ui.PanelHoaDon;
 import func.ui.PanelQuanLyDanhMuc;
@@ -60,6 +61,8 @@ public class MainForm extends javax.swing.JFrame {
                 clickPanel(jLabel5, new PanelHoaDon());
                 jLabel6.setText("Quản lý bàn");
                 clickPanel(jLabel6, new PanelChonBan());
+                jLabel9.setText("Đặt bàn");
+                clickPanel(jLabel9, new PanelDatBan());
                 jLabel7.setText("Quản lý đơn hàng");
                 clickPanel(jLabel7, new PanelDonHang());
 

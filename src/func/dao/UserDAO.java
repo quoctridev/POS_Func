@@ -1,4 +1,3 @@
-
 package func.dao;
 
 import func.entity.UserEntity;
@@ -8,14 +7,11 @@ import java.util.List;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
-
-
-
-public class UserDAO extends FuncDAO<UserEntity, String>{
+public class UserDAO extends FuncDAO<UserEntity, String> {
 
     @Override
     public void insert(UserEntity entity) {
-        String sql  = "INSERT INTO Users (username, [password], full_name, phone, [role]) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Users (username, [password], full_name, phone, [role]) VALUES (?, ?, ?, ?, ?)";
         Database.update(sql, entity.getUsername(), entity.getPassword(), entity.getFullName(), entity.getPhone(), entity.getRole());
     }
 
@@ -43,16 +39,16 @@ public class UserDAO extends FuncDAO<UserEntity, String>{
         String sql = "SELECT * FROM Users";
         return selectBySql(sql);
     }
-    
+
     @Override
     protected List<UserEntity> selectBySql(String sql, Object... args) {
         List<UserEntity> list = new ArrayList<>();
-        
+
         try {
             ResultSet rs = null;
-            try{
+            try {
                 rs = Database.query(sql, args);
-                while(rs.next()) {
+                while (rs.next()) {
                     UserEntity user = new UserEntity();
                     user.setUserId(rs.getInt("user_id"));
                     user.setUsername(rs.getString("username"));
@@ -61,10 +57,9 @@ public class UserDAO extends FuncDAO<UserEntity, String>{
                     user.setPhone(rs.getString("phone"));
                     user.setRole(rs.getString("role"));
                     user.setCreatedAt(rs.getDate("created_at"));
-                    list.add(user);                    
+                    list.add(user);
                 }
-            }
-            finally{
+            } finally {
                 rs.getStatement().getConnection().close();
             }
         } catch (SQLException e) {
@@ -73,5 +68,5 @@ public class UserDAO extends FuncDAO<UserEntity, String>{
         }
         return list;
     }
-    
+
 }
