@@ -4,6 +4,8 @@
  */
 package func.entity;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author quoctris.dev
@@ -11,12 +13,13 @@ package func.entity;
 public class CustomerEntity {
 
     String phone, fullName, email;
-    int customerId, point;
+    int customerId;
+    BigDecimal point;
 
     public CustomerEntity() {
     }
 
-    public CustomerEntity(String phone, String fullName, String email, int customerId, int point) {
+    public CustomerEntity(String phone, String fullName, String email, int customerId, BigDecimal point) {
         this.phone = phone;
         this.fullName = fullName;
         this.email = email;
@@ -56,11 +59,11 @@ public class CustomerEntity {
         this.customerId = customerId;
     }
 
-    public int getPoint() {
+    public BigDecimal getPoint() {
         return point;
     }
 
-    public void setPoint(int point) {
+    public void setPoint(BigDecimal point) {
         this.point = point;
     }
 

@@ -242,6 +242,11 @@ public class DialogChiTietMonAn extends javax.swing.JDialog {
                 tb.setTableId(Integer.parseInt(table));
                 tableDAO.updateTableStatus(tb);
             }
+        } else {
+            TableEntity tb = new TableEntity();
+            tb.setStatus("available");
+            tb.setTableId(Integer.parseInt(table));
+            tableDAO.updateTableStatus(tb);
         }
         dispose();
         mainForm.showPanel(new PanelChonBan());

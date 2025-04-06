@@ -101,7 +101,7 @@ public class DialogGopBan extends javax.swing.JDialog {
             int seatsUsed = mergedTables.stream()
                     .filter(t -> t.matches("\\d+")) // Tránh lỗi số không hợp lệ
                     .mapToInt(t -> tableDAO.getSeatsUsed(Integer.parseInt(t))) // Gọi phương thức sửa lỗi
-                    .sum(); 
+                    .sum();
             if (seatsUsed == 0) {
                 Message.warning(null, "Không tìm thấy hóa đơn của bàn này!");
                 return;
@@ -311,13 +311,6 @@ public class DialogGopBan extends javax.swing.JDialog {
 
         // Trường hợp CHUYỂN BÀN
         if (!selectedTables.isEmpty() && !selectedTargetTables.isEmpty()) {
-            System.out.println(selectedSeats);
-            System.out.println(requiredSeats);
-            if (selectedSeats < requiredSeats) {
-                Message.warning(null, "Bạn chưa chọn đủ số chỗ cần thiết để chuyển!");
-                return;
-            }
-
             boolean confirm = Message.confirm(null, "Bạn có muốn thực hiện chuyển bàn ngay không?");
 
             if (confirm) {

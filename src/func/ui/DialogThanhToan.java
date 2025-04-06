@@ -8,21 +8,23 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import func.application.MainForm;
+import func.dao.CustomerDAO;
 import func.dao.DiscountDAO;
 import func.dao.OrderDAO;
 import func.dao.OrderDetailsDAO;
 import func.dao.TableDAO;
 import func.dto.OrderDetailsDTO;
+import func.entity.CustomerEntity;
 import func.entity.DiscountEntity;
 import func.entity.OrderEntity;
-import func.entity.PaymentEntity;
 import func.entity.TableEntity;
-import func.utils.Auth;
 import func.utils.Currency;
 import func.utils.Message;
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -403,18 +405,35 @@ public class DialogThanhToan extends javax.swing.JDialog {
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
-        OrderEntity od = new OrderEntity();
-        od.setOrderId(Integer.parseInt(orderId));
+        OrderEntity od = new OrderDAO().selectById(orderId);
         od.setPaymentMethod(getSelectedPayment() == 1 ? "cash" : "qr-code");
         od.setStatus("completed");
         od.setIsPaid(true);
         od.setTotalPrice(totalAmount);
         od.setDiscountId(dc.getDiscountId());
+        String phone = od.getCustomerPhone();
+        CustomerEntity customer = CustomerDAO.findCustomerByPhone(phone);
+        if (customer != null) {
+            BigDecimal point = customer.getPoint();
+            //100k = 1 point
+            BigDecimal pointRatio = new BigDecimal("100000");
+            BigDecimal earnedPoint = totalAmount.divide(pointRatio, 2, RoundingMode.HALF_UP);
+            point = point.add(earnedPoint);
+            customer.setPoint(point);
+            CustomerDAO.updatePoint(point, customer.getCustomerId());
+        }
 
         if (getSelectedPayment() == 2) { // Thanh toán QR
-            DialogQRThanhToan qr = new DialogQRThanhToan((Frame) SwingUtilities.getWindowAncestor(this), false);
+            DialogQRThanhToan qr = new DialogQRThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
             qr.setOd(od);
             qr.setTableId(tableId);
+//            qr.addWindowListener(new WindowAdapter() {
+//                @Override
+//                public void windowClosing(WindowEvent e) {
+//                    qr.getPaymentCheckTimer().stop();
+//                    qr.dispose();
+//                }
+//            });
             qr.setVisible(true);
         } else { // Thanh toán tiền mặt
             TableDAO tableDAO = new TableDAO();
@@ -426,15 +445,16 @@ public class DialogThanhToan extends javax.swing.JDialog {
                 tb.setTableId(Integer.parseInt(table));
                 tableDAO.updateTableStatus(tb);
             }
+            dispose();
+            boolean confirm = Message.confirm(null, "Bạn có muốn in hoá đơn không");
+            if (confirm) {
+
+            }
+            MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
+            PanelChonBan chonBan = new PanelChonBan();
+            mainForm.showPanel(chonBan);
         }
-        dispose();
-        boolean confirm = Message.confirm(null, "Bạn có muốn in hoá đơn không");
-        if (confirm) {
-            
-        }
-        MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
-        PanelChonBan chonBan = new PanelChonBan();
-        mainForm.showPanel(chonBan);
+
 
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
@@ -454,7 +474,6 @@ public class DialogThanhToan extends javax.swing.JDialog {
                 return;
             } else {
                 Message.info(this, "Bạn đã áp dụng mã giảm giá thành công");
-                return;
             }
         }
         checkDiscount(dc);

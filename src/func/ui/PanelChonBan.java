@@ -307,7 +307,6 @@ public class PanelChonBan extends javax.swing.JPanel {
                 customerInfoDialog.setVisible(true);
                 customerName = customerInfoDialog.getTenKhach();
                 phoneNumber = customerInfoDialog.getSoDienThoai();
-
             }
         }
 

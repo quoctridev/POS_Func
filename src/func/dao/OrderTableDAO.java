@@ -30,7 +30,7 @@ public class OrderTableDAO {
     }
 
     public List<OrderTableEntity> selectAll() {
-        String sql = "SELECT * FROM Order_Table ORDER BY reservation_time ASC";
+        String sql = "SELECT * FROM Order_Table WHERE [status] NOT IN('completed', 'canceled') ORDER BY reservation_time ASC ";
         return selectBySql(sql);
     }
 

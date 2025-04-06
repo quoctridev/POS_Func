@@ -4,21 +4,29 @@
  */
 package func.ui;
 
+import func.application.MainForm;
+import func.dao.CustomerDAO;
 import func.dao.OrderDAO;
 import func.dao.TableDAO;
+import func.entity.CustomerEntity;
 import func.entity.OrderEntity;
-import func.entity.PaymentEntity;
 import func.entity.TableEntity;
-import java.awt.Dialog;
+import func.utils.Message;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 /**
@@ -30,6 +38,7 @@ public class DialogQRThanhToan extends javax.swing.JDialog {
     String urlCheck = null;
     OrderEntity od = null;
     String tableId = null;
+    private Timer paymentCheckTimer;
 
     /**
      * Creates new form JDialogQRThanhToan
@@ -37,10 +46,27 @@ public class DialogQRThanhToan extends javax.swing.JDialog {
     public DialogQRThanhToan(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setAlwaysOnTop(true);
+        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                getPaymentCheckTimer().stop();
+                dispose();
+            }
+        });
     }
 
     public OrderEntity getOd() {
         return od;
+    }
+
+    public Timer getPaymentCheckTimer() {
+        return paymentCheckTimer;
+    }
+
+    public void setPaymentCheckTimer(Timer paymentCheckTimer) {
+        this.paymentCheckTimer = paymentCheckTimer;
     }
 
     public void setOd(OrderEntity od) {
@@ -88,7 +114,7 @@ public class DialogQRThanhToan extends javax.swing.JDialog {
 String callAPI(String amount) {
         try {
             // URL API backend
-            URL url = new URL("http://localhost:3030/create-payment/");
+            URL url = new URL("http://localhost:3000/create-payment/");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             // Thiết lập phương thức POST
@@ -158,7 +184,7 @@ String callAPI(String amount) {
 
     String getAPI() {
         try {
-            String url = "http://localhost:3030/get-payment/" + urlCheck; // URL API
+            String url = "http://localhost:3000/get-payment/" + urlCheck; // URL API
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json"); // Đặt header
@@ -183,26 +209,58 @@ String callAPI(String amount) {
     }
 
     void checkBank() {
-        Timer timer = new Timer(2000, new ActionListener() {
+        paymentCheckTimer = new Timer(2000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (getAPI().equals("PAID")) {
                     ((Timer) e.getSource()).stop(); // Dừng timer khi điều kiện thỏa mãn
                     TableDAO tableDAO = new TableDAO();
                     new OrderDAO().update(od);
-                    if (tableDAO.selectTableNumberByOrderId(String.valueOf(od.getOrderId())).size() > 1) {
+                    String phone = od.getCustomerPhone();
+                    CustomerEntity customer = CustomerDAO.findCustomerByPhone(phone);
+                    if (customer != null) {
+                        BigDecimal point = customer.getPoint();
+                        //100k = 1 point
+                        BigDecimal pointRatio = new BigDecimal("100000");
+                        BigDecimal earnedPoint = od.getTotalPrice().divide(pointRatio, 2, RoundingMode.HALF_UP);
+                        point = point.add(earnedPoint);
+                        customer.setPoint(point);
+                        CustomerDAO.updatePoint(point, customer.getCustomerId());
+                    }
+                    if (tableDAO.selectTableNumberByOrderId(String.valueOf(od.getOrderId())).size() > 0) {
                         for (String table : tableDAO.selectTableNumberByOrderId(String.valueOf(od.getOrderId()))) {
                             TableEntity tb = new TableEntity();
                             tb.setStatus("available");
                             tb.setTableId(Integer.parseInt(table));
                             tableDAO.updateTableStatus(tb);
                         }
+                    } else {
+                        TableEntity tb = new TableEntity();
+                        tb.setStatus("available");
+                        tb.setTableId(Integer.parseInt(tableId));
+                        tableDAO.updateTableStatus(tb);
                     }
+                    // Tìm form thanh toán ban đầu và đóng nó
+                    Component parent = SwingUtilities.getWindowAncestor(DialogQRThanhToan.this);
+                    if (parent instanceof JDialog) {
+                        ((JDialog) parent).dispose();
+                    }
+
+                    // Hỏi về in hóa đơn
+                    boolean confirm = Message.confirm(null, "Bạn có muốn in hoá đơn không");
+                    if (confirm) {
+                        // Xử lý in hóa đơn
+                    }
+
+                    // Chuyển về trang chủ
+                    MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(parent);
+                    PanelChonBan chonBan = new PanelChonBan();
+                    mainForm.showPanel(chonBan);
                     dispose();
                 }
             }
         });
-        timer.start();
+        paymentCheckTimer.start();
     }
 
     /**
@@ -244,6 +302,7 @@ String callAPI(String amount) {
                     }
                 });
                 dialog.setVisible(true);
+                dialog.requestFocus();
             }
         });
     }

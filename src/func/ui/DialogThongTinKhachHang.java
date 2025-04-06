@@ -5,6 +5,7 @@
 package func.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import func.dao.CustomerDAO;
 import func.utils.Message;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +20,7 @@ public class DialogThongTinKhachHang extends javax.swing.JDialog {
     String tenKhach = null;
     String soDienThoai = null;
     private static final String PHONE_REGEX = "^(?:\\+84|0)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\\d{7}$";
+    boolean them = false;
 
     /**
      * Creates new form JDialogThongTinKhachHang
@@ -28,6 +30,10 @@ public class DialogThongTinKhachHang extends javax.swing.JDialog {
         initComponents();
         txtTenKhach.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Tên khách");
         txtSoDienThoai.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Số điện thoại khách");
+    }
+
+    public void setThem(boolean them) {
+        this.them = them;
     }
 
     public String getTenKhach() {
@@ -108,18 +114,32 @@ public static boolean isValidPhoneNumber(String phoneNumber) {
     }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if (!isValidPhoneNumber(txtSoDienThoai.getText())) {
-            Message.warning(this, "Số điện thoại không đúng");
-            return;
-        } else if (txtTenKhach.getText().isBlank()) {
-            Message.warning(this, "Tên khách không được bỏ trống");
-            return;
+        if (them) {
+            if (!isValidPhoneNumber(txtSoDienThoai.getText())) {
+                Message.warning(this, "Số điện thoại không đúng");
+                return;
+            } else if (txtTenKhach.getText().isBlank()) {
+                Message.warning(this, "Tên khách không được bỏ trống");
+                return;
+            } else {
+                CustomerDAO.insert(txtTenKhach.getText(), txtSoDienThoai.getText());
+                dispose();
+            }
         } else {
-            setSoDienThoai(txtSoDienThoai.getText());
-            setTenKhach(txtTenKhach.getText());
-            Message.info(this, "Bạn đã thêm thông tin khách hàng thành công");
-            dispose();
+            if (!isValidPhoneNumber(txtSoDienThoai.getText())) {
+                Message.warning(this, "Số điện thoại không đúng");
+                return;
+            } else if (txtTenKhach.getText().isBlank()) {
+                Message.warning(this, "Tên khách không được bỏ trống");
+                return;
+            } else {
+                setSoDienThoai(txtSoDienThoai.getText());
+                setTenKhach(txtTenKhach.getText());
+                Message.info(this, "Bạn đã thêm thông tin khách hàng thành công");
+                dispose();
+            }
         }
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
