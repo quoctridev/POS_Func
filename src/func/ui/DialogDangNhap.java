@@ -10,7 +10,8 @@ import func.dao.UserDAO;
 import func.entity.UserEntity;
 import func.utils.Auth;
 import func.utils.Message;
-
+import java.awt.event.KeyEvent;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -41,6 +42,8 @@ public class DialogDangNhap extends javax.swing.JDialog {
         pwfMatKhau.putClientProperty(FlatClientProperties.STYLE, ""
                 + "showRevealButton:true;"
                 + "showCapsLock:true");
+
+        getRootPane().setDefaultButton(btnDangNhap);
 
     }
 
@@ -125,6 +128,8 @@ public class DialogDangNhap extends javax.swing.JDialog {
         );
 
         btnDangNhap.setText("-> ĐĂNG NHẬP");
+        btnDangNhap.setToolTipText("");
+        btnDangNhap.setInheritsPopupMenu(true);
         btnDangNhap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDangNhapActionPerformed(evt);

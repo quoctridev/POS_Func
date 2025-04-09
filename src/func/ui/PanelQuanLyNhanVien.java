@@ -6,6 +6,7 @@ package func.ui;
 
 import func.dao.UserDAO;
 import func.entity.UserEntity;
+import func.utils.Auth;
 import func.utils.Message;
 import java.awt.Frame;
 import java.util.Date;
@@ -222,10 +223,14 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
         } else {
             boolean confirm = Message.confirm(this, "Bạn có chắc chắn muốn xóa nhân viên này ?");
             if (confirm) {
-                new UserDAO().delete(String.valueOf(user.getUserId()));
-                showTable();
-                Message.info(this, "Xóa nhân viên thành công");
-                user = null;
+                if (user.getUsername().equals(Auth.user.getUsername())) {
+                    Message.error(this, "Khong the xoa ban than ");
+                } else {
+                    new UserDAO().delete(String.valueOf(user.getUserId()));
+                    showTable();
+                    Message.info(this, "Xóa nhân viên thành công");
+                    user = null;
+                }
             }
         }
     }//GEN-LAST:event_btnXoaActionPerformed

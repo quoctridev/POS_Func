@@ -27,7 +27,7 @@ import javax.swing.JPanel;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    int role;
+    int role ;
 
     private static MainForm app;
 
@@ -43,6 +43,7 @@ public class MainForm extends javax.swing.JFrame {
     void init() {
         new DialogDangNhap(this, true).setVisible(true);
         role = Auth.isRole();
+        
         switch (role) {
             case 1:
                 jLabel5.setText("Quản lý nhân viên");

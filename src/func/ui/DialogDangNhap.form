@@ -185,6 +185,8 @@
         <Component class="javax.swing.JButton" name="btnDangNhap">
           <Properties>
             <Property name="text" type="java.lang.String" value="-&gt; &#x110;&#x102;NG NH&#x1eac;P"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="inheritsPopupMenu" type="boolean" value="true"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDangNhapActionPerformed"/>
