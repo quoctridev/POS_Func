@@ -167,6 +167,18 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        if (txtMaGiamGia.getText().trim().isEmpty()) {
+            Message.warning(this, "Không được để trống mã giảm giá");
+            txtMaGiamGia.requestFocus(); // Focus lại ô input
+            return;
+        }
+
+        if (txtPhanTram.getText().trim().isEmpty()) {
+            Message.warning(this, "Không được để trống phần trăm");
+            txtPhanTram.requestFocus();
+            return;
+        }
+
         if (discount == null) {
             them();
         } else {
@@ -221,6 +233,18 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
     }
 
     void sua() {
+        if (txtMaGiamGia.getText().trim().isEmpty()) {
+            Message.warning(this, "Không được để trống mã giảm giá");
+            txtMaGiamGia.requestFocus(); // Focus lại ô input
+            return;
+        }
+
+        if (txtPhanTram.getText().trim().isEmpty()) {
+            Message.warning(this, "Không được để trống phần trăm");
+            txtPhanTram.requestFocus();
+            return;
+        }
+
         Date startDate = dateNgayBatDau.getDate();
         Date endDate = dateNgayKetThuc.getDate();
         String maGiamGia = txtMaGiamGia.getText();
@@ -246,6 +270,17 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
     }
 
     void them() {
+        if (txtMaGiamGia.getText().trim().isEmpty()) {
+            Message.warning(this, "Không được để trống mã giảm giá");
+            txtMaGiamGia.requestFocus(); // Focus lại ô input
+            return;
+        }
+
+        if (txtPhanTram.getText().trim().isEmpty()) {
+            Message.warning(this, "Không được để trống phần trăm");
+            txtPhanTram.requestFocus();
+            return;
+        }
         Date startDate = dateNgayBatDau.getDate();
         Date endDate = dateNgayKetThuc.getDate();
         String maGiamGia = txtMaGiamGia.getText();
@@ -258,15 +293,26 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
             Message.warning(null, "Ngày bắt đầu phải nhỏ hơn ngày kết thúc!ngày");
             return;
         }
-        DiscountEntity dis = new DiscountEntity();
-        dis.setCode(maGiamGia);
-        dis.setMaxValue(new BigDecimal(giaToiDa));
-        dis.setDiscountValue(new BigDecimal(phanTram));
-        dis.setStartDate(startDate);
-        dis.setEndDate(endDate);
-        new DiscountDAO().insert(dis);
-        Message.info(null, "Thêm thành công");
-        dispose();
+        if (txtGia.getText().equals("")) {
+            DiscountEntity dis = new DiscountEntity();
+            dis.setCode(maGiamGia);
+            dis.setDiscountValue(new BigDecimal(phanTram));
+            dis.setStartDate(startDate);
+            dis.setEndDate(endDate);
+            new DiscountDAO().insert(dis);
+            Message.info(null, "Thêm thành công");
+            dispose();
+        } else {
+            DiscountEntity dis = new DiscountEntity();
+            dis.setCode(maGiamGia);
+            dis.setMaxValue(new BigDecimal(giaToiDa));
+            dis.setDiscountValue(new BigDecimal(phanTram));
+            dis.setStartDate(startDate);
+            dis.setEndDate(endDate);
+            new DiscountDAO().insert(dis);
+            Message.info(null, "Thêm thành công");
+            dispose();
+        }
 
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
