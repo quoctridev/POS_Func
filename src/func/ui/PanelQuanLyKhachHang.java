@@ -8,7 +8,6 @@ import func.cell.ChinhSuaBang;
 import func.cell.KetHopBang;
 import func.cell.SuKienHanhDong;
 import func.dao.CustomerDAO;
-import func.dao.DiscountDAO;
 import func.entity.CustomerEntity;
 import func.utils.Message;
 import java.awt.Frame;
@@ -31,6 +30,7 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
         initComponents();
         fillTable();
         setTable();
+
     }
 
     void fillTable() {
@@ -70,6 +70,9 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
 
         tblDanhSach.getColumnModel().getColumn(4).setCellRenderer(new KetHopBang(true));
         tblDanhSach.getColumnModel().getColumn(4).setCellEditor(new ChinhSuaBang(true, event));
+        tblDanhSach.getColumnModel().getColumn(4).setMinWidth(95);
+        tblDanhSach.getColumnModel().getColumn(4).setMaxWidth(95);
+        tblDanhSach.getColumnModel().getColumn(4).setWidth(95);
     }
 
     /**

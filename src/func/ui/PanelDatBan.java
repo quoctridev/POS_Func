@@ -45,6 +45,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
         ls = new OrderTableDAO().selectAll();
+        System.out.println(ls.size());
         int i = 1;
         for (OrderTableEntity od : ls) {
 
@@ -63,7 +64,7 @@ public class PanelDatBan extends javax.swing.JPanel {
 
             @Override
             public void Delete(int row) {
-                
+                Message.warning(null, "Chưa hỗ trợ tính năng này!");
             }
 
             @Override
@@ -206,6 +207,7 @@ public class PanelDatBan extends javax.swing.JPanel {
         // TODO add your handling code here:
         DialogDatBan datBan = new DialogDatBan((Frame) SwingUtilities.getWindowAncestor(this), true);
         datBan.setVisible(true);
+        init();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

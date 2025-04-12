@@ -75,7 +75,7 @@ public class ThongKeDAO {
             }
 
             while (rs.next()) {
-                String method = rs.getString("payment_method").equals("cash") ? "Tiền mặt" : "QR-Code";
+                String method = "cash".equals(rs.getString("payment_method")) ? "Tiền mặt" : "QR-Code";
                 String orderStatus = rs.getString("order_status");
                 double revenue = rs.getDouble("revenue");
 

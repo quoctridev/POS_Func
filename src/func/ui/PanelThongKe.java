@@ -56,6 +56,14 @@ public class PanelThongKe extends javax.swing.JPanel {
         selectDate.setDateFormatString("dd/MM/yyyy");
         model = (DefaultTableModel) tblDanhSach.getModel();
         selectDate.setMaxSelectableDate(new Date());
+        LocalDate currentDate = LocalDate.now();
+
+        int ngay = currentDate.getDayOfMonth();
+        int thang = currentDate.getMonthValue();
+        int nam = currentDate.getYear();
+        lsThongKeMonAn = ThongKeDAO.thongKeMonAn("Ngày", ngay, thang, nam);
+        fillTable();
+        showPieChartInPanel(lsThongKeMonAn, pnMonAn);
 
     }
 
@@ -349,6 +357,13 @@ public class PanelThongKe extends javax.swing.JPanel {
     }
 
     public void showPieChartInPanel(List<ProductStatistics> list, JPanel pnlBieuDo) {
+        if (lsThongKeMonAn.size() == 0) {
+            model.setRowCount(0);
+            pnMonAn.removeAll();
+            pnMonAn.repaint();
+            Message.warning(null, "Hôm nay chưa bán được món nào");
+            return;
+        }
         pnlBieuDo.removeAll(); // Xoá nội dung cũ
 
         DefaultPieDataset dataset = new DefaultPieDataset();
@@ -416,12 +431,12 @@ public class PanelThongKe extends javax.swing.JPanel {
         if (lsThongKeMonAn.size() == 0) {
             model.setRowCount(0);
             pnMonAn.removeAll();
+            pnMonAn.repaint();
             Message.warning(null, "Vui lòng chọn thời gian khác. Do thời gian này không thể thống kê món ăn được");
             return;
         }
         fillTable();
         showPieChartInPanel(lsThongKeMonAn, pnMonAn);
-
     }//GEN-LAST:event_btnConfirmActionPerformed
     private void hienThiBieuDo() {
         String luaChon = (String) cboThongKe.getSelectedItem();

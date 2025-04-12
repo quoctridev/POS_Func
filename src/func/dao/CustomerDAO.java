@@ -24,7 +24,7 @@ public class CustomerDAO {
     public static void insert(String fullName, String phone) {
         String sql = "INSERT INTO Customer(customer_phone, full_name, password) VALUES(?,?,?)";
         String password = BCrypt.withDefaults().hashToString(10, pass.toCharArray());
-        Database.update(sql, fullName, phone, password);
+        Database.update(sql, phone, fullName, password);
     }
 
     public static List<CustomerEntity> selectAllCustomers() {
@@ -38,7 +38,7 @@ public class CustomerDAO {
                 String fullName = rs.getNString("full_name");
                 String email = rs.getString("email");
                 BigDecimal point = rs.getBigDecimal("point");
-                String phone = rs.getString("phone");
+                String phone = rs.getString("customer_phone");
                 ls.add(new CustomerEntity(phone, fullName, email, customerId, point));
             }
         } catch (SQLException e) {

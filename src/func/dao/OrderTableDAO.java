@@ -19,9 +19,9 @@ public class OrderTableDAO {
 
     public void createOrderTable(OrderTableEntity od) {
         String sql = "INSERT INTO [dbo].[Order_Table] \n"
-                + "([customer_id], [capacity], [phone], [note], [reservation_time], [customer_name])  \n"
-                + "VALUES (?,?,?,?,?,?)";
-        Database.update(sql, od.getCustomerId(), od.getCapacity(), od.getPhone(), od.getNote(), od.getReservationTime(), od.getCustomer_name());
+                + "([customer_id], [capacity], [phone], [note], [reservation_time], [customer_name],[status])  \n"
+                + "VALUES (?,?,?,?,?,?,?)";
+        Database.update(sql, od.getCustomerId(), od.getCapacity(), od.getPhone(), od.getNote(), od.getReservationTime(), od.getCustomer_name(), "pending");
     }
 
     public void updateOrderTable(String status, String id) {
