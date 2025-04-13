@@ -10,7 +10,8 @@ import func.dao.UserDAO;
 import func.entity.UserEntity;
 import func.utils.Auth;
 import func.utils.Message;
-
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -43,7 +44,11 @@ public class DialogDangNhap extends javax.swing.JDialog {
                 + "showCapsLock:true");
 
         getRootPane().setDefaultButton(btnDangNhap);
-
+        setTitle("Đăng nhập");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
     }
 
     /**

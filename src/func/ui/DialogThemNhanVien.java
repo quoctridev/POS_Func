@@ -8,8 +8,10 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import func.dao.UserDAO;
 import func.entity.UserEntity;
 import func.utils.Message;
+import java.awt.Image;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,6 +28,11 @@ public class DialogThemNhanVien extends javax.swing.JDialog {
     public DialogThemNhanVien(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setTitle("Thêm nhân viên");
+        setLocationRelativeTo(null);
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
     }
 
     /**

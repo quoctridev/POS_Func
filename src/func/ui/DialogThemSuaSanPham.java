@@ -40,6 +40,11 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
     }
 
     void addProduct() {
+        setTitle("Thêm sản phẩm");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
         cboDanhMuc.removeAllItems();
         for (CategoriesEntity category : cat) {
             if (category.isIsActive()) {
@@ -49,6 +54,7 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
     }
 
     void fillText() {
+        setTitle("Sửa sản phẩm");
         jButton1.setText("Sửa");
         jLabel6.setText("Sửa Sản Phẩm");
         cboDanhMuc.removeAllItems();

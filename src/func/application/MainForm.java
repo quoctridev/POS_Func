@@ -49,7 +49,7 @@ public class MainForm extends javax.swing.JFrame {
     void init() {
         new DialogDangNhap(this, true).setVisible(true);
         role = Auth.isRole();
-        
+        setTitle("Trang chủ");
         ImageIcon icon = new ImageIcon(getClass().getResource("/func/image/logo.png"));
         Image img = icon.getImage();
         Image smoothImg = img.getScaledInstance(240, 164, Image.SCALE_SMOOTH);
@@ -76,7 +76,7 @@ public class MainForm extends javax.swing.JFrame {
     void cheff() {
         addHoverEffect(jLabel5);
         jLabel5.setText("Quản lí đơn hàng");
-        clickPanel(jLabel5, PanelDonHang.class, "Quản lí đơn hàng");
+        clickPanel(jLabel5, PanelDonHang.class, "Quản lý đơn hàng");
         FlatSVGIcon quanLiDon = new FlatSVGIcon("func/image/receipt.svg").derive(30, 30);
         jLabel5.setIcon(new IconWithHorizontalMargin(quanLiDon, 10));
     }
@@ -95,11 +95,6 @@ public class MainForm extends javax.swing.JFrame {
         clickPanel(jLabel6, PanelChonBan.class, "Danh sách bàn");
         FlatSVGIcon quanLyBan = new FlatSVGIcon("func/image/tablets.svg").derive(30, 30);
         jLabel6.setIcon(new IconWithHorizontalMargin(quanLyBan, 10));
-        
-        jLabel7.setText("Quản lý đơn hàng");
-        clickPanel(jLabel7, PanelDonHang.class, "Quản lý đơn hàng");
-        FlatSVGIcon donHang = new FlatSVGIcon("func/image/receipt.svg").derive(30, 30);
-        jLabel7.setIcon(new IconWithHorizontalMargin(donHang, 10));
         
         jLabel9.setText("Đặt bàn");
         clickPanel(jLabel9, PanelDatBan.class, "Đặt bàn");
@@ -142,12 +137,12 @@ public class MainForm extends javax.swing.JFrame {
         jLabel10.setIcon(new IconWithHorizontalMargin(thongKe, 10));
         
         jLabel11.setText("Quản lí bàn");
-        clickPanel(jLabel11, PanelQuanLyBan.class, "Quản lí bàn");
+        clickPanel(jLabel11, PanelQuanLyBan.class, "Quản lý bàn");
         FlatSVGIcon ban = new FlatSVGIcon("func/image/tablets.svg").derive(30, 30);
         jLabel11.setIcon(new IconWithHorizontalMargin(ban, 10));
         
         jLabel12.setText("Quản lí khách hàng");
-        clickPanel(jLabel12, PanelQuanLyKhachHang.class, "Quản lí khách hàng");
+        clickPanel(jLabel12, PanelQuanLyKhachHang.class, "Quản lý khách hàng");
         jLabel12.setIcon(user); // đã có margin
 
     }

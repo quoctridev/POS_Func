@@ -9,8 +9,10 @@ import func.dao.UserDAO;
 import func.entity.UserEntity;
 import static func.ui.DialogThemNhanVien.isValidPhoneNumber;
 import func.utils.Message;
+import java.awt.Image;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -36,6 +38,11 @@ public class DialogSuaNhanVien extends javax.swing.JDialog {
     }
 
     void fillText() {
+        setTitle("Sửa thông tin nhân viên");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
         txtSoDienThoai.setText(user.getPhone());
         txtTenTaiKhoan.setText(user.getUsername());
         txtHoVaTen.setText(user.getFullName());

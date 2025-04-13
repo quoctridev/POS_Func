@@ -10,10 +10,12 @@ import func.utils.Currency;
 import func.utils.Message;
 import func.utils.XDate;
 import java.awt.Dialog;
+import java.awt.Image;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -43,6 +45,10 @@ public class DialogMaGiamGia extends javax.swing.JDialog {
     }
 
     void init() {
+        setTitle("Áp dụng mã giảm giá");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
         setLocationRelativeTo(null);
         model = (DefaultTableModel) tblMaGiamGia.getModel();
         model.setRowCount(0);

@@ -13,6 +13,7 @@ import func.entity.OrderEntity;
 import func.entity.TableEntity;
 import func.utils.Message;
 import java.awt.Component;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -38,6 +39,7 @@ public class DialogQRThanhToan extends javax.swing.JDialog {
     String urlCheck = null;
     OrderEntity od = null;
     String tableId = null;
+    BigDecimal remainingPoint = BigDecimal.ZERO;
     private Timer paymentCheckTimer;
 
     /**
@@ -72,6 +74,15 @@ public class DialogQRThanhToan extends javax.swing.JDialog {
     public void setOd(OrderEntity od) {
         this.od = od;
         init(String.valueOf(od.getTotalPrice()));
+
+    }
+
+    public BigDecimal getRemainingPoint() {
+        return remainingPoint;
+    }
+
+    public void setRemainingPoint(BigDecimal remainingPoint) {
+        this.remainingPoint = remainingPoint;
     }
 
     public String getTableId() {
@@ -156,6 +167,10 @@ String callAPI(String amount) {
     }
 
     void init(String amount) {
+        setTitle("QR thanh toán");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
         setLocationRelativeTo(null);
         String url = callAPI(amount);
         System.out.println(url);
@@ -219,11 +234,10 @@ String callAPI(String amount) {
                     String phone = od.getCustomerPhone();
                     CustomerEntity customer = CustomerDAO.findCustomerByPhone(phone);
                     if (customer != null) {
-                        BigDecimal point = customer.getPoint();
                         //100k = 1 point
                         BigDecimal pointRatio = new BigDecimal("100000");
                         BigDecimal earnedPoint = od.getTotalPrice().divide(pointRatio, 2, RoundingMode.HALF_UP);
-                        point = point.add(earnedPoint);
+                        BigDecimal point = remainingPoint.add(earnedPoint);
                         customer.setPoint(point);
                         CustomerDAO.updatePoint(point, customer.getCustomerId());
                     }

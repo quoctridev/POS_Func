@@ -8,8 +8,10 @@ import func.dao.BillDAO;
 import func.dto.BillDTO;
 import func.dto.OrderDetailsDTO;
 import func.utils.Currency;
+import java.awt.Image;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -39,6 +41,11 @@ public class DialogChiTietHoaDon extends javax.swing.JDialog {
     }
 
     void init() {
+        setTitle("Chi tiết hoá đơn");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
         model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
         txtTen.setText(bill.getCustomerName() == null ? "Khách vãng lai" : bill.getCustomerName());

@@ -7,6 +7,8 @@ package func.ui;
 import func.dao.OrderOrderDetailDAO;
 import func.dto.OrderOrderDetailDTO;
 import func.utils.Message;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -34,6 +36,11 @@ public class DialogSuaDonHang extends javax.swing.JDialog {
     }
 
     void init() {
+        setTitle("Sửa đơn hàng");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
         txtMonAn.setText(orderDetail.getProductName());
         txtSoBan.setText(orderDetail.getTableName());
         txtKhuVuc.setText(orderDetail.getZoneName());

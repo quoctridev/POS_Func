@@ -9,6 +9,8 @@ import func.dao.UserDAO;
 import func.entity.UserEntity;
 import func.utils.Message;
 import java.awt.Frame;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 /**
@@ -33,6 +35,11 @@ public class DialogQuenMatKhau extends javax.swing.JDialog {
 
             }
         });
+        setTitle("Quên mật khẩu");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
     }
 
     /**

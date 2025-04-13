@@ -16,7 +16,9 @@ import func.entity.OrderDetailEntity;
 import func.entity.OrderEntity;
 import func.entity.TableEntity;
 import func.utils.Message;
+import java.awt.Image;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -40,6 +42,11 @@ public class DialogChiTietMonAn extends javax.swing.JDialog {
     }
 
     void init() {
+        setTitle("Chi tiết món ăn");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
         model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
         int i = 1;

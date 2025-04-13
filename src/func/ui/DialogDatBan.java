@@ -7,6 +7,7 @@ package func.ui;
 import func.dao.OrderTableDAO;
 import func.entity.OrderTableEntity;
 import func.utils.Message;
+import java.awt.Image;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -194,6 +196,11 @@ public class DialogDatBan extends javax.swing.JDialog {
     }
 
     void init() {
+        setTitle("Đặt bàn");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
         dateNgay.setDateFormatString("dd/MM/yyyy");
         dateNgay.setMinSelectableDate(new Date());
     }

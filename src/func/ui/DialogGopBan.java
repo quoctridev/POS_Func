@@ -18,8 +18,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -56,10 +58,17 @@ public class DialogGopBan extends javax.swing.JDialog {
     }
 
     void init() {
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
         if (trangThai == 1) {
             gopBan();
+            setTitle("Gộp bàn");
+
         } else {
             chuyenBan();
+            setTitle("Chuyển bàn");
         }
 
     }

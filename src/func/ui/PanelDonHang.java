@@ -52,6 +52,10 @@ public class PanelDonHang extends javax.swing.JPanel {
             @Override
             public void Delete(int row) {
                 String note = Message.input(null, "Lí do huỷ món");
+                if (note == null || note.trim().isEmpty()) {
+                    Message.warning(null, "Vui lòng nhập lý do huỷ món!");
+                    return;
+                }
                 OrderOrderDetailDTO canceledOrder = new OrderOrderDetailDTO();
                 canceledOrder.setStatus("canceled");
                 canceledOrder.setOrderDetailId(ls.get(row).getOrderDetailId());

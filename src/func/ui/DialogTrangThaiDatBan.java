@@ -6,8 +6,10 @@ package func.ui;
 
 import func.dao.OrderTableDAO;
 import func.entity.OrderTableEntity;
+import java.awt.Image;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -35,6 +37,11 @@ public class DialogTrangThaiDatBan extends javax.swing.JDialog {
     }
 
     void init() {
+        setTitle("Trạng thái đặt bàn");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
         txtChoNgoi.setText(String.valueOf(order.getCapacity()));
         txtSoDienThoai.setText(order.getPhone());
         txtTenKhach.setText(order.getCustomer_name());

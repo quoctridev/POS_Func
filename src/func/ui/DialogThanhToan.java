@@ -23,9 +23,11 @@ import func.utils.Message;
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Frame;
+import java.awt.Image;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -45,6 +47,7 @@ public class DialogThanhToan extends javax.swing.JDialog {
     BigDecimal discount = BigDecimal.ZERO;
     BigDecimal totalDiscount = BigDecimal.ZERO;
     BigDecimal finalAmount = BigDecimal.ZERO;
+    BigDecimal remainingPoint = BigDecimal.ZERO;
     CustomerEntity cus = new CustomerEntity();
 
     /**
@@ -336,7 +339,7 @@ public class DialogThanhToan extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(pnDonHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnMonDaChon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnDonHangLayout.setVerticalGroup(
@@ -468,11 +471,11 @@ public class DialogThanhToan extends javax.swing.JDialog {
         String phone = od.getCustomerPhone();
         CustomerEntity customer = CustomerDAO.findCustomerByPhone(phone);
         if (customer != null) {
-            BigDecimal point = customer.getPoint();
+//            BigDecimal point = customer.getPoint();
             //100k = 1 point
             BigDecimal pointRatio = new BigDecimal("100000");
             BigDecimal earnedPoint = totalAmount.divide(pointRatio, 2, RoundingMode.HALF_UP);
-            point = point.add(earnedPoint);
+            BigDecimal point = remainingPoint.add(earnedPoint);
             customer.setPoint(point);
             CustomerDAO.updatePoint(point, customer.getCustomerId());
         }
@@ -481,13 +484,7 @@ public class DialogThanhToan extends javax.swing.JDialog {
             DialogQRThanhToan qr = new DialogQRThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
             qr.setOd(od);
             qr.setTableId(tableId);
-//            qr.addWindowListener(new WindowAdapter() {
-//                @Override
-//                public void windowClosing(WindowEvent e) {
-//                    qr.getPaymentCheckTimer().stop();
-//                    qr.dispose();
-//                }
-//            });
+            qr.setRemainingPoint(remainingPoint);
             qr.setVisible(true);
         } else { // Thanh toán tiền mặt
             TableDAO tableDAO = new TableDAO();
@@ -529,7 +526,7 @@ public class DialogThanhToan extends javax.swing.JDialog {
 
         BigDecimal customerPoint = cus.getPoint();
         BigDecimal pointValue = customerPoint.multiply(new BigDecimal("10000"));
-        BigDecimal usedPoint = customerPoint;
+        BigDecimal usedPoint = BigDecimal.ZERO;
         BigDecimal pointDiscount;
 
         if (pointValue.compareTo(finalAmount) > 0) {
@@ -543,7 +540,7 @@ public class DialogThanhToan extends javax.swing.JDialog {
         }
 
         totalDiscount = totalDiscount.add(pointDiscount);
-        BigDecimal remainingPoint = customerPoint.subtract(usedPoint);
+        remainingPoint = customerPoint.subtract(usedPoint);
         cus.setPoint(remainingPoint);
 
         txtGiamGia.setText(Currency.formatVND(totalDiscount));
@@ -605,6 +602,11 @@ public class DialogThanhToan extends javax.swing.JDialog {
     }
 
     void init() {
+        setTitle("Thanh toán");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
         jLabel2.setVisible(false);
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -633,7 +635,7 @@ public class DialogThanhToan extends javax.swing.JDialog {
         txtTienHang.setText(String.valueOf(Currency.formatVND(totalAmount)));
         finalAmount = totalAmount.subtract(discount);
         txtTongTien.setText(Currency.formatVND(finalAmount));
-        
+
     }
 
     BigDecimal calculateDiscount(DiscountEntity dc, BigDecimal totalAmount) {

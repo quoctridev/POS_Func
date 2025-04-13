@@ -7,8 +7,10 @@ package func.ui;
 import com.formdev.flatlaf.FlatClientProperties;
 import func.dao.CustomerDAO;
 import func.utils.Message;
+import java.awt.Image;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 
 /**
@@ -30,6 +32,11 @@ public class DialogThongTinKhachHang extends javax.swing.JDialog {
         initComponents();
         txtTenKhach.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Tên khách");
         txtSoDienThoai.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Số điện thoại khách");
+        setTitle("Thông tin khách hàng");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
     }
 
     public void setThem(boolean them) {

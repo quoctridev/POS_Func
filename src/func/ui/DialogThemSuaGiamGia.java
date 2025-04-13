@@ -7,16 +7,18 @@ package func.ui;
 import func.dao.DiscountDAO;
 import func.entity.DiscountEntity;
 import func.utils.Message;
+import java.awt.Image;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.ImageIcon;
 
 /**
  *
  * @author Admin
  */
 public class DialogThemSuaGiamGia extends javax.swing.JDialog {
-
+    
     DiscountEntity discount;
 
     /**
@@ -27,11 +29,11 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
         initComponents();
         setFormatDate();
     }
-
+    
     public DiscountEntity getDiscount() {
         return discount;
     }
-
+    
     public void setDiscount(DiscountEntity discount) {
         this.discount = discount;
         txtGia.setText(String.valueOf(discount.getMaxValue()));
@@ -40,6 +42,12 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
         dateNgayBatDau.setDate(discount.getStartDate());
         dateNgayKetThuc.setDate(discount.getEndDate());
         jButton1.setText("Sửa");
+        jLabel6.setText("Sửa giảm giá");
+        setTitle("Sửa giảm giá");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -99,7 +107,7 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Thêm / Sửa Giảm Giá");
+        jLabel6.setText("Thêm Giảm Giá");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -121,20 +129,20 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtMaGiamGia, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtPhanTram, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtMaGiamGia, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtGia, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtGia, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPhanTram, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -160,22 +168,22 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(txtMaGiamGia, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(dateNgayBatDau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(dateNgayKetThuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtPhanTram, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
+                                .addGap(12, 12, 12)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtGia, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -186,6 +194,11 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     void setFormatDate() {
+        setTitle("Thêm giảm giá");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
         dateNgayBatDau.setDateFormatString("dd/MM/yyyy");
         dateNgayKetThuc.setDateFormatString("dd/MM/yyyy");
         dateNgayKetThuc.setMinSelectableDate(new Date());
@@ -201,13 +214,13 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
             txtMaGiamGia.requestFocus(); // Focus lại ô input
             return;
         }
-
+        
         if (txtPhanTram.getText().trim().isEmpty()) {
             Message.warning(this, "Không được để trống phần trăm");
             txtPhanTram.requestFocus();
             return;
         }
-
+        
         if (discount == null) {
             them();
         } else {
@@ -243,8 +256,6 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
         }
         //</editor-fold>
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -260,20 +271,20 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
             }
         });
     }
-
+    
     void sua() {
         if (txtMaGiamGia.getText().trim().isEmpty()) {
             Message.warning(this, "Không được để trống mã giảm giá");
             txtMaGiamGia.requestFocus(); // Focus lại ô input
             return;
         }
-
+        
         if (txtPhanTram.getText().trim().isEmpty()) {
             Message.warning(this, "Không được để trống phần trăm");
             txtPhanTram.requestFocus();
             return;
         }
-
+        DiscountEntity dis = new DiscountEntity();
         Date startDate = dateNgayBatDau.getDate();
         Date endDate = dateNgayKetThuc.getDate();
         String maGiamGia = txtMaGiamGia.getText();
@@ -286,10 +297,12 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
             Message.warning(null, "Ngày bắt đầu phải nhỏ hơn ngày kết thúc!ngày");
             return;
         }
-        DiscountEntity dis = new DiscountEntity();
+        if (giaToiDa != null && !giaToiDa.trim().isEmpty()) {
+            dis.setMaxValue(new BigDecimal(giaToiDa));
+        }
+        
         dis.setCode(maGiamGia);
         dis.setDiscountId(discount.getDiscountId());
-        dis.setMaxValue(new BigDecimal(giaToiDa));
         dis.setDiscountValue(new BigDecimal(phanTram));
         dis.setStartDate(startDate);
         dis.setEndDate(endDate);
@@ -297,14 +310,14 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
         Message.info(null, "Sửa thành công");
         dispose();
     }
-
+    
     void them() {
         if (txtMaGiamGia.getText().trim().isEmpty()) {
             Message.warning(this, "Không được để trống mã giảm giá");
             txtMaGiamGia.requestFocus(); // Focus lại ô input
             return;
         }
-
+        
         if (txtPhanTram.getText().trim().isEmpty()) {
             Message.warning(this, "Không được để trống phần trăm");
             txtPhanTram.requestFocus();
@@ -342,7 +355,7 @@ public class DialogThemSuaGiamGia extends javax.swing.JDialog {
             Message.info(null, "Thêm thành công");
             dispose();
         }
-
+        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser dateNgayBatDau;

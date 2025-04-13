@@ -39,6 +39,11 @@ public class DialogXemSanPham extends javax.swing.JDialog {
     }
 
     void fillText() {
+        setTitle("Xem sản phẩm");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image logoImg = logo.getImage();
+        setIconImage(logoImg);
+        setLocationRelativeTo(null);
         cboDanhMuc.removeAllItems();
         for (CategoriesEntity category : cat) {
             if (category.isIsActive()) {
