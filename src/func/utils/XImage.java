@@ -35,10 +35,10 @@ public class XImage {
                 .addFormDataPart("image", file.getName(),
                         RequestBody.create(mediaType, file))
                 .build();
-        System.out.println("Uploading file: " + file.getAbsolutePath());
-        System.out.println("File name: " + file.getName());
-        System.out.println("File size: " + file.length());
-        System.out.println("MIME type: " + mediaType);
+//        System.out.println("Uploading file: " + file.getAbsolutePath());
+//        System.out.println("File name: " + file.getName());
+//        System.out.println("File size: " + file.length());
+//        System.out.println("MIME type: " + mediaType);
         Request request = new Request.Builder()
                 .url("http://103.118.28.181:3000/upload")
                 .post(requestBody)

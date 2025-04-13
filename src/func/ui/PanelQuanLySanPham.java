@@ -13,6 +13,7 @@ import func.dao.ProductDAO;
 import func.dto.ProductDTO;
 import func.utils.Currency;
 import func.utils.Message;
+import java.awt.Container;
 import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +54,8 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
             public void Delete(int row) {
                 boolean confirm = Message.confirm(null, "Bạn có muốn xoá sản phẩm này không. Nếu bạn xoá có thể mất sản phẩm trong các hoá đơn");
                 if (confirm) {
-                    System.out.println(pd.get(row).getCategoryId());
                     new ProductDAO().delete(String.valueOf(pd.get(row).getProductId()));
+                    pd.remove(row);
                     Message.info(null, "Đã xoá thành công");
                     fillTable();
                 }

@@ -124,7 +124,7 @@ public class PanelThongKe extends javax.swing.JPanel {
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
         );
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel2.setText("Thống kế theo:");
 
         javax.swing.GroupLayout pnDoanhThuLayout = new javax.swing.GroupLayout(pnDoanhThu);
@@ -275,7 +275,7 @@ public class PanelThongKe extends javax.swing.JPanel {
 
         jPanel4.setBackground(new java.awt.Color(137, 137, 229));
 
-        jLabel3.setFont(new java.awt.Font("Helvetica Neue", 1, 36)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("THỐNG KÊ MÓN ĂN");
