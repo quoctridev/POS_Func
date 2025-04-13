@@ -38,7 +38,7 @@ public class CustomerDAO {
                 String fullName = rs.getNString("full_name");
                 String email = rs.getString("email");
                 BigDecimal point = rs.getBigDecimal("point");
-                String phone = rs.getString("phone");
+                String phone = rs.getString("customer_phone");
                 ls.add(new CustomerEntity(phone, fullName, email, customerId, point));
             }
         } catch (SQLException e) {
