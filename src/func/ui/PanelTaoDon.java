@@ -17,7 +17,6 @@ import func.entity.ProductEntity;
 import func.utils.Currency;
 import func.utils.Message;
 import func.utils.XImage;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
@@ -25,20 +24,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.swing.AbstractCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 
 /**
  *
@@ -51,10 +43,15 @@ public class PanelTaoDon extends javax.swing.JPanel {
     private DefaultTableModel model;
     private String table;
     private String order;
+    private MainForm mainForm;
 
     public PanelTaoDon() {
         initComponents();
 
+    }
+
+    public void setMainForm(MainForm mainForm) {
+        this.mainForm = mainForm;
     }
 
     public String getTable() {

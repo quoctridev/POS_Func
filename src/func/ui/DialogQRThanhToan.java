@@ -11,6 +11,7 @@ import func.dao.TableDAO;
 import func.entity.CustomerEntity;
 import func.entity.OrderEntity;
 import func.entity.TableEntity;
+import func.utils.Currency;
 import func.utils.Message;
 import java.awt.Component;
 import java.awt.Image;
@@ -25,6 +26,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
@@ -41,6 +43,8 @@ public class DialogQRThanhToan extends javax.swing.JDialog {
     String tableId = null;
     BigDecimal remainingPoint = BigDecimal.ZERO;
     private Timer paymentCheckTimer;
+    String tongTien = null;
+    private MainForm mainForm;
 
     /**
      * Creates new form JDialogQRThanhToan
@@ -59,8 +63,16 @@ public class DialogQRThanhToan extends javax.swing.JDialog {
         });
     }
 
+    public void setMainForm(MainForm mainForm) {
+        this.mainForm = mainForm;
+    }
+
     public OrderEntity getOd() {
         return od;
+    }
+
+    public void setTongTien(String tongTien) {
+        this.tongTien = tongTien;
     }
 
     public Timer getPaymentCheckTimer() {
@@ -73,7 +85,7 @@ public class DialogQRThanhToan extends javax.swing.JDialog {
 
     public void setOd(OrderEntity od) {
         this.od = od;
-        init(String.valueOf(od.getTotalPrice()));
+        init(Currency.parseVNDToString(tongTien));
 
     }
 
@@ -241,17 +253,11 @@ String callAPI(String amount) {
                         customer.setPoint(point);
                         CustomerDAO.updatePoint(point, customer.getCustomerId());
                     }
-                    if (tableDAO.selectTableNumberByOrderId(String.valueOf(od.getOrderId())).size() > 0) {
-                        for (String table : tableDAO.selectTableNumberByOrderId(String.valueOf(od.getOrderId()))) {
-                            TableEntity tb = new TableEntity();
-                            tb.setStatus("available");
-                            tb.setTableId(Integer.parseInt(table));
-                            tableDAO.updateTableStatus(tb);
-                        }
-                    } else {
+                    List<String> tables = tableDAO.selectTableNumberByOrderId(String.valueOf(od.getOrderId()));
+                    for (String table : tables) {
                         TableEntity tb = new TableEntity();
                         tb.setStatus("available");
-                        tb.setTableId(Integer.parseInt(tableId));
+                        tb.setTableId(Integer.parseInt(table));
                         tableDAO.updateTableStatus(tb);
                     }
                     // Tìm form thanh toán ban đầu và đóng nó
@@ -260,16 +266,6 @@ String callAPI(String amount) {
                         ((JDialog) parent).dispose();
                     }
 
-                    // Hỏi về in hóa đơn
-                    boolean confirm = Message.confirm(null, "Bạn có muốn in hoá đơn không");
-                    if (confirm) {
-                        // Xử lý in hóa đơn
-                    }
-
-                    // Chuyển về trang chủ
-                    MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(parent);
-                    PanelChonBan chonBan = new PanelChonBan();
-                    mainForm.showPanel(chonBan);
                     dispose();
                 }
             }

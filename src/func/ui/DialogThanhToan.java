@@ -20,15 +20,24 @@ import func.entity.OrderEntity;
 import func.entity.TableEntity;
 import func.utils.Currency;
 import func.utils.Message;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Image;
+import java.awt.print.PrinterException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
@@ -49,6 +58,7 @@ public class DialogThanhToan extends javax.swing.JDialog {
     BigDecimal finalAmount = BigDecimal.ZERO;
     BigDecimal remainingPoint = BigDecimal.ZERO;
     CustomerEntity cus = new CustomerEntity();
+    private MainForm mainForm;
 
     /**
      * Creates new form JDialogThanhToan
@@ -57,6 +67,10 @@ public class DialogThanhToan extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
+    }
+
+    public void setMainForm(MainForm mainForm) {
+        this.mainForm = mainForm;
     }
 
     public String getTableId() {
@@ -463,52 +477,79 @@ public class DialogThanhToan extends javax.swing.JDialog {
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
         OrderEntity od = new OrderDAO().selectById(orderId);
+        updateOrderPaymentDetails(od);
+
+        // Cập nhật điểm khách hàng
+        String phone = od.getCustomerPhone();
+        CustomerEntity customer = CustomerDAO.findCustomerByPhone(phone);
+        if (customer != null) {
+            updateCustomerPoints(customer);
+        }
+
+        // Xử lý thanh toán
+        if (getSelectedPayment() == 2) { // Thanh toán QR
+            handleQRPayment(od);
+        } else { // Thanh toán tiền mặt
+            handleCashPayment(od);
+        }
+    }//GEN-LAST:event_btnThanhToanActionPerformed
+    private void updateOrderPaymentDetails(OrderEntity od) {
         od.setPaymentMethod(getSelectedPayment() == 1 ? "cash" : "qr-code");
         od.setStatus("completed");
         od.setIsPaid(true);
         od.setTotalPrice(totalAmount);
         od.setDiscountId(dc.getDiscountId());
-        String phone = od.getCustomerPhone();
-        CustomerEntity customer = CustomerDAO.findCustomerByPhone(phone);
-        if (customer != null) {
-//            BigDecimal point = customer.getPoint();
-            //100k = 1 point
-            BigDecimal pointRatio = new BigDecimal("100000");
-            BigDecimal earnedPoint = totalAmount.divide(pointRatio, 2, RoundingMode.HALF_UP);
-            BigDecimal point = remainingPoint.add(earnedPoint);
-            customer.setPoint(point);
-            CustomerDAO.updatePoint(point, customer.getCustomerId());
+        new OrderDAO().update(od);
+    }
+
+    private void updateCustomerPoints(CustomerEntity customer) {
+        BigDecimal pointRatio = new BigDecimal("100000");
+        BigDecimal earnedPoint = totalAmount.divide(pointRatio, 2, RoundingMode.HALF_UP);
+        BigDecimal point = remainingPoint.add(earnedPoint);
+        customer.setPoint(point);
+        CustomerDAO.updatePoint(point, customer.getCustomerId());
+    }
+
+    private void handleQRPayment(OrderEntity od) {
+        DialogQRThanhToan qr = new DialogQRThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
+        qr.setTongTien(txtTongTien.getText());
+        qr.setOd(od);
+        qr.setTableId(tableId);
+        qr.setRemainingPoint(remainingPoint);
+        qr.setVisible(true);
+
+        if (Message.confirm(null, "Bạn có muốn in hoá đơn không")) {
+            billPrint();
         }
 
-        if (getSelectedPayment() == 2) { // Thanh toán QR
-            DialogQRThanhToan qr = new DialogQRThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
-            qr.setOd(od);
-            qr.setTableId(tableId);
-            qr.setRemainingPoint(remainingPoint);
-            qr.setVisible(true);
-        } else { // Thanh toán tiền mặt
-            TableDAO tableDAO = new TableDAO();
-            new OrderDAO().update(od);
-            List<String> tables = tableDAO.selectTableNumberByOrderId(orderId);
-            for (String table : tables) {
-                TableEntity tb = new TableEntity();
-                tb.setStatus("available");
-                tb.setTableId(Integer.parseInt(table));
-                tableDAO.updateTableStatus(tb);
-            }
-            dispose();
-            boolean confirm = Message.confirm(null, "Bạn có muốn in hoá đơn không");
-            if (confirm) {
+        navigateToTableSelectionPanel();
+    }
 
-            }
-            MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
-            PanelChonBan chonBan = new PanelChonBan();
-            mainForm.showPanel(chonBan);
+    private void handleCashPayment(OrderEntity od) {
+        TableDAO tableDAO = new TableDAO();
+        List<String> tables = tableDAO.selectTableNumberByOrderId(orderId);
+
+        // Cập nhật trạng thái bàn
+        for (String table : tables) {
+            TableEntity tb = new TableEntity();
+            tb.setStatus("available");
+            tb.setTableId(Integer.parseInt(table));
+            tableDAO.updateTableStatus(tb);
         }
 
+        if (Message.confirm(null, "Bạn có muốn in hoá đơn không")) {
+            billPrint();
+        }
 
-    }//GEN-LAST:event_btnThanhToanActionPerformed
+        navigateToTableSelectionPanel();
+    }
 
+    private void navigateToTableSelectionPanel() {
+        dispose();
+        MainForm mainForm = (MainForm) SwingUtilities.getWindowAncestor(this);
+        PanelChonBan chonBan = new PanelChonBan();
+        mainForm.showPanel(chonBan);
+    }
     private void btnQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuayLaiActionPerformed
         // TODO add your handling code here:
         boolean confirm = Message.confirm(this, "Bạn có chắc quay lại không");
@@ -654,6 +695,74 @@ public class DialogThanhToan extends javax.swing.JDialog {
         return discount;
     }
 
+    public void billPrint() {
+        try {
+            JTextArea bill = new JTextArea();
+            bill.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("                      FUNC RESTAURANT\n");
+            sb.append("271 Lê Thánh Tông,Ngô Quyền, Hải Phòng\tPhone: 0793 391 878\n");
+            sb.append("------------------------------------------------------------\n");
+            sb.append(String.format(" %-25s %8s %12s %12s\n", "Tên món", "SL", "Đơn giá", "Thành tiền"));
+            sb.append("------------------------------------------------------------\n");
+
+            DefaultTableModel df = (DefaultTableModel) tblThanhToan.getModel();
+            for (int i = 0; i < df.getRowCount(); i++) {
+                String name = df.getValueAt(i, 1).toString();
+                String qtyStr = df.getValueAt(i, 2).toString();
+                String priceStr = df.getValueAt(i, 3).toString();
+                priceStr = priceStr.replace(" VND", "").replace(".", "").trim();
+
+                int qty = Integer.parseInt(qtyStr);
+                double price = Double.parseDouble(priceStr);
+                double total = qty * price;
+
+                sb.append(String.format(" %-25s %8d %,12.0f %,12.0f\n", name, qty, price, total));
+            }
+
+            sb.append("------------------------------------------------------------\n");
+            sb.append(String.format(" %-30s %22s \n", "Tạm tính:", txtTienHang.getText()));
+            sb.append(String.format(" %-30s %22s \n", "Giảm giá:", txtGiamGia.getText()));
+            sb.append(String.format(" %-30s %22s \n", "Tổng tiền:", txtTongTien.getText()));
+            sb.append("============================================================\n");
+            sb.append("              Cảm ơn quý khách đã ủng hộ!\n");
+            sb.append("------------------------------------------------------------\n");
+            sb.append("               Software by Quốc Trí\n");
+
+            bill.setText(sb.toString());
+
+            // Hiển thị dialog xem trước
+            JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Xem trước hóa đơn", true);
+            dialog.setSize(550, 600);
+            dialog.setLocationRelativeTo(null);
+            dialog.setLayout(new BorderLayout());
+
+            JTextArea billView = new JTextArea();
+            billView.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            billView.setEditable(false);
+            billView.setText(bill.getText());
+
+            JScrollPane scrollPane = new JScrollPane(billView);
+            dialog.add(scrollPane, BorderLayout.CENTER);
+
+            JButton btnClose = new JButton("Đóng");
+            btnClose.addActionListener(e -> dialog.dispose());
+
+            JPanel bottomPanel = new JPanel();
+            bottomPanel.add(btnClose);
+            dialog.add(bottomPanel, BorderLayout.SOUTH);
+
+            dialog.setVisible(true);
+
+            bill.print();
+
+        } catch (PrinterException ex) {
+            ex.printStackTrace();
+            Message.warning(null, "Không thể in hóa đơn. Hiển thị bản xem trước.");
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApDung;
     private javax.swing.JButton btnQuayLai;

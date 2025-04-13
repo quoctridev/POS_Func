@@ -32,6 +32,7 @@ public class PanelChonBan extends javax.swing.JPanel {
     private List<String> zone;
     private List<TableEntity> table;
     OrderTableEntity datTruoc;
+    private MainForm mainForm;
 
     /**
      * Creates new form JDialogChonBan
@@ -40,6 +41,10 @@ public class PanelChonBan extends javax.swing.JPanel {
         initComponents();
         selectZone();
 
+    }
+
+    public void setMainForm(MainForm mainForm) {
+        this.mainForm = mainForm;
     }
 
     public OrderTableEntity getDatTruoc() {

@@ -32,9 +32,9 @@ import javax.swing.JPanel;
  * @author quoca
  */
 public class MainForm extends javax.swing.JFrame {
-    
+
     int role;
-    
+
     private static MainForm app;
 
     /**
@@ -43,9 +43,9 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
         init();
-        
+
     }
-    
+
     void init() {
         new DialogDangNhap(this, true).setVisible(true);
         role = Auth.isRole();
@@ -62,17 +62,17 @@ public class MainForm extends javax.swing.JFrame {
             case 2:
                 cashier();
                 break;
-            
+
             case 3:
                 cheff();
                 break;
-            
+
         }
         FlatSVGIcon danxuat = new FlatSVGIcon("func/image/logout.svg").derive(25, 30);
         dangxuat.setIcon(new IconWithHorizontalMargin(danxuat, 10));
-        
+
     }
-    
+
     void cheff() {
         addHoverEffect(jLabel5);
         jLabel5.setText("Quản lí đơn hàng");
@@ -80,28 +80,27 @@ public class MainForm extends javax.swing.JFrame {
         FlatSVGIcon quanLiDon = new FlatSVGIcon("func/image/receipt.svg").derive(30, 30);
         jLabel5.setIcon(new IconWithHorizontalMargin(quanLiDon, 10));
     }
-    
+
     void cashier() {
         addHoverEffect(jLabel5);
         addHoverEffect(jLabel6);
-        addHoverEffect(jLabel7);
         addHoverEffect(jLabel9);
         jLabel5.setText("Quản lý hóa đơn");
         clickPanel(jLabel5, PanelHoaDon.class, "Quản lý hóa đơn");
         FlatSVGIcon hoaDon = new FlatSVGIcon("func/image/invoice.svg").derive(30, 30);
         jLabel5.setIcon(new IconWithHorizontalMargin(hoaDon, 10));
-        
+
         jLabel6.setText("Danh sách bàn");
         clickPanel(jLabel6, PanelChonBan.class, "Danh sách bàn");
         FlatSVGIcon quanLyBan = new FlatSVGIcon("func/image/tablets.svg").derive(30, 30);
         jLabel6.setIcon(new IconWithHorizontalMargin(quanLyBan, 10));
-        
+
         jLabel9.setText("Đặt bàn");
         clickPanel(jLabel9, PanelDatBan.class, "Đặt bàn");
         FlatSVGIcon datBan = new FlatSVGIcon("func/image/user-plus.svg").derive(30, 30);
         jLabel9.setIcon(new IconWithHorizontalMargin(datBan, 10));
     }
-    
+
     void admin() {
         addHoverEffect(jLabel5);
         addHoverEffect(jLabel6);
@@ -115,38 +114,38 @@ public class MainForm extends javax.swing.JFrame {
         FlatSVGIcon users = new FlatSVGIcon("func/image/users.svg").derive(30, 30);
         Icon user = new IconWithHorizontalMargin(users, 10);
         jLabel5.setIcon(user);
-        
+
         jLabel6.setText("Quản lý danh mục");
         clickPanel(jLabel6, PanelQuanLyDanhMuc.class, "Quản lý danh mục");
         FlatSVGIcon danhMuc = new FlatSVGIcon("func/image/list.svg").derive(30, 30);
         jLabel6.setIcon(new IconWithHorizontalMargin(danhMuc, 10));
-        
+
         jLabel7.setText("Quản lý sản phẩm");
         clickPanel(jLabel7, PanelQuanLySanPham.class, "Quản lý sản phẩm");
         FlatSVGIcon sanPham = new FlatSVGIcon("func/image/cart.svg").derive(30, 30);
         jLabel7.setIcon(new IconWithHorizontalMargin(sanPham, 10));
-        
+
         jLabel9.setText("Quản lý giảm giá");
         clickPanel(jLabel9, PanelQuanLyGiamGia.class, "Quản lý giảm giá");
         FlatSVGIcon giamGia = new FlatSVGIcon("func/image/percent.svg").derive(25, 30);
         jLabel9.setIcon(new IconWithHorizontalMargin(giamGia, 10));
-        
+
         jLabel10.setText("Thống kê");
         clickPanel(jLabel10, PanelThongKe.class, "Thống kê");
         FlatSVGIcon thongKe = new FlatSVGIcon("func/image/chart.svg").derive(30, 30);
         jLabel10.setIcon(new IconWithHorizontalMargin(thongKe, 10));
-        
+
         jLabel11.setText("Quản lí bàn");
         clickPanel(jLabel11, PanelQuanLyBan.class, "Quản lý bàn");
         FlatSVGIcon ban = new FlatSVGIcon("func/image/tablets.svg").derive(30, 30);
         jLabel11.setIcon(new IconWithHorizontalMargin(ban, 10));
-        
+
         jLabel12.setText("Quản lí khách hàng");
         clickPanel(jLabel12, PanelQuanLyKhachHang.class, "Quản lý khách hàng");
         jLabel12.setIcon(user); // đã có margin
 
     }
-    
+
     private void addHoverEffect(JLabel label) {
         Color defaultColor = label.getBackground();  // màu nền gốc
         Color hoverColor = new Color(220, 220, 220);  // màu khi hover
@@ -160,25 +159,25 @@ public class MainForm extends javax.swing.JFrame {
                 label.setBackground(hoverColor);
                 label.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
-            
+
             @Override
             public void mouseExited(MouseEvent e) {
                 label.setBackground(defaultColor);
                 label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
-            
+
             @Override
             public void mousePressed(MouseEvent e) {
                 label.setBackground(clickColor);
             }
-            
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 label.setBackground(hoverColor);
             }
         });
     }
-    
+
     private void clickPanel(javax.swing.JLabel label, Class<? extends JPanel> panelClass, String title) {
         label.addMouseListener(new MouseAdapter() {
             @Override
@@ -193,14 +192,14 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public void showPanel(JPanel panel) {
         pnlMain.removeAll();
         pnlMain.setLayout(null); // Không sử dụng layout manager
 
         // Đặt kích thước và vị trí cho panel
         panel.setBounds(0, 0, pnlMain.getWidth(), pnlMain.getHeight());
-        
+
         pnlMain.add(panel);
         pnlMain.revalidate(); // Cập nhật giao diện
         pnlMain.repaint(); // Vẽ lại giao diện
@@ -371,9 +370,9 @@ public class MainForm extends javax.swing.JFrame {
                 java.awt.EventQueue.invokeLater(() -> {
                     app = new MainForm();
                     app.setVisible(true);
-                    
+
                 });
-                
+
             }
         });
     }
