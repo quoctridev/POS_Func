@@ -26,7 +26,6 @@ public class DialogMaGiamGia extends javax.swing.JDialog {
     DefaultTableModel model;
     List<DiscountEntity> ls;
     private DiscountEntity selectedDiscount;
-    LocalDate currentDate = LocalDate.now();
 
     /**
      * Creates new form JDialogMaGiamGia
@@ -50,8 +49,12 @@ public class DialogMaGiamGia extends javax.swing.JDialog {
         ls = new DiscountDAO().selectAll();
         int i = 1;
         for (DiscountEntity dc : ls) {
+            String maxValue = "";
+            if (dc.getMaxValue() != null) {
+                maxValue = Currency.formatVND(dc.getMaxValue());
+            }
             model.addRow(new Object[]{
-                i, dc.getDiscountValue() + "%", Currency.formatVND(dc.getMaxValue()), XDate.toString(dc.getStartDate(), "dd/MM/YYYY"), XDate.toString(dc.getEndDate(), "dd/MM/YYYY")
+                i, dc.getDiscountValue() + "%", maxValue, XDate.toString(dc.getStartDate(), "dd/MM/YYYY"), XDate.toString(dc.getEndDate(), "dd/MM/YYYY")
             });
             i++;
         }

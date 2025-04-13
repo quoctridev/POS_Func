@@ -206,7 +206,7 @@ public class PanelChonBan extends javax.swing.JPanel {
             jButtonCategory.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Ví dụ: Hiển thị danh sách món theo danh mục
+                    // Ví dụ: Hiển thị danh sách bàn theo khu vực
                     selectTableByZone(zone);
                 }
             });
@@ -225,7 +225,7 @@ public class PanelChonBan extends javax.swing.JPanel {
         table = new TableDAO().selectByZone(id);
         pnBan.removeAll();
         pnBan.updateUI();
-        JPanel panelRecipe = new JPanel(new java.awt.GridLayout(0, 4, 10, 5));
+        JPanel panelRecipe = new JPanel(new java.awt.GridLayout(0, 5, 30, 10));
         JScrollPane mainScrollPane = new JScrollPane();
 
         for (TableEntity tb : table) {
