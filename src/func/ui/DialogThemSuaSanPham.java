@@ -50,6 +50,7 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
 
     void fillText() {
         jButton1.setText("Sửa");
+        jLabel6.setText("Sửa Sản Phẩm");
         cboDanhMuc.removeAllItems();
         for (CategoriesEntity category : cat) {
             if (category.isIsActive()) {
@@ -154,7 +155,7 @@ public class DialogThemSuaSanPham extends javax.swing.JDialog {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Thêm / Sửa Sản Phẩm");
+        jLabel6.setText("Thêm Sản Phẩm");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

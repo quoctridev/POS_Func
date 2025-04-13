@@ -225,7 +225,7 @@
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Th&#xea;m / S&#x1eed;a S&#x1ea3;n Ph&#x1ea9;m"/>
+            <Property name="text" type="java.lang.String" value="Th&#xea;m S&#x1ea3;n Ph&#x1ea9;m"/>
           </Properties>
         </Component>
       </SubComponents>
