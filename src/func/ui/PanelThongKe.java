@@ -19,6 +19,8 @@ import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
@@ -50,6 +52,10 @@ public class PanelThongKe extends javax.swing.JPanel {
      */
     public PanelThongKe() {
         initComponents();
+        init();
+    }
+
+    void init() {
         hienThiBieuDo();
         Date now = new Date();
         selectDate.setDate(now);
@@ -65,6 +71,8 @@ public class PanelThongKe extends javax.swing.JPanel {
         fillTable();
         showPieChartInPanel(lsThongKeMonAn, pnMonAn);
 
+//        ImageIcon icon = new ImageIcon("src/assets/icon.png");
+//        setIconImage(icon.getImage());
     }
 
     /**
@@ -173,10 +181,7 @@ public class PanelThongKe extends javax.swing.JPanel {
 
         tblDanhSach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Tên sản phẩm", "Số lượng", "Thành tiền"
@@ -241,21 +246,19 @@ public class PanelThongKe extends javax.swing.JPanel {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cboChonThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cboChonThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnConfirm)
-                        .addContainerGap(468, Short.MAX_VALUE))
-                    .addComponent(pnMonAn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(btnConfirm)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnMonAn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -371,7 +374,7 @@ public class PanelThongKe extends javax.swing.JPanel {
     }
 
     public void showPieChartInPanel(List<ProductStatistics> list, JPanel pnlBieuDo) {
-        if (lsThongKeMonAn.size() == 0) {
+        if (list == null || list.isEmpty()) {
             model.setRowCount(0);
             pnMonAn.removeAll();
             pnMonAn.repaint();
@@ -395,6 +398,8 @@ public class PanelThongKe extends javax.swing.JPanel {
         plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0} ({2})"));
         plot.setBackgroundPaint(Color.WHITE);
         plot.setOutlineVisible(false);
+        plot.setSimpleLabels(true);
+        plot.setShadowPaint(Color.GRAY);
 
         // Bảng màu đẹp cho tối đa 5 phần
         Color[] colors = {
@@ -411,12 +416,12 @@ public class PanelThongKe extends javax.swing.JPanel {
         }
 
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(671, 532));
         chartPanel.setMouseWheelEnabled(true);
+        chartPanel.setPreferredSize(new Dimension(602, 582));
 
         pnlBieuDo.setLayout(new java.awt.BorderLayout());
         pnlBieuDo.add(chartPanel, java.awt.BorderLayout.CENTER);
-        pnlBieuDo.validate();
+        pnlBieuDo.revalidate();
         pnlBieuDo.repaint();
     }
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
@@ -484,16 +489,38 @@ public class PanelThongKe extends javax.swing.JPanel {
         for (int i = 0; i < dataset.getRowCount(); i++) {
             String rowKey = (String) dataset.getRowKey(i);
             if (rowKey.equals("Đơn hoàn thành")) {
-                renderer.setSeriesPaint(i, new Color(52, 152, 219)); // Xanh - Hoàn thành
+                renderer.setSeriesPaint(i, new Color(52, 152, 219)); // Xanh
             } else if (rowKey.equals("Đơn bị huỷ")) {
-                renderer.setSeriesPaint(i, new Color(231, 76, 60));  // Đỏ - Bị huỷ
+                renderer.setSeriesPaint(i, new Color(231, 76, 60));  // Đỏ
             }
         }
         renderer.setBarPainter(new StandardBarPainter());
 
-        // Tạo ChartPanel
+        // Tạo ChartPanel với chiều rộng động tùy vào số lượng cột
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(981, 409));
+        int columnWidth = 80; // Chiều rộng mỗi cột
+        int width = Math.max(981, dataset.getColumnCount() * columnWidth); // Đảm bảo đủ không gian cuộn
+        chartPanel.setPreferredSize(new Dimension(width, 409));
+        chartPanel.setMouseWheelEnabled(true);
+        chartPanel.setMouseZoomable(false); // Tắt zoom khi lăn chuột
+
+        // Đặt ChartPanel vào JScrollPane để cuộn ngang
+        JScrollPane scrollPane = new JScrollPane(chartPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setPreferredSize(new Dimension(981, 409));
+
+        // Sự kiện cuộn ngang bằng chuột
+        chartPanel.addMouseWheelListener(e -> {
+            JScrollBar bar = scrollPane.getHorizontalScrollBar();
+            int amount = e.getWheelRotation();
+            if (amount < 0) {
+                bar.setValue(bar.getValue() - bar.getUnitIncrement());  // Cuộn sang trái
+            } else {
+                bar.setValue(bar.getValue() + bar.getUnitIncrement());  // Cuộn sang phải
+            }
+            e.consume(); // Ngăn chặn zoom mặc định
+        });
+
+        // Bắt sự kiện click trên biểu đồ
         chartPanel.addChartMouseListener(new ChartMouseListener() {
             @Override
             public void chartMouseClicked(ChartMouseEvent event) {
@@ -501,8 +528,6 @@ public class PanelThongKe extends javax.swing.JPanel {
                 if (entity instanceof CategoryItemEntity categoryEntity) {
                     String selectedDate = categoryEntity.getColumnKey().toString();
 
-                    // Xác định kiểu thống kê
-                    String luaChon = (String) cboThongKe.getSelectedItem();
                     String type = switch (luaChon) {
                         case "Ngày" ->
                             "day";
@@ -514,7 +539,6 @@ public class PanelThongKe extends javax.swing.JPanel {
                             "year";
                     };
 
-                    // Hiển thị lựa chọn biểu đồ khi chọn "Ngày"
                     if (type.equals("day")) {
                         String[] options = {"Phương thức thanh toán trong ngày", "Xem doanh thu theo ca"};
                         int choice = JOptionPane.showOptionDialog(
@@ -534,7 +558,6 @@ public class PanelThongKe extends javax.swing.JPanel {
                             hienThiBieuDoTheoCa(selectedDate);
                         }
                     } else {
-                        System.out.println(selectedDate);
                         hienThiPieChart(selectedDate, type);
                     }
                 }
@@ -545,10 +568,10 @@ public class PanelThongKe extends javax.swing.JPanel {
             }
         });
 
-        // Hiển thị biểu đồ
+        // Hiển thị lên panel
         pnDoanhThu.removeAll();
         pnDoanhThu.setLayout(new BorderLayout());
-        pnDoanhThu.add(chartPanel, BorderLayout.CENTER);
+        pnDoanhThu.add(scrollPane, BorderLayout.CENTER);
         pnDoanhThu.revalidate();
         pnDoanhThu.repaint();
     }
