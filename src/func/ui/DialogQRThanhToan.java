@@ -114,7 +114,7 @@ public class DialogQRThanhToan extends javax.swing.JDialog {
 String callAPI(String amount) {
         try {
             // URL API backend
-            URL url = new URL("http://localhost:3000/create-payment/");
+            URL url = new URL("http://103.118.28.181:3000/create-payment/");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             // Thiết lập phương thức POST
@@ -184,7 +184,7 @@ String callAPI(String amount) {
 
     String getAPI() {
         try {
-            String url = "http://localhost:3000/get-payment/" + urlCheck; // URL API
+            String url = "http://103.118.28.181:3000/get-payment/" + urlCheck; // URL API
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json"); // Đặt header

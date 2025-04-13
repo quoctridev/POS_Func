@@ -40,7 +40,7 @@ public class XImage {
         System.out.println("File size: " + file.length());
         System.out.println("MIME type: " + mediaType);
         Request request = new Request.Builder()
-                .url("http://localhost:3000/upload")
+                .url("http://103.118.28.181:3000/upload")
                 .post(requestBody)
                 .build();
 
@@ -60,7 +60,7 @@ public class XImage {
     public static ImageIcon getImageIconFromServerWithOkHttp(String fileName) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://localhost:3000/images/" + fileName)
+                .url("http://103.118.28.181:3000/images/" + fileName)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -89,7 +89,7 @@ public class XImage {
 
         // Tạo yêu cầu DELETE
         Request request = new Request.Builder()
-                .url("http://localhost:3000" + "/delete/" + filename) // URL với tên file cần xóa
+                .url("http://103.118.28.181:3000" + "/delete/" + filename) // URL với tên file cần xóa
                 .delete() // Phương thức DELETE
                 .build();
 
