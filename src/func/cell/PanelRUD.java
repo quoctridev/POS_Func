@@ -4,11 +4,8 @@
  */
 package func.cell;
 
-import func.ui.JDialogSuaHoaDon;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.SwingUtilities;
 
 public class PanelRUD extends javax.swing.JPanel {
 
@@ -30,7 +27,12 @@ public class PanelRUD extends javax.swing.JPanel {
             public void actionPerformed(ActionEvent e) {
                 event.Delete(row);
             }
-
+        });
+        acbXem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                event.View(row);
+            }
         });
     }
 

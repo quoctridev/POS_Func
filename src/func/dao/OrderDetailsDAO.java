@@ -12,13 +12,14 @@ public class OrderDetailsDAO {
 
     public List<OrderDetailsDTO> selectById(String id) {
         String sql = "         SELECT \n"
-                + "                    p.product_name, \n"
-                + "                  quantity, \n"
-                + "                    od.price, od.product_id\n"
-                + "                FROM OrderDetails od\n"
-                + "                JOIN Products p ON od.product_id = p.product_id\n"
-                + "                JOIN Orders o ON od.order_id = o.order_id\n"
-                + "                WHERE od.order_id = ? and od.[status] != 'canceled'";
+                + "                                    p.product_name, \n"
+                + "                                 SUM(od.quantity) as quantity, \n"
+                + "                                    od.price, od.product_id\n"
+                + "                                FROM OrderDetails od\n"
+                + "                                JOIN Products p ON od.product_id = p.product_id\n"
+                + "                                JOIN Orders o ON od.order_id = o.order_id\n"
+                + "                                WHERE od.order_id = ? and od.[status] != 'canceled'\n"
+                + "                                GROUP BY p.product_name, od.price, od.product_id";
         return selectBySql(sql, id);
     }
 
@@ -55,8 +56,8 @@ public class OrderDetailsDAO {
 
         // Nếu tổng số lượng trong OrderDetails nhỏ hơn số lượng cần đặt, thì thêm từng bản ghi
         while (orderedQuantity < od.getQuantity()) {
-            String sql = "INSERT INTO OrderDetails (order_id, product_id, quantity, price, note, status, created_at)\n"
-                    + "VALUES (?, ?, ?, ?, ?, ?, GETDATE())";
+            String sql = "INSERT INTO OrderDetails (order_id, product_id, quantity, price, note, status)\n"
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
 
             Database.update(sql, od.getOrderId(), od.getProductId(), 1, od.getPrice(), od.getNote(), "pending");
 

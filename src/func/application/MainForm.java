@@ -1,24 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package func.application;
 
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import func.ui.JDialogDangNhap;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+import func.ui.DialogDangNhap;
 import func.ui.PanelChonBan;
-import func.ui.PanelDanhSachDonHang;
-import func.ui.PanelTaoDon;
+import func.ui.PanelDatBan;
+import func.ui.PanelDonHang;
+import func.ui.PanelHoaDon;
+import func.ui.PanelQuanLyBan;
 import func.ui.PanelQuanLyDanhMuc;
 import func.ui.PanelQuanLyGiamGia;
-import func.ui.PanelQuanLyHoaDon;
+import func.ui.PanelQuanLyKhachHang;
 import func.ui.PanelQuanLySanPham;
 import func.ui.PanelThongKe;
-import func.ui.QuanLyNhanVienForm;
+import func.ui.PanelQuanLyNhanVien;
 import func.utils.Auth;
+import func.utils.IconWithHorizontalMargin;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -41,42 +47,148 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     void init() {
-        new JDialogDangNhap(this, true).setVisible(true);
+        new DialogDangNhap(this, true).setVisible(true);
         role = Auth.isRole();
+        setTitle("Trang chủ");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/func/image/logo.png"));
+        Image img = icon.getImage();
+        Image smoothImg = img.getScaledInstance(240, 164, Image.SCALE_SMOOTH);
+        logo.setIcon(new ImageIcon(smoothImg));
+        setIconImage(img);
         switch (role) {
             case 1:
-                jLabel5.setText("Quản lý nhân viên");
-                clickPanel(jLabel5, new QuanLyNhanVienForm());
-                jLabel6.setText("Quản lý danh mục");
-                clickPanel(jLabel6, new PanelQuanLyDanhMuc());
-                jLabel7.setText("Quản lý sản phẩm");
-                clickPanel(jLabel7, new PanelQuanLySanPham());
-                jLabel9.setText("Quản lý giảm giá");
-                clickPanel(jLabel9, new PanelQuanLyGiamGia());
-                jLabel10.setText("Thống kê");
-                clickPanel(jLabel10, new PanelThongKe());
+                admin();
                 break;
             case 2:
-                jLabel5.setText("Quản lý hóa đơn");
-                clickPanel(jLabel5, new PanelQuanLyHoaDon());
-                jLabel6.setText("Quản lý bàn");
-                clickPanel(jLabel6, new PanelChonBan());
-                jLabel7.setText("Quản lý đơn hàng");
-                clickPanel(jLabel7, new PanelDanhSachDonHang());
-                jLabel9.setText("Thanh Toán");
+                cashier();
                 break;
+
             case 3:
-                jLabel5.setText("Quản lí đơn hàng");
-//                clickPanel(jLabel7, panelTaoDon);
+                cheff();
                 break;
+
         }
+        FlatSVGIcon danxuat = new FlatSVGIcon("func/image/logout.svg").derive(25, 30);
+        dangxuat.setIcon(new IconWithHorizontalMargin(danxuat, 10));
+
     }
 
-    private void clickPanel(javax.swing.JLabel label, JPanel panel) {
+    void cheff() {
+        addHoverEffect(jLabel5);
+        jLabel5.setText("Quản lí đơn hàng");
+        clickPanel(jLabel5, PanelDonHang.class, "Quản lý đơn hàng");
+        FlatSVGIcon quanLiDon = new FlatSVGIcon("func/image/receipt.svg").derive(30, 30);
+        jLabel5.setIcon(new IconWithHorizontalMargin(quanLiDon, 10));
+    }
+
+    void cashier() {
+        addHoverEffect(jLabel5);
+        addHoverEffect(jLabel6);
+        addHoverEffect(jLabel9);
+        jLabel5.setText("Quản lý hóa đơn");
+        clickPanel(jLabel5, PanelHoaDon.class, "Quản lý hóa đơn");
+        FlatSVGIcon hoaDon = new FlatSVGIcon("func/image/invoice.svg").derive(30, 30);
+        jLabel5.setIcon(new IconWithHorizontalMargin(hoaDon, 10));
+
+        jLabel6.setText("Danh sách bàn");
+        clickPanel(jLabel6, PanelChonBan.class, "Danh sách bàn");
+        FlatSVGIcon quanLyBan = new FlatSVGIcon("func/image/tablets.svg").derive(30, 30);
+        jLabel6.setIcon(new IconWithHorizontalMargin(quanLyBan, 10));
+
+        jLabel9.setText("Đặt bàn");
+        clickPanel(jLabel9, PanelDatBan.class, "Đặt bàn");
+        FlatSVGIcon datBan = new FlatSVGIcon("func/image/user-plus.svg").derive(30, 30);
+        jLabel9.setIcon(new IconWithHorizontalMargin(datBan, 10));
+    }
+
+    void admin() {
+        addHoverEffect(jLabel5);
+        addHoverEffect(jLabel6);
+        addHoverEffect(jLabel7);
+        addHoverEffect(jLabel9);
+        addHoverEffect(jLabel10);
+        addHoverEffect(jLabel11);
+        addHoverEffect(jLabel12);
+        jLabel5.setText("Quản lý nhân viên");
+        clickPanel(jLabel5, PanelQuanLyNhanVien.class, "Quản lý nhân viên");
+        FlatSVGIcon users = new FlatSVGIcon("func/image/users.svg").derive(30, 30);
+        Icon user = new IconWithHorizontalMargin(users, 10);
+        jLabel5.setIcon(user);
+
+        jLabel6.setText("Quản lý danh mục");
+        clickPanel(jLabel6, PanelQuanLyDanhMuc.class, "Quản lý danh mục");
+        FlatSVGIcon danhMuc = new FlatSVGIcon("func/image/list.svg").derive(30, 30);
+        jLabel6.setIcon(new IconWithHorizontalMargin(danhMuc, 10));
+
+        jLabel7.setText("Quản lý sản phẩm");
+        clickPanel(jLabel7, PanelQuanLySanPham.class, "Quản lý sản phẩm");
+        FlatSVGIcon sanPham = new FlatSVGIcon("func/image/cart.svg").derive(30, 30);
+        jLabel7.setIcon(new IconWithHorizontalMargin(sanPham, 10));
+
+        jLabel9.setText("Quản lý giảm giá");
+        clickPanel(jLabel9, PanelQuanLyGiamGia.class, "Quản lý giảm giá");
+        FlatSVGIcon giamGia = new FlatSVGIcon("func/image/percent.svg").derive(25, 30);
+        jLabel9.setIcon(new IconWithHorizontalMargin(giamGia, 10));
+
+        jLabel10.setText("Thống kê");
+        clickPanel(jLabel10, PanelThongKe.class, "Thống kê");
+        FlatSVGIcon thongKe = new FlatSVGIcon("func/image/chart.svg").derive(30, 30);
+        jLabel10.setIcon(new IconWithHorizontalMargin(thongKe, 10));
+
+        jLabel11.setText("Quản lí bàn");
+        clickPanel(jLabel11, PanelQuanLyBan.class, "Quản lý bàn");
+        FlatSVGIcon ban = new FlatSVGIcon("func/image/tablets.svg").derive(30, 30);
+        jLabel11.setIcon(new IconWithHorizontalMargin(ban, 10));
+
+        jLabel12.setText("Quản lí khách hàng");
+        clickPanel(jLabel12, PanelQuanLyKhachHang.class, "Quản lý khách hàng");
+        jLabel12.setIcon(user); // đã có margin
+
+    }
+
+    private void addHoverEffect(JLabel label) {
+        Color defaultColor = label.getBackground();  // màu nền gốc
+        Color hoverColor = new Color(220, 220, 220);  // màu khi hover
+        Color clickColor = new Color(200, 200, 200);  // màu khi nhấn
+
+        label.setOpaque(true); // cần thiết để setBackground có hiệu lực
+
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                label.setBackground(hoverColor);
+                label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                label.setBackground(defaultColor);
+                label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                label.setBackground(clickColor);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                label.setBackground(hoverColor);
+            }
+        });
+    }
+
+    private void clickPanel(javax.swing.JLabel label, Class<? extends JPanel> panelClass, String title) {
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                showPanel(panel);
+                try {
+                    JPanel panel = panelClass.getDeclaredConstructor().newInstance(); // Tạo mới panel
+                    showPanel(panel);
+                    setTitle(title);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }
@@ -103,67 +215,86 @@ public class MainForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        logo = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        dangxuat = new javax.swing.JLabel();
         pnlMain = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/func/image/logo.png"))); // NOI18N
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/func/image/logo.png"))); // NOI18N
 
+        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel5.setText("");
 
-        jLabel8.setText("Đăng xuất");
-        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel8MouseClicked(evt);
-            }
-        });
-
+        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel6.setText("");
 
+        jLabel7.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jLabel7.setText("");
+
+        jLabel9.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel9.setText("");
 
+        jLabel10.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel10.setText("");
 
-        jLabel7.setText("");
+        jLabel11.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jLabel11.setText("");
+
+        jLabel12.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jLabel12.setText("");
+
+        dangxuat.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        dangxuat.setText("Đăng xuất");
+        dangxuat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dangxuatMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(dangxuat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(dangxuat, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
@@ -183,8 +314,9 @@ public class MainForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,13 +327,13 @@ public class MainForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+    private void dangxuatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dangxuatMouseClicked
         // TODO add your handling code here:
         Auth.clear();
         dispose();
         MainForm main = new MainForm();
         main.setVisible(true);
-    }//GEN-LAST:event_jLabel8MouseClicked
+    }//GEN-LAST:event_dangxuatMouseClicked
 
     /**
      * @param args the command line arguments
@@ -246,14 +378,16 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel dangxuat;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel logo;
     private javax.swing.JPanel pnlMain;
     // End of variables declaration//GEN-END:variables
 }

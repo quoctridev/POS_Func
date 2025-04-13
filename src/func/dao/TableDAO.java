@@ -72,11 +72,11 @@ public class TableDAO extends FuncDAO<TableEntity, String> {
     }
 
     public List<String> selectTableNumberByOrderId(String id) {
-        String sql = "SELECT t.table_number FROM Orders o JOIN MergedTables m ON o.order_id = m.order_id JOIN Tables t ON t.table_id = m.table_id WHERE o.order_id = ?";
+        String sql = "SELECT t.table_id FROM Orders o JOIN MergedTables m ON o.order_id = m.order_id JOIN Tables t ON t.table_id = m.table_id WHERE o.order_id = ?";
         List<String> list = new ArrayList<>();
         try (ResultSet rs = Database.query(sql, id)) {
             while (rs.next()) {
-                list.add(rs.getString("table_number"));
+                list.add(rs.getString("table_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -162,7 +162,7 @@ public class TableDAO extends FuncDAO<TableEntity, String> {
     }
 
     public List<String> getMergedTables(int tableId) {
-        String sql = "SELECT table_id FROM MergedTables WHERE order_id = (SELECT order_id FROM MergedTables WHERE table_id = ?)";
+        String sql = "SELECT table_id FROM MergedTables WHERE order_id IN (SELECT order_id FROM MergedTables WHERE table_id = ?)";
         List<String> mergedTables = new ArrayList<>();
         try (ResultSet rs = Database.query(sql, tableId)) {
             while (rs.next()) {

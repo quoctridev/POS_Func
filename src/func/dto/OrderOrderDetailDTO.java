@@ -2,74 +2,61 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package func.dto;
 
 import java.util.Date;
 
 /**
-
+ *
  */
 public class OrderOrderDetailDTO {
-private int orderId;
-     Date orderDate;
-     String cashierName;
-     String zone;
-     int tableNumber;
-     String status;
-     String note;
+
+    int orderDetailId;
+    String productName, tableName, zoneName, status;
+    Date createdAt;
 
     public OrderOrderDetailDTO() {
     }
 
-    public OrderOrderDetailDTO(int orderId, Date orderDate, String cashierName, String zone, int tableNumber, String status, String note) {
-        this.orderId = orderId;
-        this.orderDate = orderDate;
-        this.cashierName = cashierName;
-        this.zone = zone;
-        this.tableNumber = tableNumber;
+    public OrderOrderDetailDTO(int orderId, String productName, String tableName, String zoneName, String status, Date createdAt) {
+        this.orderDetailId = orderDetailId;
+        this.productName = productName;
+        this.tableName = tableName;
+        this.zoneName = zoneName;
         this.status = status;
-        this.note = note;
+        this.createdAt = createdAt;
     }
 
-    public int getOrderId() {
-        return orderId;
+    public int getOrderDetailId() {
+        return orderDetailId;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setOrderDetailId(int orderDetailId) {
+        this.orderDetailId = orderDetailId;
     }
 
-    public Date getOrderDate() {
-        return orderDate;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public String getCashierName() {
-        return cashierName;
+    public String getTableName() {
+        return tableName;
     }
 
-    public void setCashierName(String cashierName) {
-        this.cashierName = cashierName;
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
-    public String getZone() {
-        return zone;
+    public String getZoneName() {
+        return zoneName;
     }
 
-    public void setZone(String zone) {
-        this.zone = zone;
-    }
-
-    public int getTableNumber() {
-        return tableNumber;
-    }
-
-    public void setTableNumber(int tableNumber) {
-        this.tableNumber = tableNumber;
+    public void setZoneName(String zoneName) {
+        this.zoneName = zoneName;
     }
 
     public String getStatus() {
@@ -80,12 +67,12 @@ private int orderId;
         this.status = status;
     }
 
-    public String getNote() {
-        return note;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
-    
+
 }

@@ -1,30 +1,50 @@
 package func.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class OrderTableEntity {
 
     int orderTableId;
     int customerId;
-    int tableId;
+    int capacity;
     String phone;
     String note;
     String status;
+    Timestamp reservationTime;
+    String customer_name;
     Date createdAt;
 
     public OrderTableEntity() {
     }
 
-    public OrderTableEntity(int orderTableId, int customerId, int tableId, String phone, String note, String status, Date createdAt) {
+    public OrderTableEntity(int orderTableId, int customerId, int capacity, String phone, String note, String status, Timestamp reservationTime, String customer_name, Date createdAt) {
         this.orderTableId = orderTableId;
         this.customerId = customerId;
-        this.tableId = tableId;
+        this.capacity = capacity;
         this.phone = phone;
         this.note = note;
         this.status = status;
+        this.reservationTime = reservationTime;
+        this.customer_name = customer_name;
         this.createdAt = createdAt;
     }
 
+    public Timestamp getReservationTime() {
+        return reservationTime;
+    }
+
+    public void setReservationTime(Timestamp reservationTime) {
+        this.reservationTime = reservationTime;
+    }
+
+    public String getCustomer_name() {
+        return customer_name;
+    }
+
+    public void setCustomer_name(String customer_name) {
+        this.customer_name = customer_name;
+    }
 
     public int getOrderTableId() {
         return orderTableId;
@@ -42,12 +62,12 @@ public class OrderTableEntity {
         this.customerId = customerId;
     }
 
-    public int getTableId() {
-        return tableId;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public void setTableId(int tableId) {
-        this.tableId = tableId;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public String getPhone() {
@@ -57,7 +77,6 @@ public class OrderTableEntity {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
 
     public String getNote() {
         return note;

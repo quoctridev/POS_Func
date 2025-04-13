@@ -4,6 +4,7 @@
  */
 package func.ui;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import func.application.MainForm;
 import func.dao.CategoryDAO;
 import func.dao.OrderDetailsDAO;
@@ -12,30 +13,24 @@ import func.dao.TableDAO;
 import func.dto.OrderDetailsDTO;
 import func.entity.CategoriesEntity;
 import func.entity.OrderDetailEntity;
-import func.entity.OrderEntity;
 import func.entity.ProductEntity;
-import func.entity.TableEntity;
 import func.utils.Currency;
 import func.utils.Message;
-import java.awt.Component;
+import func.utils.XImage;
+import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.swing.AbstractCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
 
 /**
  *
@@ -48,10 +43,15 @@ public class PanelTaoDon extends javax.swing.JPanel {
     private DefaultTableModel model;
     private String table;
     private String order;
+    private MainForm mainForm;
 
     public PanelTaoDon() {
         initComponents();
 
+    }
+
+    public void setMainForm(MainForm mainForm) {
+        this.mainForm = mainForm;
     }
 
     public String getTable() {
@@ -67,8 +67,10 @@ public class PanelTaoDon extends javax.swing.JPanel {
     }
 
     public void setOrder(String order) {
-        this.order = order;
-        init();
+        if (this.order == null || !this.order.equals(order)) {
+            this.order = order;
+            init();
+        }
     }
 
     void init() {
@@ -91,7 +93,25 @@ public class PanelTaoDon extends javax.swing.JPanel {
                 ), or.getProductId()
             });
         }
+        txtTimKiem.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Tìm kiếm");
+
         lbTongTien.setText(Currency.formatVND(tinhTongTien()));
+        txtTimKiem.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                searchMenu(txtTimKiem.getText());
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                searchMenu(txtTimKiem.getText());
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                searchMenu(txtTimKiem.getText());
+            }
+        });
     }
 
     /**
@@ -128,6 +148,7 @@ public class PanelTaoDon extends javax.swing.JPanel {
         pnMonAn = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         txtTimKiem = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         jMenu1.setText("jMenu1");
 
@@ -326,6 +347,15 @@ public class PanelTaoDon extends javax.swing.JPanel {
         jLabel5.setText("Bạn chưa chọn danh mục sản phẩm");
         pnMonAn.add(jLabel5);
 
+        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimKiemActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jLabel2.setText("Tìm kiếm:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -336,7 +366,10 @@ public class PanelTaoDon extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnMonAn, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtTimKiem))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtTimKiem)))
                 .addGap(9, 9, 9)
                 .addComponent(pnDanhSachMon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -347,7 +380,9 @@ public class PanelTaoDon extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnMonAn, javax.swing.GroupLayout.PREFERRED_SIZE, 694, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -360,9 +395,11 @@ public class PanelTaoDon extends javax.swing.JPanel {
             Message.warning(null, "Bạn phải thêm món ăn trước khi thanh toán");
             return;
         }
-        JDialogThanhToan thanhToan = new JDialogThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
+        DialogThanhToan thanhToan = new DialogThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
         thanhToan.setOrderId(order);
         thanhToan.setTableId(table);
+        thanhToan.setPreferredSize(new Dimension(950, 650));
+        thanhToan.pack();
         thanhToan.setVisible(true);
 
     }//GEN-LAST:event_btnThanhToanActionPerformed
@@ -375,7 +412,8 @@ public class PanelTaoDon extends javax.swing.JPanel {
         for (int i = 0; i < tblDanhSach.getRowCount(); i++) {
             OrderDetailEntity od = new OrderDetailEntity();
             od.setProductId(Integer.parseInt(String.valueOf(tblDanhSach.getValueAt(i, 4))));
-            od.setPrice(new BigDecimal(String.valueOf(tblDanhSach.getValueAt(i, 2))));
+            BigDecimal price = new BigDecimal(String.valueOf(tblDanhSach.getValueAt(i, 2)));
+            od.setPrice(price);
             od.setQuantity(Integer.parseInt(String.valueOf(tblDanhSach.getValueAt(i, 1))));
             od.setOrderId(Integer.parseInt(order));
             new OrderDetailsDAO().createOrderDetails(od);
@@ -391,12 +429,16 @@ public class PanelTaoDon extends javax.swing.JPanel {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        JDialogChiTietMonAn chiTietMon = new JDialogChiTietMonAn((MainForm) SwingUtilities.getWindowAncestor(this), true);
+        DialogChiTietMonAn chiTietMon = new DialogChiTietMonAn((MainForm) SwingUtilities.getWindowAncestor(this), true);
         chiTietMon.setOrder(order);
         chiTietMon.setTable(table);
         chiTietMon.setVisible(true);
         init();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTimKiemActionPerformed
 
     public void selectCategory() {
         categoryList = new CategoryDAO().selectAll();
@@ -427,27 +469,64 @@ public class PanelTaoDon extends javax.swing.JPanel {
         pnCategory.setLayout(new java.awt.GridLayout(i, 0));
     }
 
-    public void selectProductById(int id) {
+    private void searchMenu(String keyword) {
+        List<ProductEntity> filtered = new java.util.ArrayList<>();
+        for (ProductEntity pro : menu) {
+            if (pro.getProductName().toLowerCase().contains(keyword.toLowerCase())) {
+                filtered.add(pro);
+            }
+        }
+        renderMenuButtons(filtered);
+    }
 
-        menu = new ProductDAO().selectByCategory(id);
+    public void selectProductById(int id) {
+        menu = new ProductDAO().selectByCategory(id); // gán danh sách món hiện tại
+        renderMenuButtons(menu);
+    }
+
+    private BigDecimal tinhTongTien() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            BigDecimal amount = (BigDecimal) model.getValueAt(i, 3); // Cột Thành tiền (Index 3)
+            total = total.add(amount);
+        }
+        return total;
+    }
+
+    private void renderMenuButtons(List<ProductEntity> productList) {
         pnMonAn.removeAll();
-        pnMonAn.updateUI();
+        pnMonAn.revalidate();
+        pnMonAn.repaint();
+
         JPanel panelRecipe = new JPanel(new java.awt.GridLayout(0, 4, 10, 5));
         JScrollPane mainScrollPane = new JScrollPane();
-        tblDanhSach.getColumnModel().getColumn(0).setPreferredWidth(150); // Cột Tên món
-        tblDanhSach.getColumnModel().getColumn(1).setPreferredWidth(70);  // Cột Số lượng
-        tblDanhSach.getColumnModel().getColumn(2).setPreferredWidth(100); // Cột Đơn giá
-        tblDanhSach.getColumnModel().getColumn(3).setPreferredWidth(120); // Cột Thành tiền
-        tblDanhSach.getColumnModel().getColumn(4).setMinWidth(0);
-        tblDanhSach.getColumnModel().getColumn(4).setMaxWidth(0);
-        tblDanhSach.getColumnModel().getColumn(4).setWidth(0);
-        TableColumn quantityColumn = tblDanhSach.getColumnModel().getColumn(1);
-        quantityColumn.setCellEditor(new SpinnerEditor());
 
-        for (ProductEntity pro : menu) {
+        for (ProductEntity pro : productList) {
+            if (!pro.isIsActive()) {
+                continue;
+            }
+
             JButton jButtonRecipe = new JButton();
-            jButtonRecipe.setText(String.valueOf(pro.getProductName()));
             jButtonRecipe.setPreferredSize(new java.awt.Dimension(110, 110));
+            jButtonRecipe.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jButtonRecipe.setMargin(new java.awt.Insets(2, 2, 2, 2));
+            jButtonRecipe.setFont(new java.awt.Font("Segoe UI", 0, 12));
+            jButtonRecipe.setIconTextGap(5);
+            jButtonRecipe.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+            jButtonRecipe.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+            if (XImage.getImageIconFromServerWithOkHttp(pro.getImage()) != null) {
+                ImageIcon rawIcon = XImage.getImageIconFromServerWithOkHttp(pro.getImage());
+                if (rawIcon != null) {
+                    ImageIcon resizedIcon = resizeIcon(rawIcon, 80, 80);
+                    jButtonRecipe.setIcon(resizedIcon);
+                    jButtonRecipe.setHorizontalTextPosition(SwingConstants.CENTER);
+                    jButtonRecipe.setVerticalTextPosition(SwingConstants.BOTTOM);
+                }
+            }
+            jButtonRecipe.setText("<html><body style=\"text-indent: -2em;padding:0;margin:0;\"><p style=\"font-size: 13; color:black;\">"
+                    + pro.getProductName() + "</p><p style=\"font-weight: 50%; color:blue;\">"
+                    + Currency.formatVND(pro.getPrice()) + "</p></body></html>");
+
             jButtonRecipe.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -458,7 +537,6 @@ public class PanelTaoDon extends javax.swing.JPanel {
                             int newQuantity = currentQuantity + 1;
                             model.setValueAt(newQuantity, i, 1);
 
-                            // Cập nhật thành tiền
                             BigDecimal price = (BigDecimal) model.getValueAt(i, 2);
                             BigDecimal total = price.multiply(BigDecimal.valueOf(newQuantity));
                             model.setValueAt(total, i, 3);
@@ -472,92 +550,36 @@ public class PanelTaoDon extends javax.swing.JPanel {
                             pro.getProductName(),
                             1,
                             pro.getPrice(),
-                            pro.getPrice(), // Thành tiền = số lượng * đơn giá (1 * giá),
-                            pro.getProductId()});
+                            pro.getPrice(),
+                            pro.getProductId()
+                        });
                     }
                     lbTongTien.setText(Currency.formatVND(tinhTongTien()));
                 }
             });
-            if (!pro.isIsActive()) {
-                continue;
-            }
-//            if (displayPicture(menu) == null) {
-//            } else {
-//                jButtonRecipe.setIcon(displayPicture(menu));
-//            }
-//            jButtonRecipe.setBackground(new Color(192,192,192));
-            jButtonRecipe.setName(String.valueOf(pro.getCategoryId()));
-            jButtonRecipe.setText("<html><body style =\"text-indent: -2em;padding:0;margin:0;\"><p style=\"font-size: 13; color:black;\">" + pro.getProductName() + "</p><p  style=\"font-weight: 50%; color:blue;\">" + Currency.formatVND(pro.getPrice()) + "</p></body></html>");
-            jButtonRecipe.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            jButtonRecipe.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-            jButtonRecipe.setMargin(new java.awt.Insets(2, 2, 2, 2));
-            jButtonRecipe.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
             panelRecipe.add(jButtonRecipe);
 
             mainScrollPane.setViewportView(panelRecipe);
-
+            pnMonAn.setLayout(new java.awt.BorderLayout());
             pnMonAn.add(mainScrollPane, java.awt.BorderLayout.CENTER);
-            pnMonAn.validate();
-            pnMonAn.validate();
-        }
-//        disableSideButton();
-    }
-
-    private BigDecimal tinhTongTien() {
-        BigDecimal total = BigDecimal.ZERO;
-        for (int i = 0; i < model.getRowCount(); i++) {
-            BigDecimal amount = (BigDecimal) model.getValueAt(i, 3); // Cột Thành tiền (Index 3)
-            total = total.add(amount);
-        }
-        return total;
-    }
-
-    class SpinnerEditor extends AbstractCellEditor implements TableCellEditor {
-
-        private final JSpinner spinner;
-        private int row;
-        private JTable table;
-
-        public SpinnerEditor() {
-            spinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1)); // Min = 1, Max = 100, Step = 1
-            spinner.addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    if (table != null) {
-                        int quantity = (int) spinner.getValue();
-                        Object priceObj = table.getModel().getValueAt(row, 2);
-
-                        if (priceObj instanceof BigDecimal) {
-                            BigDecimal price = (BigDecimal) priceObj;
-                            BigDecimal total = price.multiply(BigDecimal.valueOf(quantity)); // Thành tiền = Đơn giá * Số lượng
-
-                            table.getModel().setValueAt(total, row, 3);
-                            lbTongTien.setText(Currency.formatVND(tinhTongTien()));
-                        }
-                    }
-                }
-            });
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            this.row = row;
-            this.table = table;
-            spinner.setValue(value);
-            return spinner;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return spinner.getValue();
+            pnMonAn.revalidate();
         }
     }
+
+    public ImageIcon resizeIcon(ImageIcon icon, int width, int height) {
+        Image img = icon.getImage();
+        Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImg);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLuu;
     private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

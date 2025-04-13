@@ -13,6 +13,12 @@ public class Currency {
         return VND_FORMAT.format(amount.setScale(0, RoundingMode.HALF_UP)) + " VND";
     }
 
+    public static String parseVNDToString(String vndString) {
+        // Loại bỏ " VND" và dấu chấm ngăn cách hàng nghìn
+        String numberOnly = vndString.replace(" VND", "").replace(".", "");
+        return numberOnly;
+    }
+
     public static String formatVND(int amount) {
         return VND_FORMAT.format(amount) + " VND";
     }

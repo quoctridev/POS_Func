@@ -10,6 +10,7 @@ import func.dao.OrderDAO;
 import func.dao.TableDAO;
 import func.entity.MergeTableEntity;
 import func.entity.OrderEntity;
+import func.entity.OrderTableEntity;
 import func.entity.TableEntity;
 import func.utils.Auth;
 import func.utils.Message;
@@ -30,6 +31,8 @@ public class PanelChonBan extends javax.swing.JPanel {
 
     private List<String> zone;
     private List<TableEntity> table;
+    OrderTableEntity datTruoc;
+    private MainForm mainForm;
 
     /**
      * Creates new form JDialogChonBan
@@ -38,6 +41,18 @@ public class PanelChonBan extends javax.swing.JPanel {
         initComponents();
         selectZone();
 
+    }
+
+    public void setMainForm(MainForm mainForm) {
+        this.mainForm = mainForm;
+    }
+
+    public OrderTableEntity getDatTruoc() {
+        return datTruoc;
+    }
+
+    public void setDatTruoc(OrderTableEntity datTruoc) {
+        this.datTruoc = datTruoc;
     }
 
     /**
@@ -50,6 +65,7 @@ public class PanelChonBan extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel3 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         pnZone = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -59,21 +75,36 @@ public class PanelChonBan extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
-        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 3, 48)); // NOI18N
+        jPanel1.setBackground(new java.awt.Color(137, 137, 229));
+
+        jLabel2.setBackground(new java.awt.Color(137, 137, 229));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("CHỌN BÀN");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1005, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnZone.setBorder(javax.swing.BorderFactory.createTitledBorder("Khu vực"));
@@ -89,7 +120,7 @@ public class PanelChonBan extends javax.swing.JPanel {
         );
         pnZoneLayout.setVerticalGroup(
             pnZoneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
 
         pnBan.setBorder(javax.swing.BorderFactory.createTitledBorder("Bàn"));
@@ -98,6 +129,9 @@ public class PanelChonBan extends javax.swing.JPanel {
         jLabel1.setText("Vui lòng chọn khu vực");
         pnBan.add(jLabel1);
 
+        jButton1.setBackground(new java.awt.Color(204, 204, 255));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setText("Gộp bàn");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,6 +139,9 @@ public class PanelChonBan extends javax.swing.JPanel {
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(204, 204, 255));
+        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(0, 0, 0));
         jButton2.setText("Chuyển bàn");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,15 +186,15 @@ public class PanelChonBan extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        JDialogGopBan tinhNangMoRong = new JDialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
+        DialogGopBan tinhNangMoRong = new DialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
         tinhNangMoRong.setTrangThai(1);
         tinhNangMoRong.setVisible(true);
-            
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        JDialogGopBan tinhNangMoRong = new JDialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
+        DialogGopBan tinhNangMoRong = new DialogGopBan((Frame) SwingUtilities.getWindowAncestor(this), true);
         tinhNangMoRong.setTrangThai(2);
         tinhNangMoRong.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -174,7 +211,7 @@ public class PanelChonBan extends javax.swing.JPanel {
             jButtonCategory.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Ví dụ: Hiển thị danh sách món theo danh mục
+                    // Ví dụ: Hiển thị danh sách bàn theo khu vực
                     selectTableByZone(zone);
                 }
             });
@@ -193,7 +230,7 @@ public class PanelChonBan extends javax.swing.JPanel {
         table = new TableDAO().selectByZone(id);
         pnBan.removeAll();
         pnBan.updateUI();
-        JPanel panelRecipe = new JPanel(new java.awt.GridLayout(0, 4, 10, 5));
+        JPanel panelRecipe = new JPanel(new java.awt.GridLayout(0, 5, 30, 10));
         JScrollPane mainScrollPane = new JScrollPane();
 
         for (TableEntity tb : table) {
@@ -284,22 +321,27 @@ public class PanelChonBan extends javax.swing.JPanel {
             return;
         }
 
-        boolean saveCustomerInfo = Message.confirm(this, "Khách hàng muốn lưu thông tin không?");
-        String customerName = null, phoneNumber = null;
-
-        if (saveCustomerInfo) {
-            JDialogThongTinKhachHang customerInfoDialog = new JDialogThongTinKhachHang(
-                    (Frame) SwingUtilities.getWindowAncestor(this), true);
-            customerInfoDialog.setVisible(true);
-            customerName = customerInfoDialog.getTenKhach();
-            phoneNumber = customerInfoDialog.getSoDienThoai();
+        String customerName = null, phoneNumber = null, orderTableId = null;
+        if (datTruoc != null) {
+            customerName = datTruoc.getCustomer_name();
+            phoneNumber = datTruoc.getPhone();
+            orderTableId = String.valueOf(datTruoc.getOrderTableId());
+        } else {
+            boolean saveCustomerInfo = Message.confirm(this, "Khách hàng muốn lưu thông tin không?");
+            if (saveCustomerInfo) {
+                DialogThongTinKhachHang customerInfoDialog = new DialogThongTinKhachHang(
+                        (Frame) SwingUtilities.getWindowAncestor(this), true);
+                customerInfoDialog.setVisible(true);
+                customerName = customerInfoDialog.getTenKhach();
+                phoneNumber = customerInfoDialog.getSoDienThoai();
+            }
         }
 
         // Gọi hàm tạo order (hỗ trợ cả gộp bàn và không gộp bàn)
-        createOrderForTable(table, customerName, phoneNumber);
+        createOrderForTable(table, customerName, phoneNumber, orderTableId);
     }
 
-    private void createOrderForTable(TableEntity table, String customerName, String phoneNumber) {
+    private void createOrderForTable(TableEntity table, String customerName, String phoneNumber, String orderTableId) {
         MergeTableDAO mergeTableDAO = new MergeTableDAO();
         int existingOrderId = mergeTableDAO.getActiveOrderIdByTable(table.getTableId());
 
@@ -321,34 +363,32 @@ public class PanelChonBan extends javax.swing.JPanel {
         }
 
         // Xác nhận tạo Order mới
-        boolean confirm = Message.confirm(this, "Bạn có muốn tạo Order mới cho bàn " + table.getTableNumber() + "?");
+        OrderEntity od = new OrderEntity();
+        od.setCashierId(Auth.user.getUserId());
+        od.setStatus("new");
+        od.setCustomerName(customerName);
+        od.setCustomerPhone(phoneNumber);
+        if (datTruoc != null) {
+            od.setOrderTableId(Integer.parseInt(orderTableId));
+        }
 
-        if (confirm) {
-            OrderEntity od = new OrderEntity();
-            od.setCashierId(Auth.user.getUserId());
-            od.setStatus("new");
-            od.setCustomerName(customerName);
-            od.setCustomerPhone(phoneNumber);
+        int newOrderId = new OrderDAO().createOrder(od);
+        if (newOrderId > 0) {
 
-            int newOrderId = new OrderDAO().createOrder(od);
-            if (newOrderId > 0) {
+            // Nếu không có danh sách gộp bàn, chỉ tạo order cho bàn hiện tại
+            MergeTableEntity mtb = new MergeTableEntity();
+            mtb.setOrderId(newOrderId);
+            mtb.setTableId(table.getTableId());
+            new MergeTableDAO().insertMergeTable(mtb);
 
-                // Nếu không có danh sách gộp bàn, chỉ tạo order cho bàn hiện tại
-                MergeTableEntity mtb = new MergeTableEntity();
-                mtb.setOrderId(newOrderId);
-                mtb.setTableId(table.getTableId());
-                new MergeTableDAO().insertMergeTable(mtb);
+            TableEntity tb = new TableEntity();
+            tb.setTableId(table.getTableId());
+            tb.setStatus("occupied");
+            new TableDAO().updateTableStatus(tb);
 
-                TableEntity tb = new TableEntity();
-                tb.setTableId(table.getTableId());
-                tb.setStatus("occupied");
-                new TableDAO().updateTableStatus(tb);
+            taodon.setOrder(String.valueOf(newOrderId));
+            mainForm.showPanel(taodon);
 
-                taodon.setOrder(String.valueOf(newOrderId));
-                mainForm.showPanel(taodon);
-            } else {
-                Message.error(this, "Lỗi khi tạo Order!");
-            }
         }
     }
 
@@ -357,6 +397,7 @@ public class PanelChonBan extends javax.swing.JPanel {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel pnBan;
