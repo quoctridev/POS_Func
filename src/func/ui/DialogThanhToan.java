@@ -210,6 +210,7 @@ public class DialogThanhToan extends javax.swing.JDialog {
         txtTongTien.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         txtTongTien.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
+        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         jLabel2.setText("jLabel2");
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -260,9 +261,11 @@ public class DialogThanhToan extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtMaGiamGia)
                     .addComponent(btnApDung, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel7.setBackground(new java.awt.Color(137, 137, 229));
@@ -281,7 +284,7 @@ public class DialogThanhToan extends javax.swing.JDialog {
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
         );
 
         btnQuayLai.setText("Quay lại");
@@ -313,21 +316,16 @@ public class DialogThanhToan extends javax.swing.JDialog {
         });
         tblThanhToan.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblThanhToan);
-        if (tblThanhToan.getColumnModel().getColumnCount() > 0) {
-            tblThanhToan.getColumnModel().getColumn(0).setResizable(false);
-            tblThanhToan.getColumnModel().getColumn(0).setPreferredWidth(2);
-            tblThanhToan.getColumnModel().getColumn(1).setMinWidth(30);
-        }
 
         javax.swing.GroupLayout pnMonDaChonLayout = new javax.swing.GroupLayout(pnMonDaChon);
         pnMonDaChon.setLayout(pnMonDaChonLayout);
         pnMonDaChonLayout.setHorizontalGroup(
             pnMonDaChonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         pnMonDaChonLayout.setVerticalGroup(
             pnMonDaChonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout pnDonHangLayout = new javax.swing.GroupLayout(pnDonHang);
@@ -381,39 +379,12 @@ public class DialogThanhToan extends javax.swing.JDialog {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-
                     .addComponent(pnDonHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtMaGiamGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaGiamGiaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMaGiamGiaActionPerformed
-
-    private void btnQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuayLaiActionPerformed
-        // TODO add your handling code here:
-        boolean confirm = Message.confirm(this, "Bạn có chắc quay lại không");
-        if (confirm) {
-            dispose();
-        }
-    }//GEN-LAST:event_btnQuayLaiActionPerformed
-
-    private void lbTienMatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbTienMatMouseEntered
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_lbTienMatMouseEntered
-
-    private void lbTienMatMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbTienMatMouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lbTienMatMouseExited
-
-    private void lbTienMatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbTienMatMouseClicked
-        // TODO add your handling code here:
-        selectPayment(lbTienMat);
-    }//GEN-LAST:event_lbTienMatMouseClicked
 
     private void lbChuyenKhoanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbChuyenKhoanMouseClicked
         // TODO add your handling code here:
@@ -427,6 +398,64 @@ public class DialogThanhToan extends javax.swing.JDialog {
     private void lbChuyenKhoanMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbChuyenKhoanMouseExited
         // TODO add your handling code here:
     }//GEN-LAST:event_lbChuyenKhoanMouseExited
+
+    private void lbTienMatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbTienMatMouseClicked
+        // TODO add your handling code here:
+        selectPayment(lbTienMat);
+    }//GEN-LAST:event_lbTienMatMouseClicked
+
+    private void lbTienMatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbTienMatMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lbTienMatMouseEntered
+
+    private void lbTienMatMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbTienMatMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lbTienMatMouseExited
+
+    private void txtMaGiamGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaGiamGiaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMaGiamGiaActionPerformed
+
+    private void btnApDungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApDungActionPerformed
+        // TODO add your handling code here:
+        // Xử lý mã giảm giá
+        if (finalAmount.compareTo(BigDecimal.ZERO) == 0) {
+            Message.warning(null, "Bạn đang không phải thanh toán đồng nào nữa");
+            return;
+        }
+        if (txtMaGiamGia.getText().trim().isEmpty()) {
+            DialogMaGiamGia dialog = new DialogMaGiamGia((Dialog) this, true);
+            dialog.setVisible(true);
+            dc = dialog.getSelectedDiscount();
+        } else {
+            dc = new DiscountDAO().selectById(txtMaGiamGia.getText());
+            if (dc == null) {
+                Message.warning(this, "Không có mã giảm giá phù hợp");
+                return;
+            } else if (!DialogMaGiamGia.isCurrentDateInRange(dc)) {
+                Message.warning(this, "Mã giảm giá đã hết hạn!");
+                return;
+            } else {
+                Message.info(this, "Bạn đã áp dụng mã giảm giá thành công");
+            }
+        }
+
+        // Tính giảm giá từ mã giảm giá
+        if (dc != null) {
+            discount = calculateDiscount(dc, totalAmount);
+        }
+
+        // Tổng giảm giá
+        totalDiscount = totalDiscount.add(discount);
+        finalAmount = totalAmount.subtract(totalDiscount);
+        if (finalAmount.compareTo(BigDecimal.ZERO) < 0) {
+            finalAmount = BigDecimal.ZERO;
+        }
+
+        // Cập nhật giao diện
+        txtGiamGia.setText(Currency.formatVND(totalDiscount));
+        txtTongTien.setText(Currency.formatVND(finalAmount));
+    }//GEN-LAST:event_btnApDungActionPerformed
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
@@ -483,46 +512,13 @@ public class DialogThanhToan extends javax.swing.JDialog {
 
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
-    private void btnApDungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApDungActionPerformed
+    private void btnQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuayLaiActionPerformed
         // TODO add your handling code here:
-        // Xử lý mã giảm giá
-        if (finalAmount.compareTo(BigDecimal.ZERO) == 0) {
-            Message.warning(null, "Bạn đang không phải thanh toán đồng nào nữa");
-            return;
+        boolean confirm = Message.confirm(this, "Bạn có chắc quay lại không");
+        if (confirm) {
+            dispose();
         }
-        if (txtMaGiamGia.getText().trim().isEmpty()) {
-            DialogMaGiamGia dialog = new DialogMaGiamGia((Dialog) this, true);
-            dialog.setVisible(true);
-            dc = dialog.getSelectedDiscount();
-        } else {
-            dc = new DiscountDAO().selectById(txtMaGiamGia.getText());
-            if (dc == null) {
-                Message.warning(this, "Không có mã giảm giá phù hợp");
-                return;
-            } else if (!DialogMaGiamGia.isCurrentDateInRange(dc)) {
-                Message.warning(this, "Mã giảm giá đã hết hạn!");
-                return;
-            } else {
-                Message.info(this, "Bạn đã áp dụng mã giảm giá thành công");
-            }
-        }
-
-        // Tính giảm giá từ mã giảm giá
-        if (dc != null) {
-            discount = calculateDiscount(dc, totalAmount);
-        }
-
-        // Tổng giảm giá
-        totalDiscount = totalDiscount.add(discount);
-        finalAmount = totalAmount.subtract(totalDiscount);
-        if (finalAmount.compareTo(BigDecimal.ZERO) < 0) {
-            finalAmount = BigDecimal.ZERO;
-        }
-
-        // Cập nhật giao diện
-        txtGiamGia.setText(Currency.formatVND(totalDiscount));
-        txtTongTien.setText(Currency.formatVND(finalAmount));
-    }//GEN-LAST:event_btnApDungActionPerformed
+    }//GEN-LAST:event_btnQuayLaiActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         // TODO add your handling code here:
@@ -637,6 +633,7 @@ public class DialogThanhToan extends javax.swing.JDialog {
         txtTienHang.setText(String.valueOf(Currency.formatVND(totalAmount)));
         finalAmount = totalAmount.subtract(discount);
         txtTongTien.setText(Currency.formatVND(finalAmount));
+        
     }
 
     BigDecimal calculateDiscount(DiscountEntity dc, BigDecimal totalAmount) {

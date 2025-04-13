@@ -18,6 +18,7 @@ import func.utils.Currency;
 import func.utils.Message;
 import func.utils.XImage;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -400,6 +401,8 @@ public class PanelTaoDon extends javax.swing.JPanel {
         DialogThanhToan thanhToan = new DialogThanhToan((Frame) SwingUtilities.getWindowAncestor(this), true);
         thanhToan.setOrderId(order);
         thanhToan.setTableId(table);
+        thanhToan.setPreferredSize(new Dimension(950, 650));
+        thanhToan.pack();
         thanhToan.setVisible(true);
 
     }//GEN-LAST:event_btnThanhToanActionPerformed
