@@ -53,6 +53,7 @@ public class PanelDatBan extends javax.swing.JPanel {
 
             model.addRow(new Object[]{
                 i, od.getCustomer_name(), od.getPhone(), od.getCapacity(), od.getReservationTime(), trangThai});
+            i++;
         }
         SuKienHanhDong event = new SuKienHanhDong() {
             @Override

@@ -4,6 +4,7 @@
  */
 package func.ui;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import func.cell.ChinhSuaBang;
 import func.cell.KetHopBang;
 import func.cell.SuKienHanhDong;
@@ -13,8 +14,11 @@ import func.dto.ProductDTO;
 import func.utils.Currency;
 import func.utils.Message;
 import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -67,16 +71,50 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
         setSize();
         tblDanhSach.getColumnModel().getColumn(5).setCellRenderer(new KetHopBang(true));
         tblDanhSach.getColumnModel().getColumn(5).setCellEditor(new ChinhSuaBang(true, event));
+        txtTimKiem.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Tìm kiếm");
+        txtTimKiem.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                search(txtTimKiem.getText());
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                search(txtTimKiem.getText());
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                search(txtTimKiem.getText());
+            }
+        });
     }
 
     void fillTable() {
         pd = new ProductCategoryDAO().selectAll();
+        updateTable(pd); // hiển thị toàn bộ danh sách
+    }
+
+    void search(String keyword) {
+        List<ProductDTO> filtered = new ArrayList<>();
+        for (ProductDTO product : pd) {
+            if (product.getProductName().toLowerCase().contains(keyword.toLowerCase())
+                    || product.getCategoryName().toLowerCase().contains(keyword.toLowerCase())) {
+                filtered.add(product);
+            }
+        }
+        updateTable(filtered);
+    }
+
+    void updateTable(List<ProductDTO> list) {
         model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
         int i = 1;
-        for (ProductDTO product : pd) {
-            model.addRow(new Object[]{i, product.getProductName(), Currency.formatVND(product.getPrice()), product.isIsActive() ? "Hoạt động" : "Không hoạt động", product.getCategoryName()});
-            i++;
+        for (ProductDTO product : list) {
+            model.addRow(new Object[]{
+                i++,
+                product.getProductName(),
+                Currency.formatVND(product.getPrice()),
+                product.isIsActive() ? "Hoạt động" : "Không hoạt động",
+                product.getCategoryName()
+            });
         }
     }
 
@@ -104,8 +142,13 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDanhSach = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        txtTimKiem = new javax.swing.JTextField();
 
-        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 3, 48)); // NOI18N
+        jPanel1.setBackground(new java.awt.Color(137, 137, 229));
+
+        jLabel1.setBackground(new java.awt.Color(137, 137, 229));
+        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Quản lý sản phẩm");
 
@@ -117,7 +160,7 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+            .addComponent(jLabel1)
         );
 
         tblDanhSach.setModel(new javax.swing.table.DefaultTableModel(
@@ -144,9 +187,8 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         jButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
@@ -157,24 +199,42 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jLabel2.setText("Tìm kiếm");
+
+        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimKiemActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -190,13 +250,19 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
         fillTable();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTimKiemActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblDanhSach;
+    private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 }

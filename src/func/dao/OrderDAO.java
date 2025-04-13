@@ -73,8 +73,8 @@ public class OrderDAO extends FuncDAO<OrderEntity, String> {
         String sql = "";
         if (entity.getDiscountId() == 0) {
             sql = "UPDATE Orders SET "
-                    + "total_price = ?, [status] = ?, is_paid =? WHERE order_id = ?";
-            Database.update(sql, entity.getTotalPrice(),
+                    + "total_price = ?,payment_method=?, [status] = ?, is_paid =? WHERE order_id = ?";
+            Database.update(sql, entity.getTotalPrice(),entity.getPaymentMethod(),
                     entity.getStatus(), entity.isIsPaid(), entity.getOrderId());
         } else {
             sql = "UPDATE Orders SET discount_id = ?,"
