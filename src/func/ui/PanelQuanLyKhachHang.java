@@ -11,6 +11,7 @@ import func.dao.CustomerDAO;
 import func.entity.CustomerEntity;
 import func.utils.Message;
 import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -22,6 +23,10 @@ import javax.swing.table.DefaultTableModel;
 public class PanelQuanLyKhachHang extends javax.swing.JPanel {
 
     DefaultTableModel model;
+    private List<CustomerEntity> fullCustomerList = new ArrayList<>();
+    private int currentPage = 1;
+    private int rowsPerPage = 14;
+    private int totalPages = 1;
 
     /**
      * Creates new form PanelQuanLyKhachHang
@@ -34,16 +39,28 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
     }
 
     void fillTable() {
+        fullCustomerList = CustomerDAO.selectAllCustomers(); // lấy dữ liệu gốc
+        totalPages = (int) Math.ceil((double) fullCustomerList.size() / rowsPerPage);
+        currentPage = 1;
+        showCustomerPage(currentPage);
+    }
+
+    private void showCustomerPage(int page) {
         model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
-        List<CustomerEntity> ls = CustomerDAO.selectAllCustomers();
-        int i = 1;
-        for (CustomerEntity cus : ls) {
+
+        int start = (page - 1) * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, fullCustomerList.size());
+
+        for (int i = start; i < end; i++) {
+            CustomerEntity cus = fullCustomerList.get(i);
             model.addRow(new Object[]{
-                i, cus.getFullName(), cus.getPhone(), cus.getPoint()
+                i + 1, cus.getFullName(), cus.getPhone(), cus.getPoint()
             });
-            i++;
         }
+
+        // Ví dụ: cập nhật thông tin trang (nếu có label)
+        jLabel3.setText("Trang " + currentPage + "/" + totalPages);
     }
 
     void setTable() {
@@ -89,6 +106,9 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDanhSach = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -131,6 +151,22 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
             }
         });
 
+        jButton2.setText("|<");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("jLabel3");
+
+        jButton3.setText(">|");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -140,7 +176,12 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -150,7 +191,12 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton2)
+                        .addComponent(jButton3)
+                        .addComponent(jLabel3))))
         );
 
         jPanel3.setBackground(new java.awt.Color(137, 137, 229));
@@ -198,11 +244,36 @@ public class PanelQuanLyKhachHang extends javax.swing.JPanel {
         khachHang.setVisible(true);
         fillTable();
     }//GEN-LAST:event_jButton1ActionPerformed
+    private void nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            showCustomerPage(currentPage);
+        }
+    }
+
+    private void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            showCustomerPage(currentPage);
+        }
+    }
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        nextPage();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        previousPage();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
