@@ -11,6 +11,7 @@ import func.dao.OrderOrderDetailDAO;
 import func.dto.OrderOrderDetailDTO;
 import func.utils.Message;
 import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -22,6 +23,10 @@ import javax.swing.table.DefaultTableModel;
 public class PanelDonHang extends javax.swing.JPanel {
 
     DefaultTableModel model;
+    private List<OrderOrderDetailDTO> ls = new ArrayList<>();
+    private int currentPage = 1;
+    private int rowsPerPage = 14;
+    private int totalPages = 1;
 
     /**
      * Creates new form PanelDonHang
@@ -32,14 +37,7 @@ public class PanelDonHang extends javax.swing.JPanel {
     }
 
     void init() {
-        model = (DefaultTableModel) tblDanhSach.getModel();
-        model.setRowCount(0);
-        int i = 1;
-        List<OrderOrderDetailDTO> ls = OrderOrderDetailDAO.selectAllInDay();
-        for (OrderOrderDetailDTO od : ls) {
-            model.addRow(new Object[]{i, od.getProductName(), od.getTableName(), od.getZoneName(), od.getCreatedAt(), od.getStatus().equals("cooking") ? "Đang nấu" : "Đang chờ"});
-            i++;
-        }
+
         SuKienHanhDong event = new SuKienHanhDong() {
             @Override
             public void Edit(int row) {
@@ -75,6 +73,52 @@ public class PanelDonHang extends javax.swing.JPanel {
         setSizeTable();
     }
 
+    void fillTable() {
+        ls = OrderOrderDetailDAO.selectAllInDay();
+        totalPages = (int) Math.ceil((double) ls.size() / rowsPerPage);
+        currentPage = 1;
+        showCookPage(currentPage);
+    }
+
+    private void showCookPage(int page) {
+        model = (DefaultTableModel) tblDanhSach.getModel();
+        model.setRowCount(0);
+
+        int start = (page - 1) * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, ls.size());
+
+        for (int i = start; i < end; i++) {
+            OrderOrderDetailDTO od = ls.get(i);
+            String statusText = od.getStatus().equals("cooking") ? "Đang nấu" : "Đang chờ";
+
+            model.addRow(new Object[]{
+                i + 1,
+                od.getProductName(),
+                od.getTableName(),
+                od.getZoneName(),
+                od.getCreatedAt(),
+                statusText
+            });
+        }
+
+        // Hiển thị thông tin trang nếu cần
+        jLabel3.setText("Trang " + currentPage + "/" + totalPages);
+    }
+
+    private void nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            showCookPage(currentPage);
+        }
+    }
+
+    private void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            showCookPage(currentPage);
+        }
+    }
+
     void setSizeTable() {
         tblDanhSach.getColumnModel().getColumn(0).setMinWidth(35);
         tblDanhSach.getColumnModel().getColumn(0).setMaxWidth(35);
@@ -97,6 +141,9 @@ public class PanelDonHang extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDanhSach = new javax.swing.JTable();
+        jButton4 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(137, 137, 229));
 
@@ -144,25 +191,67 @@ public class PanelDonHang extends javax.swing.JPanel {
             tblDanhSach.getColumnModel().getColumn(1).setResizable(false);
         }
 
+        jButton4.setText(">|");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("|<");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("jLabel3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton4)
+                    .addComponent(jLabel3))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        nextPage();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        previousPage();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

@@ -13,7 +13,6 @@ import func.dao.ProductDAO;
 import func.dto.ProductDTO;
 import func.utils.Currency;
 import func.utils.Message;
-import java.awt.Container;
 import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +29,10 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
 
     DefaultTableModel model;
     List<ProductDTO> pd;
+    private List<ProductDTO> fullProductList = new ArrayList<>();
+    private int currentPage = 1;
+    private int rowsPerPage = 14;
+    private int totalPages = 1;
 
     /**
      * Creates new form JPanelQuanLySanPham
@@ -89,17 +92,44 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
     }
 
     void updateTable(List<ProductDTO> list) {
+        fullProductList = list; // lưu danh sách gốc
+        totalPages = (int) Math.ceil((double) list.size() / rowsPerPage);
+        showPage(currentPage); // hiển thị trang hiện tại
+    }
+
+    private void showPage(int page) {
         model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
-        int i = 1;
-        for (ProductDTO product : list) {
+
+        int start = (page - 1) * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, fullProductList.size());
+
+        for (int i = start; i < end; i++) {
+            ProductDTO product = fullProductList.get(i);
             model.addRow(new Object[]{
-                i++,
+                i + 1,
                 product.getProductName(),
                 Currency.formatVND(product.getPrice()),
                 product.isIsActive() ? "Hoạt động" : "Không hoạt động",
                 product.getCategoryName()
             });
+        }
+
+        // Ví dụ: cập nhật label số trang nếu có
+        jLabel3.setText("Trang " + currentPage + "/" + totalPages);
+    }
+
+    private void nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            showPage(currentPage);
+        }
+    }
+
+    private void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            showPage(currentPage);
         }
     }
 
@@ -145,6 +175,9 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         txtTimKiem = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(137, 137, 229));
 
@@ -220,17 +253,40 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
             }
         });
 
+        jButton2.setText("|<");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText(">|");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("jLabel3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -241,7 +297,11 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jLabel3))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -257,11 +317,24 @@ public class PanelQuanLySanPham extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTimKiemActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        nextPage();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        previousPage();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

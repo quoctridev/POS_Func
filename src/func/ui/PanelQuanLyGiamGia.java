@@ -11,6 +11,7 @@ import func.dao.DiscountDAO;
 import func.entity.DiscountEntity;
 import func.utils.Message;
 import java.awt.Frame;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -22,7 +23,10 @@ import javax.swing.SwingUtilities;
  */
 public class PanelQuanLyGiamGia extends javax.swing.JPanel {
 
-    List<DiscountEntity> discounts;
+    private List<DiscountEntity> discounts = new ArrayList<>();
+    private int currentPage = 1;
+    private int rowsPerPage = 14;
+    private int totalPages = 1;
 
     /**
      * Creates new form JPanelQuanLyGiamGia
@@ -66,27 +70,54 @@ public class PanelQuanLyGiamGia extends javax.swing.JPanel {
     }
 
     void showTable() {
-        DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
-        model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ trong bảng
-
         try {
             DiscountDAO discountDAO = new DiscountDAO();
-            discounts = discountDAO.selectAll(); // Lấy tất cả dữ liệu
-            java.util.Date currentDate = new java.util.Date(); // Lấy ngày hiện tại
-
-            for (DiscountEntity discount : discounts) {
-                String status = discount.getEndDate().before(currentDate) ? "Hết hạn" : "Còn hiệu lực";
-
-                model.addRow(new Object[]{
-                    discount.getCode(),
-                    discount.getDiscountValue(),
-                    discount.getEndDate(),
-                    status
-                });
-            }
+            discounts = discountDAO.selectAll(); // Lấy toàn bộ danh sách
+            totalPages = (int) Math.ceil((double) discounts.size() / rowsPerPage);
+            currentPage = 1;
+            showDiscountPage(currentPage);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu lên bảng!");
+        }
+    }
+
+    private void showDiscountPage(int page) {
+        DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+
+        java.util.Date currentDate = new java.util.Date();
+
+        int start = (page - 1) * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, discounts.size());
+
+        for (int i = start; i < end; i++) {
+            DiscountEntity discount = discounts.get(i);
+            String status = discount.getEndDate().before(currentDate) ? "Hết hạn" : "Còn hiệu lực";
+
+            model.addRow(new Object[]{
+                discount.getCode(),
+                discount.getDiscountValue(),
+                discount.getEndDate(),
+                status
+            });
+        }
+
+        // Cập nhật label thông tin trang nếu cần
+        jLabel3.setText("Trang " + currentPage + "/" + totalPages);
+    }
+
+    private void nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            showDiscountPage(currentPage);
+        }
+    }
+
+    private void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            showDiscountPage(currentPage);
         }
     }
 
@@ -105,6 +136,9 @@ public class PanelQuanLyGiamGia extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
 
         jButton1.setBackground(new java.awt.Color(204, 204, 255));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -151,6 +185,22 @@ public class PanelQuanLyGiamGia extends javax.swing.JPanel {
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
         );
 
+        jButton2.setText("|<");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("jLabel3");
+
+        jButton3.setText(">|");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -166,6 +216,14 @@ public class PanelQuanLyGiamGia extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,8 +237,13 @@ public class PanelQuanLyGiamGia extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jLabel3))
+                .addGap(9, 9, 9))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -191,11 +254,24 @@ public class PanelQuanLyGiamGia extends javax.swing.JPanel {
         showTable();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        previousPage();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        nextPage();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblDanhSach;

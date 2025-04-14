@@ -11,6 +11,7 @@ import func.cell.SuKienHanhDong;
 import func.dao.CategoryDAO;
 import func.entity.CategoriesEntity;
 import func.utils.Message;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 // Tạo TableCellRenderer để thay đổi màu sắc
@@ -27,8 +28,11 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
      */
     DefaultTableModel model;
     CategoriesEntity category = null;
-    List<CategoriesEntity> list = new CategoryDAO().selectAll();
     int categoryId;
+    private List<CategoriesEntity> categoryList = new ArrayList<>();
+    private int currentPage = 1;
+    private int rowsPerPage = 14;
+    private int totalPages = 1;
 
     public PanelQuanLyDanhMuc() {
         initComponents();
@@ -38,7 +42,7 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
 
             @Override
             public void Edit(int row) {
-                categoryId = list.get(row).getCategoryId();
+                categoryId = categoryList.get(row).getCategoryId();
                 String tenDanhMuc = String.valueOf(tblDanhSach.getValueAt(row, 1));
                 txtTenDanhMuc.setText(tenDanhMuc);
                 String trangThai = String.valueOf(tblDanhSach.getValueAt(row, 2));
@@ -52,7 +56,7 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
 
             @Override
             public void Delete(int row) {
-                categoryId = list.get(row).getCategoryId();
+                categoryId = categoryList.get(row).getCategoryId();
                 boolean confirm = Message.confirm(PanelQuanLyDanhMuc.this, "Bạn có chắc chắn muốn xóa danh mục này không ?");
                 if (confirm) {
                     new CategoryDAO().delete(String.valueOf(categoryId));
@@ -74,7 +78,7 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
         };
 
         tblDanhSach.getColumnModel().getColumn(3).setCellRenderer(new KetHopBang(false));
-        tblDanhSach.getColumnModel().getColumn(3).setCellEditor(new ChinhSuaBang(false,event));
+        tblDanhSach.getColumnModel().getColumn(3).setCellEditor(new ChinhSuaBang(false, event));
     }
 
     void clearText() {
@@ -83,23 +87,45 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
     }
 
     public void showTable() {
-        List<CategoriesEntity> list = new CategoryDAO().selectAll(); // Cập nhật lại danh sách 
-        model = (DefaultTableModel) this.tblDanhSach.getModel();
-        model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
+        categoryList = new CategoryDAO().selectAll(); // Lấy danh sách gốc
+        totalPages = (int) Math.ceil((double) categoryList.size() / rowsPerPage);
+        currentPage = 1;
+        showCategoryPage(currentPage);
+    }
 
-        int number = 1;
+    private void showCategoryPage(int page) {
+        model = (DefaultTableModel) tblDanhSach.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
 
-        for (CategoriesEntity category : list) {
+        int start = (page - 1) * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, categoryList.size());
+
+        for (int i = start; i < end; i++) {
+            CategoriesEntity category = categoryList.get(i);
             String name = category.getCategoryName();
             String trangThai = category.isIsActive() ? "Đang hoạt động" : "Không hoạt động";
 
-            // Thêm số thứ tự tự động vào bảng
             model.addRow(new Object[]{
-                number++, name, trangThai
+                i + 1, name, trangThai // i + 1 để tạo số thứ tự chính xác trên toàn danh sách
             });
         }
 
-//        tblDanhSach.getColumnModel().getColumn(2).setCellRenderer(new StatusCellRenderer());
+        // Gợi ý cập nhật label trang nếu có
+        jLabel5.setText("Trang " + currentPage + "/" + totalPages);
+    }
+
+    private void nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            showCategoryPage(currentPage);
+        }
+    }
+
+    private void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            showCategoryPage(currentPage);
+        }
     }
 
 //    // Tạo một lớp TableCellRenderer để thay đổi màu sắc cột trạng thái
@@ -138,6 +164,9 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
         btnThem = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDanhSach = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("DANH SÁCH DANH MỤC");
@@ -241,6 +270,22 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblDanhSach);
 
+        jLabel5.setText("jLabel3");
+
+        jButton2.setText("|<");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText(">|");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -262,6 +307,14 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
                         .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(8, 8, 8))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -274,9 +327,13 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE))
+                        .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 625, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jLabel5))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -330,14 +387,27 @@ public class PanelQuanLyDanhMuc extends javax.swing.JPanel {
 
     }//GEN-LAST:event_tblDanhSachMouseClicked
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        previousPage();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        nextPage();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnThem;
     private javax.swing.JComboBox<String> cboTrangThai;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

@@ -9,6 +9,7 @@ import func.entity.UserEntity;
 import func.utils.Auth;
 import func.utils.Message;
 import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -23,7 +24,10 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
 
     DefaultTableModel model;
     UserEntity user = null;
-    List<UserEntity> list = new UserDAO().selectAll();
+    private List<UserEntity> list = new ArrayList<>();
+    private int currentPage = 1;
+    private int rowsPerPage = 14;
+    private int totalPages = 1;
 
     public PanelQuanLyNhanVien() {
         initComponents();
@@ -31,19 +35,48 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
     }
 
     public void showTable() {
-        list = new UserDAO().selectAll(); // Cập nhật lại danh sách 
-        model = (DefaultTableModel) this.tblDanhSach.getModel();
+        list = new UserDAO().selectAll(); // Lấy dữ liệu người dùng
+        totalPages = (int) Math.ceil((double) list.size() / rowsPerPage);
+        currentPage = 1;
+        showUserPage(currentPage);
+    }
+
+    private void showUserPage(int page) {
+        model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
-        for (UserEntity user : list) {
+
+        int start = (page - 1) * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, list.size());
+
+        for (int i = start; i < end; i++) {
+            UserEntity user = list.get(i);
             String id = String.valueOf(user.getUserId());
             String name = user.getUsername();
             String fullName = user.getFullName();
             String phone = user.getPhone();
             String role = user.getRole();
             Date date = user.getCreatedAt();
+
             model.addRow(new Object[]{
                 id, name, fullName, phone, role, date
             });
+        }
+
+        // Gợi ý hiển thị thông tin trang (nếu có)
+        jLabel3.setText("Trang " + currentPage + "/" + totalPages);
+    }
+
+    private void nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            showUserPage(currentPage);
+        }
+    }
+
+    private void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            showUserPage(currentPage);
         }
     }
 
@@ -64,6 +97,9 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
         btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(137, 137, 229));
 
@@ -141,15 +177,27 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
             }
         });
 
+        jLabel3.setText("jLabel3");
+
+        jButton2.setText("|<");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText(">|");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(92, 92, 92)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 993, Short.MAX_VALUE)
@@ -162,6 +210,19 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(92, 92, 92)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,8 +231,13 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -247,12 +313,25 @@ public class PanelQuanLyNhanVien extends javax.swing.JPanel {
         this.user = list.get(dongDangChon);
     }//GEN-LAST:event_tblDanhSachMouseClicked
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        previousPage();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        nextPage();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbMenu;

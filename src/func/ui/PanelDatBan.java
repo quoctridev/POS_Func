@@ -12,6 +12,7 @@ import func.dao.OrderTableDAO;
 import func.entity.OrderTableEntity;
 import func.utils.Message;
 import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,10 @@ import javax.swing.table.DefaultTableModel;
 public class PanelDatBan extends javax.swing.JPanel {
 
     DefaultTableModel model;
-    List<OrderTableEntity> ls;
+    private List<OrderTableEntity> ls = new ArrayList<>();
+    private int currentPage = 1;
+    private int rowsPerPage = 14;
+    private int totalPages = 1;
     OrderTableEntity taoDon;
 
     /**
@@ -37,24 +41,7 @@ public class PanelDatBan extends javax.swing.JPanel {
     }
 
     void init() {
-        Map<String, String> statusMap = new HashMap();
-        statusMap.put("pending", "Đang chờ xác nhận");
-        statusMap.put("confirmed", "Đã xác nhận");
-        statusMap.put("completed", "Đã hoàn thành");
-        statusMap.put("canceled", "Đã huỷ");
-        model = (DefaultTableModel) tblDanhSach.getModel();
-        model.setRowCount(0);
-        ls = new OrderTableDAO().selectAll();
-        System.out.println(ls.size());
-        int i = 1;
-        for (OrderTableEntity od : ls) {
-
-            String trangThai = statusMap.getOrDefault(od.getStatus(), "Đang chờ xác nhận");
-
-            model.addRow(new Object[]{
-                i, od.getCustomer_name(), od.getPhone(), od.getCapacity(), od.getReservationTime(), trangThai});
-            i++;
-        }
+        fillTable();
         SuKienHanhDong event = new SuKienHanhDong() {
             @Override
             public void Edit(int row) {
@@ -79,6 +66,58 @@ public class PanelDatBan extends javax.swing.JPanel {
         tblDanhSach.getColumnModel().getColumn(6).setCellEditor(new ChinhSuaBang(false, event));
     }
 
+    void fillTable() {
+        ls = new OrderTableDAO().selectAll();
+        totalPages = (int) Math.ceil((double) ls.size() / rowsPerPage);
+        currentPage = 1;
+        showOrderPage(currentPage);
+    }
+
+    private void showOrderPage(int page) {
+        Map<String, String> statusMap = new HashMap<>();
+        statusMap.put("pending", "Đang chờ xác nhận");
+        statusMap.put("confirmed", "Đã xác nhận");
+        statusMap.put("completed", "Đã hoàn thành");
+        statusMap.put("canceled", "Đã huỷ");
+
+        model = (DefaultTableModel) tblDanhSach.getModel();
+        model.setRowCount(0);
+
+        int start = (page - 1) * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, ls.size());
+
+        for (int i = start; i < end; i++) {
+            OrderTableEntity od = ls.get(i);
+            String trangThai = statusMap.getOrDefault(od.getStatus(), "Đang chờ xác nhận");
+
+            model.addRow(new Object[]{
+                i + 1,
+                od.getCustomer_name(),
+                od.getPhone(),
+                od.getCapacity(),
+                od.getReservationTime(),
+                trangThai
+            });
+        }
+
+        // Gợi ý cập nhật hiển thị phân trang
+        jLabel3.setText("Trang " + currentPage + "/" + totalPages);
+    }
+
+    private void nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            showOrderPage(currentPage);
+        }
+    }
+
+    private void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            showOrderPage(currentPage);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,6 +134,9 @@ public class PanelDatBan extends javax.swing.JPanel {
         jButton3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         tblDanhSach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -190,17 +232,42 @@ public class PanelDatBan extends javax.swing.JPanel {
             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
         );
 
+        jButton4.setText(">|");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("jLabel3");
+
+        jButton2.setText("|<");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 811, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 811, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,12 +276,16 @@ public class PanelDatBan extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(264, 264, 264)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(268, Short.MAX_VALUE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 664, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton4)
+                    .addComponent(jLabel3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -244,10 +315,23 @@ public class PanelDatBan extends javax.swing.JPanel {
         taoDon = ls.get(soThuTu - 1);
     }//GEN-LAST:event_tblDanhSachMouseClicked
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        nextPage();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        previousPage();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

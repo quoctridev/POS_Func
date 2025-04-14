@@ -14,6 +14,7 @@ import func.utils.Message;
 import java.awt.Frame;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -24,7 +25,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PanelHoaDon extends javax.swing.JPanel {
 
-    List<BillDTO> ls;
+    List<BillDTO> ls = new ArrayList<>();
+    private int currentPage = 1;
+    private int rowsPerPage = 16;
+    private int totalPages = 1;
     DefaultTableModel model;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
 
@@ -37,16 +41,7 @@ public class PanelHoaDon extends javax.swing.JPanel {
     }
 
     void init() {
-        model = (DefaultTableModel) tblDanhSach.getModel();
-        model.setRowCount(0);
-        int i = 1;
-        ls = new BillDAO().selectAll();
-        for (BillDTO bill : ls) {
-            LocalDateTime time = bill.getOrderDate().toLocalDateTime();
-            model.addRow(new Object[]{
-                i, bill.getCustomerName() == null ? "Khách vãng lai" : bill.getCustomerName(), bill.getCustomerPhone() == null ? "Không có" : bill.getCustomerPhone(), bill.getNumberTable(), Currency.formatVND(bill.getTotal_price()), bill.getStatus(), time.format(formatter)});
-            i++;
-        }
+        fillTable();
         SuKienHanhDong event = new SuKienHanhDong() {
             @Override
             public void Edit(int row) {
@@ -76,6 +71,53 @@ public class PanelHoaDon extends javax.swing.JPanel {
         tblDanhSach.getColumnModel().getColumn(7).setWidth(95);
     }
 
+    void fillTable() {
+        ls = new BillDAO().selectAll(); // Lấy toàn bộ danh sách hóa đơn
+        totalPages = (int) Math.ceil((double) ls.size() / rowsPerPage);
+        currentPage = 1;
+        showBillPage(currentPage);
+    }
+
+    private void showBillPage(int page) {
+        model = (DefaultTableModel) tblDanhSach.getModel();
+        model.setRowCount(0);
+
+        int start = (page - 1) * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, ls.size());
+
+        for (int i = start; i < end; i++) {
+            BillDTO bill = ls.get(i);
+            LocalDateTime time = bill.getOrderDate().toLocalDateTime();
+
+            model.addRow(new Object[]{
+                i + 1,
+                bill.getCustomerName() == null ? "Khách vãng lai" : bill.getCustomerName(),
+                bill.getCustomerPhone() == null ? "Không có" : bill.getCustomerPhone(),
+                bill.getNumberTable(),
+                Currency.formatVND(bill.getTotal_price()),
+                bill.getStatus(),
+                time.format(formatter)
+            });
+        }
+
+        // Gợi ý cập nhật thông tin phân trang
+        jLabel3.setText("Trang " + currentPage + "/" + totalPages);
+    }
+
+    private void nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            showBillPage(currentPage);
+        }
+    }
+
+    private void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            showBillPage(currentPage);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -89,6 +131,9 @@ public class PanelHoaDon extends javax.swing.JPanel {
         tblDanhSach = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         tblDanhSach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -141,24 +186,67 @@ public class PanelHoaDon extends javax.swing.JPanel {
             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
         );
 
+        jButton3.setText(">|");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("|<");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("jLabel3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1005, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 702, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jLabel3))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        nextPage();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        previousPage();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
