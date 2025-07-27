@@ -75,7 +75,7 @@ POS_Func-Production/
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/POS_Func-Production.git
+   git clone https://github.com/quoctridev/POS_Func-Production.git
    ```
 
 2. Open the project in NetBeans.
@@ -166,4 +166,4 @@ POS_Func là một ứng dụng quản lý bán hàng sử dụng Java Swing, k�
 
 ---
 
-> 📌 Dự án được phát triển với tinh thần trách nhiệm cao và sự phối hợp chặt chẽ giữa các thành viên trong nhóm. Không sử dụng kéo thả hay thư viện sẵn, toàn bộ chức năng đều được lập trình thủ công nhằm hướng tới triển khai thực tế.
+> 📌 Dự án được phát triển với tinh thần trách nhiệm cao và sự phối hợp chặt chẽ giữa các thành viên trong nhóm. Toàn bộ chức năng đều được lập trình thủ công nhằm hướng tới triển khai thực tế.
